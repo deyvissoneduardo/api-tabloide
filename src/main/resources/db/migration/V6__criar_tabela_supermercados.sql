@@ -1,0 +1,21 @@
+CREATE TABLE supermercados (
+    id BIGSERIAL PRIMARY KEY,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
+    razao_social VARCHAR(255) NOT NULL,
+    nome_fantasia VARCHAR(255) NOT NULL,
+    email_comercial VARCHAR(255) NOT NULL,
+    telefone_comercial VARCHAR(20) NOT NULL,
+    cep VARCHAR(10) NOT NULL,
+    logradouro VARCHAR(255) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    bairro VARCHAR(255) NOT NULL,
+    municipio VARCHAR(255) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
+    complemento VARCHAR(255) NULL,
+    logomarca_url VARCHAR(500) NULL,
+    observacoes_internas TEXT NULL,
+    estado VARCHAR(20) NOT NULL CHECK (estado IN ('ATIVO', 'BLOQUEADO', 'DESATIVADO')),
+    versao BIGINT NOT NULL DEFAULT 0,
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT now(),
+    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT now()
+);

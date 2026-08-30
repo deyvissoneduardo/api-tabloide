@@ -1,0 +1,216 @@
+package com.tabloide.api.modules.supermercado.interfaces.http;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.tabloide.api.modules.autenticacao.domain.Perfil;
+import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJpaEntity;
+import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJpaRepository;
+import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginRequest;
+import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
+import com.tabloide.api.modules.supermercado.interfaces.http.dto.CadastrarSupermercadoRequest;
+import com.tabloide.api.modules.supermercado.interfaces.http.dto.EditarSupermercadoRequest;
+import java.time.Instant;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
+
+    private static final String EMAIL_SUPER_ADMIN = "superadmin@sgtm.local";
+    private static final String SENHA_SUPER_ADMIN = "SuperAdmin@123";
+
+    @Autowired
+    private UsuarioJpaRepository usuarioJpaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Test
+    void deveCadastrarSupermercadoComoSuperAdmin() throws Exception {
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11222333000181"))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.estado").value("ATIVO"))
+                .andExpect(jsonPath("$.versao").isNotEmpty());
+    }
+
+    @Test
+    void deveRejeitarCadastroSemToken() throws Exception {
+        mockMvc.perform(post("/api/supermercados")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000161"))))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deveRejeitarCadastroComOperador() throws Exception {
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, "operador-cadastro@sgtm.local");
+
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000161"))))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deveRejeitarCadastroComCamposInvalidos() throws Exception {
+        CadastrarSupermercadoRequest invalido = new CadastrarSupermercadoRequest(
+                "cnpj-invalido", "", "Fantasia", "email-invalido", "119999",
+                "01310-100", "Av. Paulista", "1000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalido)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void deveRejeitarCnpjDuplicado() throws Exception {
+        String token = tokenSuperAdmin();
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11987650001080"))))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11987650001080"))))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveEditarSupermercadoComVersaoAtual() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11321741000190"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+        long versao = objectMapper.readTree(corpoCadastro).get("versao").asLong();
+
+        EditarSupermercadoRequest edicao = new EditarSupermercadoRequest(
+                versao, "Razão Editada", "Fantasia Editada", "editado@mercado.com", "11777776666",
+                "01310-100", "Av. Paulista", "2000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(patch("/api/supermercados/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(edicao)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.razaoSocial").value("Razão Editada"));
+    }
+
+    @Test
+    void deveRejeitarEdicaoComVersaoDesatualizada() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000242"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        EditarSupermercadoRequest edicaoComVersaoErrada = new EditarSupermercadoRequest(
+                999L, "Razão Editada", "Fantasia Editada", "editado@mercado.com", "11777776666",
+                "01310-100", "Av. Paulista", "2000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(patch("/api/supermercados/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(edicaoComVersaoErrada)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveDesativarEReativarSupermercado() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11055978000177"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/desativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("DESATIVADO"));
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
+    }
+
+    @Test
+    void deveSerIdempotenteAoAtivarSupermercadoJaAtivo() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000323"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
+    }
+
+    @Test
+    void deveRetornarNaoEncontradoParaIdInexistente() throws Exception {
+        mockMvc.perform(post("/api/supermercados/999999/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
+                .andExpect(status().isNotFound());
+    }
+
+    private CadastrarSupermercadoRequest requestCadastro(String cnpj) {
+        return new CadastrarSupermercadoRequest(
+                cnpj, "Razão Social LTDA", "Mercado Bom Preço", "contato@mercado.com", "11999998888",
+                "01310-100", "Av. Paulista", "1000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+    }
+
+    private String tokenSuperAdmin() throws Exception {
+        return autenticarEExtrairToken(EMAIL_SUPER_ADMIN, SENHA_SUPER_ADMIN);
+    }
+
+    private String criarUsuarioEAutenticar(Perfil perfil, String email) throws Exception {
+        String senha = "SenhaCorreta1";
+        Instant agora = Instant.now();
+        usuarioJpaRepository.save(new UsuarioJpaEntity(
+                null, email, passwordEncoder.encode(senha), perfil, null, null, true, 0, null, agora, agora
+        ));
+        return autenticarEExtrairToken(email, senha);
+    }
+
+    private String autenticarEExtrairToken(String email, String senha) throws Exception {
+        String corpo = mockMvc.perform(post("/api/sessoes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new LoginRequest(email, senha))))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readValue(corpo, LoginResponse.class).token();
+    }
+}
