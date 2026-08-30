@@ -1,0 +1,14 @@
+package com.tabloide.api.modules.autenticacao.domain;
+
+import java.util.Optional;
+
+public interface UsuarioRepository {
+
+    Optional<Usuario> buscarPorEmail(String email);
+
+    Optional<Usuario> buscarPorEmailECnpj(String email, Cnpj cnpj);
+
+    Optional<Usuario> buscarPorId(Long id);
+
+    void salvar(Usuario usuario);
+}
