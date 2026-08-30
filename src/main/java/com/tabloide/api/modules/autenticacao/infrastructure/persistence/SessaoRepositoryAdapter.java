@@ -1,9 +1,13 @@
 package com.tabloide.api.modules.autenticacao.infrastructure.persistence;
 
+import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Sessao;
+import com.tabloide.api.modules.autenticacao.domain.SessaoDetalhada;
 import com.tabloide.api.modules.autenticacao.domain.SessaoRepository;
 import java.time.Instant;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,17 @@ public class SessaoRepositoryAdapter implements SessaoRepository {
     @Transactional
     public void revogarTodasDoUsuario(Long usuarioId, Instant agora) {
         jpaRepository.revogarTodasDoUsuario(usuarioId, agora);
+    }
+
+    @Override
+    public Pagina<SessaoDetalhada> listar(Long supermercadoId, int pagina, int tamanho) {
+        Page<SessaoDetalhada> resultado = jpaRepository.listar(supermercadoId, PageRequest.of(pagina, tamanho));
+        return new Pagina<>(resultado.getContent(), pagina, tamanho, resultado.getTotalElements(), resultado.getTotalPages());
+    }
+
+    @Override
+    public Optional<SessaoDetalhada> buscarDetalhePorJti(String jti) {
+        return jpaRepository.buscarDetalhePorJti(jti);
     }
 
     private static Sessao paraDominio(SessaoJpaEntity entidade) {

@@ -18,13 +18,47 @@ final class UsuarioDeTesteFactory {
             String senha,
             String cnpj
     ) {
+        return criarDono(usuarioJpaRepository, passwordEncoder, email, senha, cnpj, 99L);
+    }
+
+    static UsuarioJpaEntity criarDono(
+            UsuarioJpaRepository usuarioJpaRepository,
+            PasswordEncoder passwordEncoder,
+            String email,
+            String senha,
+            String cnpj,
+            Long supermercadoId
+    ) {
+        return criar(usuarioJpaRepository, passwordEncoder, email, senha, Perfil.DONO, supermercadoId, cnpj);
+    }
+
+    static UsuarioJpaEntity criarOperador(
+            UsuarioJpaRepository usuarioJpaRepository,
+            PasswordEncoder passwordEncoder,
+            String email,
+            String senha,
+            String cnpj,
+            Long supermercadoId
+    ) {
+        return criar(usuarioJpaRepository, passwordEncoder, email, senha, Perfil.OPERADOR, supermercadoId, cnpj);
+    }
+
+    private static UsuarioJpaEntity criar(
+            UsuarioJpaRepository usuarioJpaRepository,
+            PasswordEncoder passwordEncoder,
+            String email,
+            String senha,
+            Perfil perfil,
+            Long supermercadoId,
+            String cnpj
+    ) {
         Instant agora = Instant.now();
         UsuarioJpaEntity entidade = new UsuarioJpaEntity(
                 null,
                 email,
                 passwordEncoder.encode(senha),
-                Perfil.DONO,
-                99L,
+                perfil,
+                supermercadoId,
                 cnpj,
                 true,
                 0,

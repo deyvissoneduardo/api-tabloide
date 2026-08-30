@@ -1,8 +1,11 @@
 package com.tabloide.api.modules.autenticacao.interfaces.http;
 
+import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.CredenciaisInvalidasException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.DadosRedefinicaoNaoConferemException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoNaoEncontradaException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TokenRedefinicaoInvalidoOuExpiradoException;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import java.util.stream.Collectors;
@@ -12,8 +15,23 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(basePackages = "com.tabloide.api.modules.autenticacao.interfaces.http")
+@RestControllerAdvice
 public class ErroAutenticacaoHandler {
+
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<ErroResponse> tratarAcessoNegado(AcessoNegadoException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(SessaoNaoEncontradaException.class)
+    public ResponseEntity<ErroResponse> tratarSessaoNaoEncontrada(SessaoNaoEncontradaException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(TamanhoPaginaInvalidoException.class)
+    public ResponseEntity<ErroResponse> tratarTamanhoPaginaInvalido(TamanhoPaginaInvalidoException ex) {
+        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+    }
 
     @ExceptionHandler(CredenciaisInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarCredenciaisInvalidas(CredenciaisInvalidasException ex) {

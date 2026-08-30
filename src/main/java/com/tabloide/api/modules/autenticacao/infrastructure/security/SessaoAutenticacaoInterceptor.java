@@ -1,12 +1,16 @@
 package com.tabloide.api.modules.autenticacao.infrastructure.security;
 
 import com.tabloide.api.modules.autenticacao.application.ValidarSessao;
+import com.tabloide.api.modules.autenticacao.domain.Perfil;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
@@ -37,8 +41,24 @@ public class SessaoAutenticacaoInterceptor implements HandlerInterceptor {
         String token = cabecalho.substring(PREFIXO_BEARER.length());
         ClaimsSessao claims = jwtTokenService.decodificar(token);
         validarSessao.validar(claims.jti());
+        validarPerfilAutorizado(handler, claims.perfil());
         ContextoAutenticacao.definir(claims);
         return true;
+    }
+
+    private void validarPerfilAutorizado(Object handler, Perfil perfil) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return;
+        }
+
+        RequerPerfil requerPerfil = handlerMethod.getMethodAnnotation(RequerPerfil.class);
+        if (requerPerfil != null && !perfilPermitido(requerPerfil, perfil)) {
+            throw new AcessoNegadoException();
+        }
+    }
+
+    private boolean perfilPermitido(RequerPerfil requerPerfil, Perfil perfil) {
+        return Arrays.asList(requerPerfil.value()).contains(perfil);
     }
 
     @Override
