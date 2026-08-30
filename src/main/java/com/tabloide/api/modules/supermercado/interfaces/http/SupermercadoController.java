@@ -7,6 +7,7 @@ import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessa
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfil;
 import com.tabloide.api.modules.supermercado.application.AtivarSupermercado;
+import com.tabloide.api.modules.supermercado.application.BloquearSupermercado;
 import com.tabloide.api.modules.supermercado.application.CadastrarSupermercado;
 import com.tabloide.api.modules.supermercado.application.DadosSupermercado;
 import com.tabloide.api.modules.supermercado.application.DesativarSupermercado;
@@ -38,17 +39,20 @@ public class SupermercadoController {
     private final EditarSupermercado editarSupermercado;
     private final AtivarSupermercado ativarSupermercado;
     private final DesativarSupermercado desativarSupermercado;
+    private final BloquearSupermercado bloquearSupermercado;
 
     public SupermercadoController(
             CadastrarSupermercado cadastrarSupermercado,
             EditarSupermercado editarSupermercado,
             AtivarSupermercado ativarSupermercado,
-            DesativarSupermercado desativarSupermercado
+            DesativarSupermercado desativarSupermercado,
+            BloquearSupermercado bloquearSupermercado
     ) {
         this.cadastrarSupermercado = cadastrarSupermercado;
         this.editarSupermercado = editarSupermercado;
         this.ativarSupermercado = ativarSupermercado;
         this.desativarSupermercado = desativarSupermercado;
+        this.bloquearSupermercado = bloquearSupermercado;
     }
 
     @PostMapping
@@ -113,6 +117,15 @@ public class SupermercadoController {
     public ResponseEntity<SupermercadoResponse> desativar(@PathVariable Long id) {
         ClaimsSessao ator = contextoObrigatorio();
         Supermercado supermercado = desativarSupermercado.executar(id, ator.usuarioId(), ator.perfil());
+        return ResponseEntity.ok(SupermercadoResponse.from(supermercado));
+    }
+
+    @PostMapping("/{id}/bloqueio")
+    @RequerPerfil({Perfil.SUPER_ADMIN})
+    @Operation(summary = "Bloqueia o acesso de um supermercado ativo à plataforma")
+    public ResponseEntity<SupermercadoResponse> bloquear(@PathVariable Long id) {
+        ClaimsSessao ator = contextoObrigatorio();
+        Supermercado supermercado = bloquearSupermercado.executar(id, ator.usuarioId(), ator.perfil());
         return ResponseEntity.ok(SupermercadoResponse.from(supermercado));
     }
 

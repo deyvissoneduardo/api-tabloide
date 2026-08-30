@@ -185,6 +185,86 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deveBloquearEReativarSupermercado() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000404"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/bloqueio")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("BLOQUEADO"));
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
+    }
+
+    @Test
+    void deveRejeitarBloqueioComOperador() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000595"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, "operador-bloqueio@sgtm.local");
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/bloqueio")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deveRejeitarBloqueioQuandoJaDesativado() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000676"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/desativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/bloqueio")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveSerIdempotenteAoBloquearSupermercadoJaBloqueado() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000757"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/bloqueio")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/supermercados/" + id + "/bloqueio")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("BLOQUEADO"));
+    }
+
     private CadastrarSupermercadoRequest requestCadastro(String cnpj) {
         return new CadastrarSupermercadoRequest(
                 cnpj, "Razão Social LTDA", "Mercado Bom Preço", "contato@mercado.com", "11999998888",

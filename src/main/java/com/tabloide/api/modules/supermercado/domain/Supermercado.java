@@ -126,12 +126,24 @@ public class Supermercado {
         this.atualizadoEm = agora;
     }
 
+    public void bloquear(Instant agora) {
+        if (!podeBloquear()) {
+            throw new TransicaoEstadoInvalidaException();
+        }
+        this.estado = EstadoSupermercado.BLOQUEADO;
+        this.atualizadoEm = agora;
+    }
+
     public boolean estaAtivo() {
         return estado == EstadoSupermercado.ATIVO;
     }
 
     public boolean estaDesativado() {
         return estado == EstadoSupermercado.DESATIVADO;
+    }
+
+    public boolean estaBloqueado() {
+        return estado == EstadoSupermercado.BLOQUEADO;
     }
 
     public boolean possuiVersao(Long versaoConhecida) {
@@ -148,6 +160,10 @@ public class Supermercado {
 
     private boolean podeDesativar() {
         return estado == EstadoSupermercado.ATIVO || estado == EstadoSupermercado.BLOQUEADO;
+    }
+
+    private boolean podeBloquear() {
+        return estado == EstadoSupermercado.ATIVO;
     }
 
     public String resumoParaAuditoria() {

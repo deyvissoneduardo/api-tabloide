@@ -98,6 +98,31 @@ class SupermercadoTest {
     }
 
     @Test
+    void deveBloquearQuandoAtivo() {
+        Supermercado supermercado = cadastrarSupermercado();
+
+        supermercado.bloquear(Instant.now());
+
+        assertThat(supermercado.estaBloqueado()).isTrue();
+    }
+
+    @Test
+    void naoDeveBloquearQuandoJaBloqueado() {
+        Supermercado supermercado = new Supermercado(1L, new Cnpj("11222333000181"), "Razão", "Fantasia", "e@e.com", "119999", ENDERECO, null, null, null, EstadoSupermercado.BLOQUEADO, 0L, Instant.now(), Instant.now());
+
+        assertThatThrownBy(() -> supermercado.bloquear(Instant.now()))
+                .isInstanceOf(TransicaoEstadoInvalidaException.class);
+    }
+
+    @Test
+    void naoDeveBloquearQuandoDesativado() {
+        Supermercado supermercado = new Supermercado(1L, new Cnpj("11222333000181"), "Razão", "Fantasia", "e@e.com", "119999", ENDERECO, null, null, null, EstadoSupermercado.DESATIVADO, 0L, Instant.now(), Instant.now());
+
+        assertThatThrownBy(() -> supermercado.bloquear(Instant.now()))
+                .isInstanceOf(TransicaoEstadoInvalidaException.class);
+    }
+
+    @Test
     void deveComparaVersaoConhecida() {
         Supermercado supermercado = new Supermercado(1L, new Cnpj("11222333000181"), "Razão", "Fantasia", "e@e.com", "119999", ENDERECO, null, null, null, EstadoSupermercado.ATIVO, 3L, Instant.now(), Instant.now());
 
