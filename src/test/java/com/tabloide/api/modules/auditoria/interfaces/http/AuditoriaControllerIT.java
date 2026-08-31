@@ -104,6 +104,55 @@ class AuditoriaControllerIT extends AuditoriaIntegrationTestSupport {
     }
 
     @Test
+    void superAdminDeveFiltrarPorSupermercadoIdEspecifico() throws Exception {
+        String token = tokenSuperAdmin();
+        long supermercadoAlvo = cadastrarSupermercado(token, "11444777000838");
+        cadastrarSupermercado(token, "11444777000919");
+
+        mockMvc.perform(get("/api/auditoria")
+                        .param("supermercadoId", String.valueOf(supermercadoAlvo))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens.length()").value(1))
+                .andExpect(jsonPath("$.itens[0].supermercadoId").value(supermercadoAlvo));
+    }
+
+    @Test
+    void donoDeveIgnorarFiltroDeSupermercadoIdDeOutroTenant() throws Exception {
+        String tokenSuperAdmin = tokenSuperAdmin();
+        long supermercadoDono = cadastrarSupermercado(tokenSuperAdmin, "11444777108019");
+        long outroSupermercado = cadastrarSupermercado(tokenSuperAdmin, "11444777116119");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoDono, "dono-filtro-auditoria@sgtm.local");
+
+        mockMvc.perform(get("/api/auditoria")
+                        .param("supermercadoId", String.valueOf(outroSupermercado))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens.length()").value(1))
+                .andExpect(jsonPath("$.itens[0].supermercadoId").value(supermercadoDono));
+    }
+
+    @Test
+    void deveAuditarLeituraDeSupermercadoPorSuperAdmin() throws Exception {
+        String token = tokenSuperAdmin();
+        long supermercadoId = cadastrarSupermercado(token, "11444777124219");
+
+        mockMvc.perform(get("/api/supermercados/" + supermercadoId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/auditoria")
+                        .param("acao", "SUPERMERCADO_CONSULTADO")
+                        .param("entidade", "Supermercado")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens[0].acao").value("SUPERMERCADO_CONSULTADO"))
+                .andExpect(jsonPath("$.itens[0].entidade").value("Supermercado"))
+                .andExpect(jsonPath("$.itens[0].entidadeId").value(supermercadoId))
+                .andExpect(jsonPath("$.itens[0].supermercadoId").value(supermercadoId));
+    }
+
+    @Test
     void deveRejeitarTamanhoDePaginaInvalido() throws Exception {
         mockMvc.perform(get("/api/auditoria")
                         .param("tamanho", "10")

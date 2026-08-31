@@ -9,6 +9,7 @@ import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.SessaoDetalhada;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
+import com.tabloide.api.modules.autenticacao.infrastructure.security.AuditarConsulta;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.JwtTokenService;
@@ -73,6 +74,7 @@ public class SessaoController {
 
     @GetMapping
     @RequerPerfil({Perfil.SUPER_ADMIN, Perfil.DONO})
+    @AuditarConsulta(acao = "SESSOES_CONSULTADAS", entidade = "Sessao")
     @Operation(summary = "Lista sessões: Super Admin vê todas, DONO só as do próprio supermercado")
     public ResponseEntity<PaginaResponse<SessaoResumoResponse>> listar(
             @RequestParam(defaultValue = "0") int pagina,
@@ -85,6 +87,7 @@ public class SessaoController {
 
     @GetMapping("/{jti}")
     @RequerPerfil({Perfil.SUPER_ADMIN, Perfil.DONO})
+    @AuditarConsulta(acao = "SESSAO_CONSULTADA", entidade = "Sessao")
     @Operation(summary = "Consulta uma sessão pelo identificador, respeitando o escopo do perfil")
     public ResponseEntity<SessaoResumoResponse> buscarPorId(@PathVariable String jti) {
         ClaimsSessao solicitante = contextoObrigatorio();

@@ -8,6 +8,7 @@ import com.tabloide.api.modules.auditoria.interfaces.http.dto.RegistroAuditoriaR
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
+import com.tabloide.api.modules.autenticacao.infrastructure.security.AuditarConsulta;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfil;
@@ -38,24 +39,28 @@ public class AuditoriaController {
 
     @GetMapping
     @RequerPerfil({Perfil.SUPER_ADMIN, Perfil.DONO})
-    @Operation(summary = "Lista registros de auditoria: Super Admin vê todos, DONO só os do próprio supermercado")
+    @AuditarConsulta(acao = "AUDITORIA_CONSULTADA", entidade = "RegistroAuditoria", paramSupermercadoId = "supermercadoId")
+    @Operation(summary = "Lista registros de auditoria: Super Admin vê todos ou filtra por supermercadoId, "
+            + "DONO só os do próprio supermercado (parâmetro supermercadoId é ignorado para DONO)")
     public ResponseEntity<PaginaResponse<RegistroAuditoriaResponse>> listar(
             @RequestParam(required = false) Long atorId,
             @RequestParam(required = false) String acao,
             @RequestParam(required = false) String entidade,
             @RequestParam(required = false) Instant dataInicio,
             @RequestParam(required = false) Instant dataFim,
+            @RequestParam(required = false) Long supermercadoId,
             @RequestParam(defaultValue = "0") int pagina,
             @RequestParam(defaultValue = "25") int tamanho
     ) {
         ClaimsSessao solicitante = contextoObrigatorio();
-        FiltroAuditoria filtro = new FiltroAuditoria(atorId, acao, entidade, dataInicio, dataFim);
+        FiltroAuditoria filtro = new FiltroAuditoria(atorId, acao, entidade, dataInicio, dataFim, supermercadoId);
         Pagina<RegistroAuditoria> resultado = listarAuditoria.executar(solicitante.perfil(), solicitante.supermercadoId(), filtro, pagina, tamanho);
         return ResponseEntity.ok(PaginaResponse.from(resultado, RegistroAuditoriaResponse::from));
     }
 
     @GetMapping("/{id}")
     @RequerPerfil({Perfil.SUPER_ADMIN, Perfil.DONO})
+    @AuditarConsulta(acao = "AUDITORIA_CONSULTADA", entidade = "RegistroAuditoria", paramEntidadeId = "id")
     @Operation(summary = "Consulta um registro de auditoria pelo identificador, respeitando o escopo do perfil")
     public ResponseEntity<RegistroAuditoriaResponse> buscarPorId(@PathVariable Long id) {
         ClaimsSessao solicitante = contextoObrigatorio();

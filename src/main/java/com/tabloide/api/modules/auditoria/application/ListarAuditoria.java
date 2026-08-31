@@ -28,11 +28,12 @@ public class ListarAuditoria {
             int tamanho
     ) {
         validarPaginacao(pagina, tamanho);
-        return auditoriaRepository.listar(escopoDoSolicitante(perfilSolicitante, supermercadoIdSolicitante), filtro, pagina, tamanho);
+        Long escopo = escopoDoSolicitante(perfilSolicitante, supermercadoIdSolicitante, filtro.supermercadoId());
+        return auditoriaRepository.listar(escopo, filtro, pagina, tamanho);
     }
 
-    private Long escopoDoSolicitante(Perfil perfilSolicitante, Long supermercadoIdSolicitante) {
-        return perfilSolicitante == Perfil.SUPER_ADMIN ? null : supermercadoIdSolicitante;
+    private Long escopoDoSolicitante(Perfil perfilSolicitante, Long supermercadoIdSolicitante, Long supermercadoIdFiltro) {
+        return perfilSolicitante == Perfil.SUPER_ADMIN ? supermercadoIdFiltro : supermercadoIdSolicitante;
     }
 
     private void validarPaginacao(int pagina, int tamanho) {

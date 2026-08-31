@@ -28,7 +28,7 @@ class ListarAuditoriaTest {
 
     private ListarAuditoria listarAuditoria;
 
-    private static final FiltroAuditoria FILTRO_VAZIO = new FiltroAuditoria(null, null, null, null, null);
+    private static final FiltroAuditoria FILTRO_VAZIO = new FiltroAuditoria(null, null, null, null, null, null);
 
     @BeforeEach
     void configurar() {
@@ -54,6 +54,28 @@ class ListarAuditoriaTest {
         listarAuditoria.executar(Perfil.DONO, 10L, FILTRO_VAZIO, 0, 25);
 
         verify(auditoriaRepository).listar(eq(10L), eq(FILTRO_VAZIO), eq(0), eq(25));
+    }
+
+    @Test
+    void deveListarComFiltroDeSupermercadoEspecificoQuandoSolicitanteForSuperAdmin() {
+        FiltroAuditoria filtroComSupermercado = new FiltroAuditoria(null, null, null, null, null, 99L);
+        Pagina<RegistroAuditoria> pagina = new Pagina<>(List.of(), 0, 25, 0, 0);
+        when(auditoriaRepository.listar(eq(99L), eq(filtroComSupermercado), eq(0), eq(25))).thenReturn(pagina);
+
+        listarAuditoria.executar(Perfil.SUPER_ADMIN, 10L, filtroComSupermercado, 0, 25);
+
+        verify(auditoriaRepository).listar(eq(99L), eq(filtroComSupermercado), eq(0), eq(25));
+    }
+
+    @Test
+    void deveIgnorarFiltroDeSupermercadoDeOutroTenantQuandoSolicitanteForDono() {
+        FiltroAuditoria filtroComOutroSupermercado = new FiltroAuditoria(null, null, null, null, null, 99L);
+        Pagina<RegistroAuditoria> pagina = new Pagina<>(List.of(), 0, 25, 0, 0);
+        when(auditoriaRepository.listar(eq(10L), eq(filtroComOutroSupermercado), eq(0), eq(25))).thenReturn(pagina);
+
+        listarAuditoria.executar(Perfil.DONO, 10L, filtroComOutroSupermercado, 0, 25);
+
+        verify(auditoriaRepository).listar(eq(10L), eq(filtroComOutroSupermercado), eq(0), eq(25));
     }
 
     @Test
