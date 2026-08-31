@@ -10,7 +10,7 @@ public interface UsuarioRepository {
 
     Optional<Usuario> buscarPorId(Long id);
 
-    void salvar(Usuario usuario);
+    Usuario salvar(Usuario usuario);
 
     Pagina<Usuario> listarPorSupermercado(Long supermercadoId, int pagina, int tamanho);
 }

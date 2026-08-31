@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.autenticacao.domain;
 
+import com.tabloide.api.modules.autenticacao.domain.exceptions.PerfilInvalidoParaCadastroException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -41,6 +42,28 @@ public class Usuario {
         this.bloqueadoAte = bloqueadoAte;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+    }
+
+    public static void validarPerfilCadastravel(Perfil perfil) {
+        if (perfil == Perfil.SUPER_ADMIN) {
+            throw new PerfilInvalidoParaCadastroException();
+        }
+    }
+
+    public static Usuario cadastrar(
+            String email,
+            String senhaHash,
+            Perfil perfil,
+            Long supermercadoId,
+            Cnpj supermercadoCnpj,
+            Instant agora
+    ) {
+        validarPerfilCadastravel(perfil);
+        return new Usuario(null, email, senhaHash, perfil, supermercadoId, supermercadoCnpj, true, 0, null, agora, agora);
+    }
+
+    public String resumoParaAuditoria() {
+        return "email=" + email + ", perfil=" + perfil + ", supermercadoId=" + supermercadoId + ", ativo=" + ativo;
     }
 
     public boolean estaAtivo() {

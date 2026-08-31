@@ -34,14 +34,33 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public void salvar(Usuario usuario) {
+    public Usuario salvar(Usuario usuario) {
+        UsuarioJpaEntity entidade = usuario.id() == null
+                ? new UsuarioJpaEntity(
+                        null,
+                        usuario.email(),
+                        usuario.senhaHash(),
+                        usuario.perfil(),
+                        usuario.supermercadoId(),
+                        usuario.supermercadoCnpj() == null ? null : usuario.supermercadoCnpj().valor(),
+                        usuario.estaAtivo(),
+                        usuario.tentativasLoginInvalidas(),
+                        usuario.bloqueadoAte(),
+                        usuario.criadoEm(),
+                        usuario.atualizadoEm()
+                )
+                : atualizar(usuario);
+        return paraDominio(jpaRepository.save(entidade));
+    }
+
+    private UsuarioJpaEntity atualizar(Usuario usuario) {
         UsuarioJpaEntity entidade = jpaRepository.findById(usuario.id())
                 .orElseThrow(() -> new IllegalStateException("Usuário " + usuario.id() + " não encontrado para atualização"));
         entidade.setSenhaHash(usuario.senhaHash());
         entidade.setTentativasLoginInvalidas(usuario.tentativasLoginInvalidas());
         entidade.setBloqueadoAte(usuario.bloqueadoAte());
         entidade.setAtualizadoEm(usuario.atualizadoEm());
-        jpaRepository.save(entidade);
+        return entidade;
     }
 
     @Override

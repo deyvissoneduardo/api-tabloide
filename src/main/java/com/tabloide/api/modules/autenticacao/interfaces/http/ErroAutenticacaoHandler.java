@@ -3,6 +3,8 @@ package com.tabloide.api.modules.autenticacao.interfaces.http;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.CredenciaisInvalidasException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.DadosRedefinicaoNaoConferemException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.EmailJaCadastradoException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.PerfilInvalidoParaCadastroException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoNaoEncontradaException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
@@ -51,6 +53,16 @@ public class ErroAutenticacaoHandler {
     @ExceptionHandler(TokenRedefinicaoInvalidoOuExpiradoException.class)
     public ResponseEntity<ErroResponse> tratarTokenInvalido(TokenRedefinicaoInvalidoOuExpiradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<ErroResponse> tratarEmailDuplicado(EmailJaCadastradoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(PerfilInvalidoParaCadastroException.class)
+    public ResponseEntity<ErroResponse> tratarPerfilInvalido(PerfilInvalidoParaCadastroException ex) {
+        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
