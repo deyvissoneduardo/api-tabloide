@@ -3,6 +3,7 @@ package com.tabloide.api.modules.plano.infrastructure.persistence;
 import com.tabloide.api.modules.plano.domain.Assinatura;
 import com.tabloide.api.modules.plano.domain.AssinaturaRepository;
 import com.tabloide.api.modules.plano.domain.EstadoAssinatura;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,26 @@ public class AssinaturaRepositoryAdapter implements AssinaturaRepository {
     public Optional<Assinatura> buscarVigenteOuAgendadaPorSupermercado(Long supermercadoId) {
         return jpaRepository.findFirstBySupermercadoIdAndEstadoIn(supermercadoId, ESTADOS_ATIVOS)
                 .map(AssinaturaRepositoryAdapter::paraDominio);
+    }
+
+    @Override
+    public Optional<Assinatura> buscarMaisRecentePorSupermercado(Long supermercadoId) {
+        return jpaRepository.findFirstBySupermercadoIdOrderByDataInicioDesc(supermercadoId)
+                .map(AssinaturaRepositoryAdapter::paraDominio);
+    }
+
+    @Override
+    public List<Assinatura> listarVigentesComVencimentoAte(Instant limite) {
+        return jpaRepository.findByEstadoAndDataFimLessThanEqual(EstadoAssinatura.VIGENTE, limite).stream()
+                .map(AssinaturaRepositoryAdapter::paraDominio)
+                .toList();
+    }
+
+    @Override
+    public List<Assinatura> listarVigentesComVencimentoEntre(Instant inicio, Instant fim) {
+        return jpaRepository.findByEstadoAndDataFimBetween(EstadoAssinatura.VIGENTE, inicio, fim).stream()
+                .map(AssinaturaRepositoryAdapter::paraDominio)
+                .toList();
     }
 
     @Override
@@ -51,6 +72,10 @@ public class AssinaturaRepositoryAdapter implements AssinaturaRepository {
     private static AssinaturaJpaEntity atualizar(AssinaturaJpaEntity entidade, Assinatura assinatura) {
         entidade.setEstado(assinatura.estado());
         entidade.setDataFim(assinatura.dataFim());
+        entidade.setPlanoNome(assinatura.planoNome());
+        entidade.setPlanoValidadeDias(assinatura.planoValidadeDias());
+        entidade.setPlanoValor(assinatura.planoValor());
+        entidade.setPlanoLimiteFotos(assinatura.planoLimiteFotos());
         return entidade;
     }
 

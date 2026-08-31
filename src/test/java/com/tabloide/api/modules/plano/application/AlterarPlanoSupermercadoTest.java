@@ -63,7 +63,8 @@ class AlterarPlanoSupermercadoTest {
     }
 
     private static Plano plano(Long id, String nome) {
-        return new Plano(id, nome, 30, BigDecimal.valueOf(99.90), 100);
+        Instant agora = Instant.now();
+        return new Plano(id, nome, Plano.normalizarNome(nome), 30, BigDecimal.valueOf(99.90), 100, null, 0L, agora, agora, null);
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfi
 import com.tabloide.api.modules.plano.application.AlterarPlanoSupermercado;
 import com.tabloide.api.modules.plano.application.AssociarPlano;
 import com.tabloide.api.modules.plano.application.BuscarAssinaturaVigente;
+import com.tabloide.api.modules.plano.application.RenovarAssinatura;
 import com.tabloide.api.modules.plano.domain.Assinatura;
 import com.tabloide.api.modules.plano.interfaces.http.dto.AssinaturaResponse;
 import com.tabloide.api.modules.plano.interfaces.http.dto.AssociarPlanoRequest;
@@ -34,15 +35,18 @@ public class AssinaturaController {
     private final AssociarPlano associarPlano;
     private final AlterarPlanoSupermercado alterarPlanoSupermercado;
     private final BuscarAssinaturaVigente buscarAssinaturaVigente;
+    private final RenovarAssinatura renovarAssinatura;
 
     public AssinaturaController(
             AssociarPlano associarPlano,
             AlterarPlanoSupermercado alterarPlanoSupermercado,
-            BuscarAssinaturaVigente buscarAssinaturaVigente
+            BuscarAssinaturaVigente buscarAssinaturaVigente,
+            RenovarAssinatura renovarAssinatura
     ) {
         this.associarPlano = associarPlano;
         this.alterarPlanoSupermercado = alterarPlanoSupermercado;
         this.buscarAssinaturaVigente = buscarAssinaturaVigente;
+        this.renovarAssinatura = renovarAssinatura;
     }
 
     @GetMapping
@@ -75,6 +79,15 @@ public class AssinaturaController {
     ) {
         ClaimsSessao ator = contextoObrigatorio();
         Assinatura assinatura = alterarPlanoSupermercado.executar(supermercadoId, request.planoId(), ator.usuarioId(), ator.perfil());
+        return ResponseEntity.ok(AssinaturaResponse.from(assinatura));
+    }
+
+    @PostMapping("/renovar")
+    @RequerPerfil({Perfil.SUPER_ADMIN})
+    @Operation(summary = "Renova a assinatura de um supermercado (antecipada ou após vencimento)")
+    public ResponseEntity<AssinaturaResponse> renovar(@PathVariable Long supermercadoId) {
+        ClaimsSessao ator = contextoObrigatorio();
+        Assinatura assinatura = renovarAssinatura.executar(supermercadoId, ator.usuarioId(), ator.perfil());
         return ResponseEntity.ok(AssinaturaResponse.from(assinatura));
     }
 

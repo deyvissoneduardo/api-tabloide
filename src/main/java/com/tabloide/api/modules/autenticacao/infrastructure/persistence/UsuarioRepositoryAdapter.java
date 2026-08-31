@@ -2,8 +2,10 @@ package com.tabloide.api.modules.autenticacao.infrastructure.persistence;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
+import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.Usuario;
 import com.tabloide.api.modules.autenticacao.domain.UsuarioRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,6 +81,13 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
                 resultado.getTotalElements(),
                 resultado.getTotalPages()
         );
+    }
+
+    @Override
+    public List<Usuario> listarAtivosPorSupermercadoEPerfil(Long supermercadoId, Perfil perfil) {
+        return jpaRepository.findBySupermercadoIdAndPerfilAndAtivoTrue(supermercadoId, perfil).stream()
+                .map(UsuarioRepositoryAdapter::paraDominio)
+                .toList();
     }
 
     private static Usuario paraDominio(UsuarioJpaEntity entidade) {

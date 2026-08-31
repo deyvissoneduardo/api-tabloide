@@ -62,7 +62,8 @@ class AssociarPlanoTest {
     }
 
     private static Plano plano() {
-        return new Plano(5L, "Básico", 30, BigDecimal.valueOf(99.90), 100);
+        Instant agora = Instant.now();
+        return new Plano(5L, "Básico", Plano.normalizarNome("Básico"), 30, BigDecimal.valueOf(99.90), 100, null, 0L, agora, agora, null);
     }
 
     @Test

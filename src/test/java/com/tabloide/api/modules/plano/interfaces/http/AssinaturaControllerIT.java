@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.plano.interfaces.http;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,8 +12,13 @@ import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJ
 import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJpaRepository;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginRequest;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
+import com.tabloide.api.modules.plano.domain.EstadoAssinatura;
+import com.tabloide.api.modules.plano.domain.Plano;
+import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaEntity;
+import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaRepository;
 import com.tabloide.api.modules.plano.infrastructure.persistence.PlanoJpaEntity;
 import com.tabloide.api.modules.plano.infrastructure.persistence.PlanoJpaRepository;
+import com.tabloide.api.modules.plano.interfaces.http.dto.AssinaturaResponse;
 import com.tabloide.api.modules.plano.interfaces.http.dto.AssociarPlanoRequest;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaEntity;
@@ -35,6 +41,9 @@ class AssinaturaControllerIT extends PlanoIntegrationTestSupport {
 
     @Autowired
     private PlanoJpaRepository planoJpaRepository;
+
+    @Autowired
+    private AssinaturaJpaRepository assinaturaJpaRepository;
 
     @Autowired
     private UsuarioJpaRepository usuarioJpaRepository;
@@ -195,6 +204,59 @@ class AssinaturaControllerIT extends PlanoIntegrationTestSupport {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deveRenovarAntecipadamentePreservandoInicioEEstendendoFim() throws Exception {
+        Long supermercadoId = criarSupermercado(EstadoSupermercado.ATIVO, "11444777001052");
+        Long planoId = criarPlano("Básico Renovar Antecipado", 30, BigDecimal.valueOf(99.90), 100);
+        String token = tokenSuperAdmin();
+
+        String corpoAssociacao = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/plano")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new AssociarPlanoRequest(planoId))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        AssinaturaResponse original = objectMapper.readValue(corpoAssociacao, AssinaturaResponse.class);
+
+        String corpoRenovado = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/plano/renovar")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("VIGENTE"))
+                .andReturn().getResponse().getContentAsString();
+        AssinaturaResponse renovado = objectMapper.readValue(corpoRenovado, AssinaturaResponse.class);
+
+        assertThat(renovado.dataInicio()).isEqualTo(original.dataInicio());
+        assertThat(renovado.dataFim()).isAfter(original.dataFim());
+    }
+
+    @Test
+    void deveRenovarAposVencimentoDesbloqueandoSupermercado() throws Exception {
+        Long supermercadoId = criarSupermercado(EstadoSupermercado.BLOQUEADO, "11444777002024");
+        Long planoId = criarPlano("Básico Renovar Vencido", 30, BigDecimal.valueOf(99.90), 100);
+        Instant agora = Instant.now();
+        AssinaturaJpaEntity vencida = new AssinaturaJpaEntity(
+                null, supermercadoId, planoId, "Básico Renovar Vencido", 30, BigDecimal.valueOf(99.90), 100,
+                EstadoAssinatura.VENCIDA, agora.minusSeconds(31 * 86400L), agora.minusSeconds(3600), agora.minusSeconds(31 * 86400L)
+        );
+        assinaturaJpaRepository.save(vencida);
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/plano/renovar")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("VIGENTE"))
+                .andExpect(jsonPath("$.planoId").value(planoId));
+
+        SupermercadoJpaEntity supermercadoAtualizado = supermercadoJpaRepository.findById(supermercadoId).orElseThrow();
+        assertThat(supermercadoAtualizado.getEstado()).isEqualTo(EstadoSupermercado.ATIVO);
+    }
+
+    @Test
+    void deveRejeitarRenovacaoQuandoSupermercadoNaoExiste() throws Exception {
+        mockMvc.perform(post("/api/supermercados/999999/plano/renovar")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
+                .andExpect(status().isNotFound());
+    }
+
     private Long criarSupermercado(EstadoSupermercado estado, String cnpj) {
         Instant agora = Instant.now();
         SupermercadoJpaEntity entidade = new SupermercadoJpaEntity(
@@ -206,7 +268,10 @@ class AssinaturaControllerIT extends PlanoIntegrationTestSupport {
     }
 
     private Long criarPlano(String nome, int validadeDias, BigDecimal valor, Integer limiteFotos) {
-        PlanoJpaEntity entidade = new PlanoJpaEntity(null, nome, validadeDias, valor, limiteFotos);
+        Instant agora = Instant.now();
+        PlanoJpaEntity entidade = new PlanoJpaEntity(
+                null, nome, Plano.normalizarNome(nome), validadeDias, valor, limiteFotos, null, null, agora, agora, null
+        );
         return planoJpaRepository.save(entidade).getId();
     }
 

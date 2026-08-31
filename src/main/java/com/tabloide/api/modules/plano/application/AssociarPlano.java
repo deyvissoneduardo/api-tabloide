@@ -8,6 +8,7 @@ import com.tabloide.api.modules.plano.domain.AssinaturaRepository;
 import com.tabloide.api.modules.plano.domain.Plano;
 import com.tabloide.api.modules.plano.domain.PlanoRepository;
 import com.tabloide.api.modules.plano.domain.exceptions.AssinaturaVigenteJaExisteException;
+import com.tabloide.api.modules.plano.domain.exceptions.PlanoExcluidoException;
 import com.tabloide.api.modules.plano.domain.exceptions.PlanoNaoEncontradoException;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
@@ -52,6 +53,10 @@ public class AssociarPlano {
 
         Plano plano = planoRepository.buscarPorId(planoId)
                 .orElseThrow(PlanoNaoEncontradoException::new);
+
+        if (plano.estaExcluido()) {
+            throw new PlanoExcluidoException();
+        }
 
         Instant agora = Instant.now();
         Assinatura assinatura = Assinatura.associar(supermercadoId, plano, agora);

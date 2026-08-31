@@ -96,16 +96,32 @@ public class AssinaturaJpaEntity {
         return planoNome;
     }
 
+    public void setPlanoNome(String planoNome) {
+        this.planoNome = planoNome;
+    }
+
     public int getPlanoValidadeDias() {
         return planoValidadeDias;
+    }
+
+    public void setPlanoValidadeDias(int planoValidadeDias) {
+        this.planoValidadeDias = planoValidadeDias;
     }
 
     public BigDecimal getPlanoValor() {
         return planoValor;
     }
 
+    public void setPlanoValor(BigDecimal planoValor) {
+        this.planoValor = planoValor;
+    }
+
     public Integer getPlanoLimiteFotos() {
         return planoLimiteFotos;
+    }
+
+    public void setPlanoLimiteFotos(Integer planoLimiteFotos) {
+        this.planoLimiteFotos = planoLimiteFotos;
     }
 
     public EstadoAssinatura getEstado() {

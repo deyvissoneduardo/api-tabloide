@@ -8,6 +8,7 @@ import com.tabloide.api.modules.plano.domain.AssinaturaRepository;
 import com.tabloide.api.modules.plano.domain.Plano;
 import com.tabloide.api.modules.plano.domain.PlanoRepository;
 import com.tabloide.api.modules.plano.domain.exceptions.NenhumaAssinaturaVigenteException;
+import com.tabloide.api.modules.plano.domain.exceptions.PlanoExcluidoException;
 import com.tabloide.api.modules.plano.domain.exceptions.PlanoNaoEncontradoException;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
@@ -51,6 +52,10 @@ public class AlterarPlanoSupermercado {
 
         Plano novoPlano = planoRepository.buscarPorId(planoId)
                 .orElseThrow(PlanoNaoEncontradoException::new);
+
+        if (novoPlano.estaExcluido()) {
+            throw new PlanoExcluidoException();
+        }
 
         Instant agora = Instant.now();
         String antes = atual.resumoParaAuditoria();

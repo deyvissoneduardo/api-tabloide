@@ -7,15 +7,15 @@ import java.time.ZoneId;
 
 public class Assinatura {
 
-    private static final ZoneId FUSO_BRASILIA = ZoneId.of("America/Sao_Paulo");
+    public static final ZoneId FUSO_BRASILIA = ZoneId.of("America/Sao_Paulo");
 
     private final Long id;
     private final Long supermercadoId;
     private final Long planoId;
-    private final String planoNome;
-    private final int planoValidadeDias;
-    private final BigDecimal planoValor;
-    private final Integer planoLimiteFotos;
+    private String planoNome;
+    private int planoValidadeDias;
+    private BigDecimal planoValor;
+    private Integer planoLimiteFotos;
     private EstadoAssinatura estado;
     private final Instant dataInicio;
     private Instant dataFim;
@@ -82,6 +82,31 @@ public class Assinatura {
     public void substituir(Instant agora) {
         this.estado = EstadoAssinatura.SUBSTITUIDA;
         this.dataFim = agora;
+    }
+
+    public boolean estaVigente() {
+        return estado == EstadoAssinatura.VIGENTE;
+    }
+
+    public boolean estaVencida() {
+        return estado == EstadoAssinatura.VENCIDA;
+    }
+
+    // RN-009: renovação antecipada preserva os dias restantes (dataFim não retrocede) e
+    // enfileira o novo período logo após o atual; o snapshot do plano é atualizado para refletir
+    // o plano vigente no momento da renovação (RN-014).
+    public void renovarAntecipada(Plano planoAtual) {
+        this.dataFim = fimDaVigencia(dataFim.plusSeconds(1), planoAtual.validadeDias());
+        this.planoNome = planoAtual.nome();
+        this.planoValidadeDias = planoAtual.validadeDias();
+        this.planoValor = planoAtual.valor();
+        this.planoLimiteFotos = planoAtual.limiteFotos();
+    }
+
+    // RN-012: assinatura vigente cujo prazo passou é marcada como vencida; o bloqueio do
+    // supermercado é responsabilidade de quem processa o vencimento (não desta entidade).
+    public void vencer() {
+        this.estado = EstadoAssinatura.VENCIDA;
     }
 
     public String resumoParaAuditoria() {

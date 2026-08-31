@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.autenticacao.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository {
@@ -15,4 +16,6 @@ public interface UsuarioRepository {
     Usuario salvar(Usuario usuario);
 
     Pagina<Usuario> listarPorSupermercado(Long supermercadoId, int pagina, int tamanho);
+
+    List<Usuario> listarAtivosPorSupermercadoEPerfil(Long supermercadoId, Perfil perfil);
 }
