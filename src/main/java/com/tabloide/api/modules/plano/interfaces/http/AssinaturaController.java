@@ -2,11 +2,13 @@ package com.tabloide.api.modules.plano.interfaces.http;
 
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
+import com.tabloide.api.modules.autenticacao.infrastructure.security.AuditarConsulta;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfil;
 import com.tabloide.api.modules.plano.application.AlterarPlanoSupermercado;
 import com.tabloide.api.modules.plano.application.AssociarPlano;
+import com.tabloide.api.modules.plano.application.BuscarAssinaturaVigente;
 import com.tabloide.api.modules.plano.domain.Assinatura;
 import com.tabloide.api.modules.plano.interfaces.http.dto.AssinaturaResponse;
 import com.tabloide.api.modules.plano.interfaces.http.dto.AssociarPlanoRequest;
@@ -16,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +33,25 @@ public class AssinaturaController {
 
     private final AssociarPlano associarPlano;
     private final AlterarPlanoSupermercado alterarPlanoSupermercado;
+    private final BuscarAssinaturaVigente buscarAssinaturaVigente;
 
-    public AssinaturaController(AssociarPlano associarPlano, AlterarPlanoSupermercado alterarPlanoSupermercado) {
+    public AssinaturaController(
+            AssociarPlano associarPlano,
+            AlterarPlanoSupermercado alterarPlanoSupermercado,
+            BuscarAssinaturaVigente buscarAssinaturaVigente
+    ) {
         this.associarPlano = associarPlano;
         this.alterarPlanoSupermercado = alterarPlanoSupermercado;
+        this.buscarAssinaturaVigente = buscarAssinaturaVigente;
+    }
+
+    @GetMapping
+    @RequerPerfil({Perfil.SUPER_ADMIN})
+    @AuditarConsulta(acao = "PLANO_CONSULTADO", entidade = "Assinatura", paramSupermercadoId = "supermercadoId")
+    @Operation(summary = "Consulta a assinatura vigente ou agendada de um supermercado")
+    public ResponseEntity<AssinaturaResponse> buscarVigente(@PathVariable Long supermercadoId) {
+        Assinatura assinatura = buscarAssinaturaVigente.executar(supermercadoId);
+        return ResponseEntity.ok(AssinaturaResponse.from(assinatura));
     }
 
     @PostMapping

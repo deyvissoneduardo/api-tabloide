@@ -1,6 +1,7 @@
 package com.tabloide.api.modules.plano.interfaces.http;
 
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
+import com.tabloide.api.modules.plano.domain.exceptions.AssinaturaNaoEncontradaException;
 import com.tabloide.api.modules.plano.domain.exceptions.AssinaturaVigenteJaExisteException;
 import com.tabloide.api.modules.plano.domain.exceptions.NenhumaAssinaturaVigenteException;
 import com.tabloide.api.modules.plano.domain.exceptions.PlanoNaoEncontradoException;
@@ -27,6 +28,11 @@ public class ErroPlanoHandler {
     @ExceptionHandler(NenhumaAssinaturaVigenteException.class)
     public ResponseEntity<ErroResponse> tratarNenhumaAssinaturaVigente(NenhumaAssinaturaVigenteException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AssinaturaNaoEncontradaException.class)
+    public ResponseEntity<ErroResponse> tratarAssinaturaNaoEncontrada(AssinaturaNaoEncontradaException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

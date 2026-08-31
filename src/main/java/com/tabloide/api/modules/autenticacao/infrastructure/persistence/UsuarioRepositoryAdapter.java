@@ -1,9 +1,12 @@
 package com.tabloide.api.modules.autenticacao.infrastructure.persistence;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
+import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Usuario;
 import com.tabloide.api.modules.autenticacao.domain.UsuarioRepository;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -39,6 +42,18 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         entidade.setBloqueadoAte(usuario.bloqueadoAte());
         entidade.setAtualizadoEm(usuario.atualizadoEm());
         jpaRepository.save(entidade);
+    }
+
+    @Override
+    public Pagina<Usuario> listarPorSupermercado(Long supermercadoId, int pagina, int tamanho) {
+        Page<UsuarioJpaEntity> resultado = jpaRepository.findBySupermercadoId(supermercadoId, PageRequest.of(pagina, tamanho));
+        return new Pagina<>(
+                resultado.getContent().stream().map(UsuarioRepositoryAdapter::paraDominio).toList(),
+                pagina,
+                tamanho,
+                resultado.getTotalElements(),
+                resultado.getTotalPages()
+        );
     }
 
     private static Usuario paraDominio(UsuarioJpaEntity entidade) {

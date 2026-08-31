@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.supermercado.interfaces.http;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -263,6 +264,46 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.estado").value("BLOQUEADO"));
+    }
+
+    @Test
+    void deveBuscarSupermercadoPorIdComoSuperAdmin() throws Exception {
+        String token = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000838"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+
+        mockMvc.perform(get("/api/supermercados/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
+    }
+
+    @Test
+    void deveRetornarNaoEncontradoAoBuscarSupermercadoInexistente() throws Exception {
+        mockMvc.perform(get("/api/supermercados/999999")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveRejeitarBuscaPorIdComOperador() throws Exception {
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, "operador-busca@sgtm.local");
+
+        mockMvc.perform(get("/api/supermercados/1")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deveRejeitarBuscaPorIdSemToken() throws Exception {
+        mockMvc.perform(get("/api/supermercados/1"))
+                .andExpect(status().isUnauthorized());
     }
 
     private CadastrarSupermercadoRequest requestCadastro(String cnpj) {

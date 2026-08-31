@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.plano.interfaces.http;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -166,6 +167,32 @@ class AssinaturaControllerIT extends PlanoIntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new AssociarPlanoRequest(planoId))))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveBuscarAssinaturaVigenteComoSuperAdmin() throws Exception {
+        Long supermercadoId = criarSupermercado(EstadoSupermercado.ATIVO, "11444777000838");
+        Long planoId = criarPlano("Básico Consulta", 30, BigDecimal.valueOf(99.90), 100);
+        String token = tokenSuperAdmin();
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/plano")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new AssociarPlanoRequest(planoId))))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/supermercados/" + supermercadoId + "/plano")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.planoId").value(planoId));
+    }
+
+    @Test
+    void deveRetornarNaoEncontradoQuandoSupermercadoNaoPossuiAssinatura() throws Exception {
+        Long supermercadoId = criarSupermercado(EstadoSupermercado.ATIVO, "11444777000919");
+
+        mockMvc.perform(get("/api/supermercados/" + supermercadoId + "/plano")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
+                .andExpect(status().isNotFound());
     }
 
     private Long criarSupermercado(EstadoSupermercado estado, String cnpj) {

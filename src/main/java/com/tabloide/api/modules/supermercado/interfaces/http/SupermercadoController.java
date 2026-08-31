@@ -3,11 +3,13 @@ package com.tabloide.api.modules.supermercado.interfaces.http;
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
+import com.tabloide.api.modules.autenticacao.infrastructure.security.AuditarConsulta;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfil;
 import com.tabloide.api.modules.supermercado.application.AtivarSupermercado;
 import com.tabloide.api.modules.supermercado.application.BloquearSupermercado;
+import com.tabloide.api.modules.supermercado.application.BuscarSupermercadoPorId;
 import com.tabloide.api.modules.supermercado.application.CadastrarSupermercado;
 import com.tabloide.api.modules.supermercado.application.DadosSupermercado;
 import com.tabloide.api.modules.supermercado.application.DesativarSupermercado;
@@ -23,6 +25,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,19 +43,31 @@ public class SupermercadoController {
     private final AtivarSupermercado ativarSupermercado;
     private final DesativarSupermercado desativarSupermercado;
     private final BloquearSupermercado bloquearSupermercado;
+    private final BuscarSupermercadoPorId buscarSupermercadoPorId;
 
     public SupermercadoController(
             CadastrarSupermercado cadastrarSupermercado,
             EditarSupermercado editarSupermercado,
             AtivarSupermercado ativarSupermercado,
             DesativarSupermercado desativarSupermercado,
-            BloquearSupermercado bloquearSupermercado
+            BloquearSupermercado bloquearSupermercado,
+            BuscarSupermercadoPorId buscarSupermercadoPorId
     ) {
         this.cadastrarSupermercado = cadastrarSupermercado;
         this.editarSupermercado = editarSupermercado;
         this.ativarSupermercado = ativarSupermercado;
         this.desativarSupermercado = desativarSupermercado;
         this.bloquearSupermercado = bloquearSupermercado;
+        this.buscarSupermercadoPorId = buscarSupermercadoPorId;
+    }
+
+    @GetMapping("/{id}")
+    @RequerPerfil({Perfil.SUPER_ADMIN})
+    @AuditarConsulta(acao = "SUPERMERCADO_CONSULTADO", entidade = "Supermercado", paramEntidadeId = "id", paramSupermercadoId = "id")
+    @Operation(summary = "Consulta os dados cadastrais e o estado de um supermercado")
+    public ResponseEntity<SupermercadoResponse> buscarPorId(@PathVariable Long id) {
+        Supermercado supermercado = buscarSupermercadoPorId.executar(id);
+        return ResponseEntity.ok(SupermercadoResponse.from(supermercado));
     }
 
     @PostMapping
