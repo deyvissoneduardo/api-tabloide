@@ -214,6 +214,130 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    void deveDesativarUsuarioComoDono() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777001567");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-desativa@sgtm.local");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-desativado@sgtm.local").getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ativo").value(false));
+    }
+
+    @Test
+    void deveAtivarUsuarioComoDono() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777001648");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-ativa@sgtm.local");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-inativo@sgtm.local", false).getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "ativacao", tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ativo").value(true));
+    }
+
+    @Test
+    void deveDesativarUsuarioComoSuperAdmin() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777002458");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-desativado-super-admin@sgtm.local").getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenSuperAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ativo").value(false));
+    }
+
+    @Test
+    void deveAtivarUsuarioComoSuperAdmin() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777002539");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-inativo-super-admin@sgtm.local", false).getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "ativacao", tokenSuperAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ativo").value(true));
+    }
+
+    @Test
+    void deveSerIdempotenteAoDesativarDuasVezes() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777001729");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-idempotente@sgtm.local");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-idempotente@sgtm.local").getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenDono)).andExpect(status().isOk());
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ativo").value(false));
+    }
+
+    @Test
+    void deveEncerrarSessaoDoUsuarioAoDesativar() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777001800");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-encerra-sessao@sgtm.local");
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, supermercadoId, "operador-com-sessao@sgtm.local");
+        Long operadorId = usuarioJpaRepository.findByEmail("operador-com-sessao@sgtm.local").orElseThrow().getId();
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenDono)).andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/supermercados/" + supermercadoId + "/usuarios")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deveRejeitarDesativacaoComOperador() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777001961");
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, supermercadoId, "operador-nao-desativa@sgtm.local");
+        Long outroOperadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-alvo@sgtm.local").getId();
+
+        mockMvc.perform(acao(supermercadoId, outroOperadorId, "desativacao", tokenOperador))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deveRejeitarDesativacaoQuandoUsuarioForaDoEscopoDoAtor() throws Exception {
+        Long supermercadoA = criarSupermercado("11444777002042");
+        Long supermercadoB = criarSupermercado("11444777002123");
+        String tokenDonoA = criarUsuarioEAutenticar(Perfil.DONO, supermercadoA, "dono-fora-de-escopo-desativa@sgtm.local");
+        Long operadorDeB = criarUsuario(Perfil.OPERADOR, supermercadoB, "operador-fora-de-escopo-desativa@sgtm.local").getId();
+
+        mockMvc.perform(acao(supermercadoA, operadorDeB, "desativacao", tokenDonoA))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveRejeitarDesativacaoQuandoUsuarioNaoExiste() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777002204");
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-usuario-inexistente@sgtm.local");
+
+        mockMvc.perform(acao(supermercadoId, 999999L, "desativacao", tokenDono))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveRejeitarDesativacaoQuandoSupermercadoBloqueado() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777002296", EstadoSupermercado.ATIVO);
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, supermercadoId, "dono-bloqueado-desativa@sgtm.local");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-bloqueado@sgtm.local").getId();
+        bloquearSupermercado(supermercadoId);
+
+        mockMvc.perform(acao(supermercadoId, operadorId, "desativacao", tokenDono))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveRejeitarDesativacaoSemToken() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777002366");
+        Long operadorId = criarUsuario(Perfil.OPERADOR, supermercadoId, "operador-sem-token@sgtm.local").getId();
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/usuarios/" + operadorId + "/desativacao"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder acao(
+            Long supermercadoId, Long usuarioId, String acao, String token) {
+        return post("/api/supermercados/" + supermercadoId + "/usuarios/" + usuarioId + "/" + acao)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+    }
+
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder cadastrar(
             Long supermercadoId, String token, CadastrarUsuarioAdministrativoRequest request) throws Exception {
         return post("/api/supermercados/" + supermercadoId + "/usuarios")
@@ -250,10 +374,14 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
         supermercadoJpaRepository.save(entidade);
     }
 
-    private void criarUsuario(Perfil perfil, Long supermercadoId, String email) {
+    private UsuarioJpaEntity criarUsuario(Perfil perfil, Long supermercadoId, String email) {
+        return criarUsuario(perfil, supermercadoId, email, true);
+    }
+
+    private UsuarioJpaEntity criarUsuario(Perfil perfil, Long supermercadoId, String email, boolean ativo) {
         Instant agora = Instant.now();
-        usuarioJpaRepository.save(new UsuarioJpaEntity(
-                null, email, passwordEncoder.encode("SenhaCorreta1"), perfil, supermercadoId, null, true, 0, null, agora, agora
+        return usuarioJpaRepository.save(new UsuarioJpaEntity(
+                null, email, passwordEncoder.encode("SenhaCorreta1"), perfil, supermercadoId, null, ativo, 0, null, agora, agora
         ));
     }
 

@@ -34,6 +34,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
+    public Optional<Usuario> buscarPorIdESupermercado(Long id, Long supermercadoId) {
+        return jpaRepository.findByIdAndSupermercadoId(id, supermercadoId).map(UsuarioRepositoryAdapter::paraDominio);
+    }
+
+    @Override
     public Usuario salvar(Usuario usuario) {
         UsuarioJpaEntity entidade = usuario.id() == null
                 ? new UsuarioJpaEntity(
@@ -57,6 +62,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         UsuarioJpaEntity entidade = jpaRepository.findById(usuario.id())
                 .orElseThrow(() -> new IllegalStateException("Usuário " + usuario.id() + " não encontrado para atualização"));
         entidade.setSenhaHash(usuario.senhaHash());
+        entidade.setAtivo(usuario.estaAtivo());
         entidade.setTentativasLoginInvalidas(usuario.tentativasLoginInvalidas());
         entidade.setBloqueadoAte(usuario.bloqueadoAte());
         entidade.setAtualizadoEm(usuario.atualizadoEm());

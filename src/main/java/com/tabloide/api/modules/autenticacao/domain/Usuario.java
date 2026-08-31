@@ -70,6 +70,16 @@ public class Usuario {
         return ativo;
     }
 
+    public void ativar(Instant agora) {
+        this.ativo = true;
+        this.atualizadoEm = agora;
+    }
+
+    public void desativar(Instant agora) {
+        this.ativo = false;
+        this.atualizadoEm = agora;
+    }
+
     public boolean estaBloqueadoTemporariamente(Instant agora) {
         return bloqueadoAte != null && agora.isBefore(bloqueadoAte);
     }

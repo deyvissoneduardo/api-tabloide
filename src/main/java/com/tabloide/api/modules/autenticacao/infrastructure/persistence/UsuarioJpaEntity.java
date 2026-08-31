@@ -111,6 +111,10 @@ public class UsuarioJpaEntity {
         return ativo;
     }
 
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
     public int getTentativasLoginInvalidas() {
         return tentativasLoginInvalidas;
     }

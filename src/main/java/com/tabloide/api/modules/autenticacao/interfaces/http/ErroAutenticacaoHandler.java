@@ -9,6 +9,7 @@ import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuE
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoNaoEncontradaException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TokenRedefinicaoInvalidoOuExpiradoException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.UsuarioNaoEncontradoException;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,11 @@ public class ErroAutenticacaoHandler {
     @ExceptionHandler(EmailJaCadastradoException.class)
     public ResponseEntity<ErroResponse> tratarEmailDuplicado(EmailJaCadastradoException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErroResponse> tratarUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PerfilInvalidoParaCadastroException.class)

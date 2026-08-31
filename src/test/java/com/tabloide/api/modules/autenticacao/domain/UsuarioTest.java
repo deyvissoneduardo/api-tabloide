@@ -73,6 +73,25 @@ class UsuarioTest {
     }
 
     @Test
+    void desativarDeveMarcarUsuarioComoInativo() {
+        Usuario usuario = usuarioAtivo();
+
+        usuario.desativar(Instant.now());
+
+        assertThat(usuario.estaAtivo()).isFalse();
+    }
+
+    @Test
+    void ativarDeveMarcarUsuarioComoAtivo() {
+        Instant agora = Instant.now();
+        Usuario inativo = new Usuario(1L, "dono@sgtm.local", "hash", Perfil.DONO, 10L, null, false, 0, null, agora, agora);
+
+        inativo.ativar(agora);
+
+        assertThat(inativo.estaAtivo()).isTrue();
+    }
+
+    @Test
     void devePertencerAoSupermercadoComMesmoCnpj() {
         Cnpj cnpj = new Cnpj("11222333000181");
         Instant agora = Instant.now();

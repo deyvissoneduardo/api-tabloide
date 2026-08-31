@@ -1,7 +1,9 @@
 package com.tabloide.api.modules.autenticacao.interfaces.http;
 
+import com.tabloide.api.modules.autenticacao.application.AtivarUsuario;
 import com.tabloide.api.modules.autenticacao.application.CadastrarUsuarioAdministrativo;
 import com.tabloide.api.modules.autenticacao.application.DadosNovoUsuarioAdministrativo;
+import com.tabloide.api.modules.autenticacao.application.DesativarUsuario;
 import com.tabloide.api.modules.autenticacao.application.ListarUsuariosPorSupermercado;
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
@@ -35,13 +37,19 @@ public class UsuarioController {
 
     private final ListarUsuariosPorSupermercado listarUsuariosPorSupermercado;
     private final CadastrarUsuarioAdministrativo cadastrarUsuarioAdministrativo;
+    private final AtivarUsuario ativarUsuario;
+    private final DesativarUsuario desativarUsuario;
 
     public UsuarioController(
             ListarUsuariosPorSupermercado listarUsuariosPorSupermercado,
-            CadastrarUsuarioAdministrativo cadastrarUsuarioAdministrativo
+            CadastrarUsuarioAdministrativo cadastrarUsuarioAdministrativo,
+            AtivarUsuario ativarUsuario,
+            DesativarUsuario desativarUsuario
     ) {
         this.listarUsuariosPorSupermercado = listarUsuariosPorSupermercado;
         this.cadastrarUsuarioAdministrativo = cadastrarUsuarioAdministrativo;
+        this.ativarUsuario = ativarUsuario;
+        this.desativarUsuario = desativarUsuario;
     }
 
     @GetMapping
@@ -73,6 +81,24 @@ public class UsuarioController {
                 ator.supermercadoId()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioResponse.from(usuario));
+    }
+
+    @PostMapping("/{usuarioId}/ativacao")
+    @RequerPerfil({Perfil.DONO, Perfil.SUPER_ADMIN})
+    @Operation(summary = "Ativa um usuário do supermercado")
+    public ResponseEntity<UsuarioResponse> ativar(@PathVariable Long supermercadoId, @PathVariable Long usuarioId) {
+        ClaimsSessao ator = contextoObrigatorio();
+        Usuario usuario = ativarUsuario.executar(supermercadoId, usuarioId, ator.usuarioId(), ator.perfil(), ator.supermercadoId());
+        return ResponseEntity.ok(UsuarioResponse.from(usuario));
+    }
+
+    @PostMapping("/{usuarioId}/desativacao")
+    @RequerPerfil({Perfil.DONO, Perfil.SUPER_ADMIN})
+    @Operation(summary = "Desativa um usuário do supermercado, encerrando suas sessões ativas")
+    public ResponseEntity<UsuarioResponse> desativar(@PathVariable Long supermercadoId, @PathVariable Long usuarioId) {
+        ClaimsSessao ator = contextoObrigatorio();
+        Usuario usuario = desativarUsuario.executar(supermercadoId, usuarioId, ator.usuarioId(), ator.perfil(), ator.supermercadoId());
+        return ResponseEntity.ok(UsuarioResponse.from(usuario));
     }
 
     private ClaimsSessao contextoObrigatorio() {

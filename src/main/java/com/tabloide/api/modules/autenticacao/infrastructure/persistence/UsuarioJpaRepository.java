@@ -11,5 +11,7 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Lo
 
     Optional<UsuarioJpaEntity> findByEmailAndSupermercadoCnpj(String email, String supermercadoCnpj);
 
+    Optional<UsuarioJpaEntity> findByIdAndSupermercadoId(Long id, Long supermercadoId);
+
     Page<UsuarioJpaEntity> findBySupermercadoId(Long supermercadoId, Pageable pageable);
 }
