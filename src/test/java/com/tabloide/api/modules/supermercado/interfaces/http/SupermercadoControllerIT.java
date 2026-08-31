@@ -306,9 +306,85 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    void deveListarSupermercadosComPaginacaoPadrao() throws Exception {
+        String token = tokenSuperAdmin();
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777000919"))))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pagina").value(0))
+                .andExpect(jsonPath("$.tamanho").value(25))
+                .andExpect(jsonPath("$.itens").isArray());
+    }
+
+    @Test
+    void deveListarSupermercadosOrdenadosPorRazaoSocial() throws Exception {
+        String token = tokenSuperAdmin();
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastroComRazaoSocial("11222333000262", "Zeta Supermercados"))))
+                .andExpect(status().isCreated());
+        mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastroComRazaoSocial("11222333000343", "Alfa Supermercados"))))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .param("tamanho", "100"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens[0].razaoSocial").value("Alfa Supermercados"));
+    }
+
+    @Test
+    void deveRejeitarTamanhoDePaginaInvalidoNaListagem() throws Exception {
+        mockMvc.perform(get("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
+                        .param("tamanho", "10"))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void deveRejeitarPaginaNegativaNaListagem() throws Exception {
+        mockMvc.perform(get("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
+                        .param("pagina", "-1"))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void deveRejeitarListagemSemToken() throws Exception {
+        mockMvc.perform(get("/api/supermercados"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deveRejeitarListagemComOperador() throws Exception {
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, "operador-listagem@sgtm.local");
+
+        mockMvc.perform(get("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador))
+                .andExpect(status().isForbidden());
+    }
+
     private CadastrarSupermercadoRequest requestCadastro(String cnpj) {
         return new CadastrarSupermercadoRequest(
                 cnpj, "Razão Social LTDA", "Mercado Bom Preço", "contato@mercado.com", "11999998888",
+                "01310-100", "Av. Paulista", "1000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+    }
+
+    private CadastrarSupermercadoRequest requestCadastroComRazaoSocial(String cnpj, String razaoSocial) {
+        return new CadastrarSupermercadoRequest(
+                cnpj, razaoSocial, "Mercado Bom Preço", "contato@mercado.com", "11999998888",
                 "01310-100", "Av. Paulista", "1000", "Bela Vista", "São Paulo", "SP", null, null, null
         );
     }

@@ -1,12 +1,14 @@
 package com.tabloide.api.modules.supermercado.interfaces.http;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
+import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.AuditarConsulta;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ClaimsSessao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.ContextoAutenticacao;
 import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfil;
+import com.tabloide.api.modules.autenticacao.interfaces.http.dto.PaginaResponse;
 import com.tabloide.api.modules.supermercado.application.AtivarSupermercado;
 import com.tabloide.api.modules.supermercado.application.BloquearSupermercado;
 import com.tabloide.api.modules.supermercado.application.BuscarSupermercadoPorId;
@@ -14,6 +16,7 @@ import com.tabloide.api.modules.supermercado.application.CadastrarSupermercado;
 import com.tabloide.api.modules.supermercado.application.DadosSupermercado;
 import com.tabloide.api.modules.supermercado.application.DesativarSupermercado;
 import com.tabloide.api.modules.supermercado.application.EditarSupermercado;
+import com.tabloide.api.modules.supermercado.application.ListarSupermercados;
 import com.tabloide.api.modules.supermercado.domain.Endereco;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.interfaces.http.dto.CadastrarSupermercadoRequest;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,6 +48,7 @@ public class SupermercadoController {
     private final DesativarSupermercado desativarSupermercado;
     private final BloquearSupermercado bloquearSupermercado;
     private final BuscarSupermercadoPorId buscarSupermercadoPorId;
+    private final ListarSupermercados listarSupermercados;
 
     public SupermercadoController(
             CadastrarSupermercado cadastrarSupermercado,
@@ -51,7 +56,8 @@ public class SupermercadoController {
             AtivarSupermercado ativarSupermercado,
             DesativarSupermercado desativarSupermercado,
             BloquearSupermercado bloquearSupermercado,
-            BuscarSupermercadoPorId buscarSupermercadoPorId
+            BuscarSupermercadoPorId buscarSupermercadoPorId,
+            ListarSupermercados listarSupermercados
     ) {
         this.cadastrarSupermercado = cadastrarSupermercado;
         this.editarSupermercado = editarSupermercado;
@@ -59,6 +65,19 @@ public class SupermercadoController {
         this.desativarSupermercado = desativarSupermercado;
         this.bloquearSupermercado = bloquearSupermercado;
         this.buscarSupermercadoPorId = buscarSupermercadoPorId;
+        this.listarSupermercados = listarSupermercados;
+    }
+
+    @GetMapping
+    @RequerPerfil({Perfil.SUPER_ADMIN})
+    @AuditarConsulta(acao = "SUPERMERCADOS_CONSULTADOS", entidade = "Supermercado")
+    @Operation(summary = "Lista supermercados cadastrados, paginado")
+    public ResponseEntity<PaginaResponse<SupermercadoResponse>> listar(
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "25") int tamanho
+    ) {
+        Pagina<Supermercado> resultado = listarSupermercados.executar(pagina, tamanho);
+        return ResponseEntity.ok(PaginaResponse.from(resultado, SupermercadoResponse::from));
     }
 
     @GetMapping("/{id}")

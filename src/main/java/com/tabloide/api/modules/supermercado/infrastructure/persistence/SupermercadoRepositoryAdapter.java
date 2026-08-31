@@ -1,11 +1,15 @@
 package com.tabloide.api.modules.supermercado.infrastructure.persistence;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
+import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.supermercado.domain.Endereco;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -55,6 +59,19 @@ public class SupermercadoRepositoryAdapter implements SupermercadoRepository {
                         new IllegalStateException("Supermercado " + supermercado.id() + " não encontrado para atualização")), supermercado);
 
         return paraDominio(jpaRepository.save(entidade));
+    }
+
+    @Override
+    public Pagina<Supermercado> listar(int pagina, int tamanho) {
+        PageRequest paginacao = PageRequest.of(pagina, tamanho, Sort.by(Sort.Direction.ASC, "razaoSocial"));
+        Page<SupermercadoJpaEntity> resultado = jpaRepository.findAll(paginacao);
+        return new Pagina<>(
+                resultado.getContent().stream().map(SupermercadoRepositoryAdapter::paraDominio).toList(),
+                pagina,
+                tamanho,
+                resultado.getTotalElements(),
+                resultado.getTotalPages()
+        );
     }
 
     private static SupermercadoJpaEntity atualizar(SupermercadoJpaEntity entidade, Supermercado supermercado) {

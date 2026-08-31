@@ -1,6 +1,7 @@
 package com.tabloide.api.modules.supermercado.domain;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
+import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import java.util.Optional;
 
 public interface SupermercadoRepository {
@@ -10,4 +11,6 @@ public interface SupermercadoRepository {
     boolean existePorCnpj(Cnpj cnpj);
 
     Supermercado salvar(Supermercado supermercado);
+
+    Pagina<Supermercado> listar(int pagina, int tamanho);
 }

@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.supermercado.interfaces.http;
 
+import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import com.tabloide.api.modules.supermercado.domain.exceptions.CnpjJaCadastradoException;
 import com.tabloide.api.modules.supermercado.domain.exceptions.SupermercadoBloqueadoOuDesativadoException;
@@ -49,6 +50,11 @@ public class ErroSupermercadoHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErroResponse> tratarArgumentoInvalido(IllegalArgumentException ex) {
+        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(TamanhoPaginaInvalidoException.class)
+    public ResponseEntity<ErroResponse> tratarTamanhoPaginaInvalido(TamanhoPaginaInvalidoException ex) {
         return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
     }
 
