@@ -48,7 +48,7 @@ public class EditarSupermercado {
         Supermercado salvo = supermercadoRepository.salvar(supermercado);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "SUPERMERCADO_EDITADO", "Supermercado", salvo.id(),
+                null, atorId, perfilAtor, salvo.id(), "SUPERMERCADO_EDITADO", "Supermercado", salvo.id(),
                 antes, salvo.resumoParaAuditoria(), agora
         ));
 

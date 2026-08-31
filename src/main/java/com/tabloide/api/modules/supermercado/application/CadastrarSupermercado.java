@@ -44,7 +44,7 @@ public class CadastrarSupermercado {
         Supermercado salvo = supermercadoRepository.salvar(supermercado);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "SUPERMERCADO_CADASTRADO", "Supermercado", salvo.id(),
+                null, atorId, perfilAtor, salvo.id(), "SUPERMERCADO_CADASTRADO", "Supermercado", salvo.id(),
                 null, salvo.resumoParaAuditoria(), agora
         ));
 

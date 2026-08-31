@@ -62,7 +62,7 @@ public class AlterarPlanoSupermercado {
         Assinatura salva = assinaturaRepository.salvar(nova);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "PLANO_ALTERADO", "Assinatura", salva.id(),
+                null, atorId, perfilAtor, salva.supermercadoId(), "PLANO_ALTERADO", "Assinatura", salva.id(),
                 antes, salva.resumoParaAuditoria(), agora
         ));
 

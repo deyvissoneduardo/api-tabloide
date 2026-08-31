@@ -36,7 +36,7 @@ public class BloquearSupermercado {
         Supermercado salvo = supermercadoRepository.salvar(supermercado);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "SUPERMERCADO_BLOQUEADO", "Supermercado", salvo.id(),
+                null, atorId, perfilAtor, salvo.id(), "SUPERMERCADO_BLOQUEADO", "Supermercado", salvo.id(),
                 antes, salvo.resumoParaAuditoria(), agora
         ));
 

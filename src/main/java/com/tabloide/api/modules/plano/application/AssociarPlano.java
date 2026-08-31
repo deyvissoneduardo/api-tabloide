@@ -58,7 +58,7 @@ public class AssociarPlano {
         Assinatura salva = assinaturaRepository.salvar(assinatura);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "PLANO_ASSOCIADO", "Assinatura", salva.id(),
+                null, atorId, perfilAtor, salva.supermercadoId(), "PLANO_ASSOCIADO", "Assinatura", salva.id(),
                 null, salva.resumoParaAuditoria(), agora
         ));
 

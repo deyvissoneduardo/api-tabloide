@@ -36,7 +36,7 @@ public class AtivarSupermercado {
         Supermercado salvo = supermercadoRepository.salvar(supermercado);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "SUPERMERCADO_ATIVADO", "Supermercado", salvo.id(),
+                null, atorId, perfilAtor, salvo.id(), "SUPERMERCADO_ATIVADO", "Supermercado", salvo.id(),
                 antes, salvo.resumoParaAuditoria(), agora
         ));
 

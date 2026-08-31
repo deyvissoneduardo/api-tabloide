@@ -26,6 +26,9 @@ public class RegistroAuditoriaJpaEntity {
     @Column(name = "perfil_ator", nullable = false)
     private Perfil perfilAtor;
 
+    @Column(name = "supermercado_id")
+    private Long supermercadoId;
+
     @Column(nullable = false)
     private String acao;
 
@@ -50,6 +53,7 @@ public class RegistroAuditoriaJpaEntity {
     public RegistroAuditoriaJpaEntity(
             Long atorId,
             Perfil perfilAtor,
+            Long supermercadoId,
             String acao,
             String entidade,
             Long entidadeId,
@@ -59,6 +63,7 @@ public class RegistroAuditoriaJpaEntity {
     ) {
         this.atorId = atorId;
         this.perfilAtor = perfilAtor;
+        this.supermercadoId = supermercadoId;
         this.acao = acao;
         this.entidade = entidade;
         this.entidadeId = entidadeId;
@@ -77,6 +82,10 @@ public class RegistroAuditoriaJpaEntity {
 
     public Perfil getPerfilAtor() {
         return perfilAtor;
+    }
+
+    public Long getSupermercadoId() {
+        return supermercadoId;
     }
 
     public String getAcao() {

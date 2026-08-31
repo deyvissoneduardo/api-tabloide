@@ -36,7 +36,7 @@ public class DesativarSupermercado {
         Supermercado salvo = supermercadoRepository.salvar(supermercado);
 
         auditoriaRepository.registrar(new RegistroAuditoria(
-                atorId, perfilAtor, "SUPERMERCADO_DESATIVADO", "Supermercado", salvo.id(),
+                null, atorId, perfilAtor, salvo.id(), "SUPERMERCADO_DESATIVADO", "Supermercado", salvo.id(),
                 antes, salvo.resumoParaAuditoria(), agora
         ));
 
