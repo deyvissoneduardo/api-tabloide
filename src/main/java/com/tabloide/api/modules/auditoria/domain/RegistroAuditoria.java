@@ -15,4 +15,9 @@ public record RegistroAuditoria(
         String dadosDepois,
         Instant instante
 ) {
+
+    public static RegistroAuditoria deConsulta(
+            Long atorId, Perfil perfilAtor, Long supermercadoId, String acao, String entidade, Long entidadeId, Instant instante) {
+        return new RegistroAuditoria(null, atorId, perfilAtor, supermercadoId, acao, entidade, entidadeId, null, null, instante);
+    }
 }

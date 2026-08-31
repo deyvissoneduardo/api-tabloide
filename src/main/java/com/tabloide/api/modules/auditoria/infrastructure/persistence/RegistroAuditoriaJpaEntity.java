@@ -35,13 +35,13 @@ public class RegistroAuditoriaJpaEntity {
     @Column(nullable = false)
     private String entidade;
 
-    @Column(name = "entidade_id", nullable = false)
+    @Column(name = "entidade_id")
     private Long entidadeId;
 
     @Column(name = "dados_antes")
     private String dadosAntes;
 
-    @Column(name = "dados_depois", nullable = false)
+    @Column(name = "dados_depois")
     private String dadosDepois;
 
     @Column(nullable = false)
