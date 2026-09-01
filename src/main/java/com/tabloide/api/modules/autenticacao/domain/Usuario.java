@@ -7,7 +7,7 @@ import java.time.Instant;
 public class Usuario {
 
     private final Long id;
-    private final String email;
+    private String email;
     private String senhaHash;
     private final Perfil perfil;
     private final Long supermercadoId;
@@ -100,6 +100,11 @@ public class Usuario {
 
     public void alterarSenha(String novoHash, Instant agora) {
         this.senhaHash = novoHash;
+        this.atualizadoEm = agora;
+    }
+
+    public void alterarEmail(String novoEmail, Instant agora) {
+        this.email = novoEmail.toLowerCase();
         this.atualizadoEm = agora;
     }
 

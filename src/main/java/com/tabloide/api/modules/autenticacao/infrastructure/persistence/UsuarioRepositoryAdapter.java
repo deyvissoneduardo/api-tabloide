@@ -63,6 +63,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     private UsuarioJpaEntity atualizar(Usuario usuario) {
         UsuarioJpaEntity entidade = jpaRepository.findById(usuario.id())
                 .orElseThrow(() -> new IllegalStateException("Usuário " + usuario.id() + " não encontrado para atualização"));
+        entidade.setEmail(usuario.email());
         entidade.setSenhaHash(usuario.senhaHash());
         entidade.setAtivo(usuario.estaAtivo());
         entidade.setTentativasLoginInvalidas(usuario.tentativasLoginInvalidas());

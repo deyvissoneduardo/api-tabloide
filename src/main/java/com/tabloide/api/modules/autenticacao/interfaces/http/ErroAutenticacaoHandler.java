@@ -4,6 +4,7 @@ import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoExcep
 import com.tabloide.api.modules.autenticacao.domain.exceptions.CredenciaisInvalidasException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.DadosRedefinicaoNaoConferemException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.EmailJaCadastradoException;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.NenhumaAlteracaoInformadaException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.PerfilInvalidoParaCadastroException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoInvalidaOuExpiradaException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.SessaoNaoEncontradaException;
@@ -68,6 +69,11 @@ public class ErroAutenticacaoHandler {
 
     @ExceptionHandler(PerfilInvalidoParaCadastroException.class)
     public ResponseEntity<ErroResponse> tratarPerfilInvalido(PerfilInvalidoParaCadastroException ex) {
+        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(NenhumaAlteracaoInformadaException.class)
+    public ResponseEntity<ErroResponse> tratarNenhumaAlteracaoInformada(NenhumaAlteracaoInformadaException ex) {
         return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
     }
 

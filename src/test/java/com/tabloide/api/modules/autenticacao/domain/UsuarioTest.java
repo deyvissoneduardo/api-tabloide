@@ -92,6 +92,17 @@ class UsuarioTest {
     }
 
     @Test
+    void deveAlterarEmailNormalizandoParaMinusculas() {
+        Usuario usuario = usuarioAtivo();
+        Instant agora = Instant.now();
+
+        usuario.alterarEmail("Novo.Email@Sgtm.Local", agora);
+
+        assertThat(usuario.email()).isEqualTo("novo.email@sgtm.local");
+        assertThat(usuario.atualizadoEm()).isEqualTo(agora);
+    }
+
+    @Test
     void devePertencerAoSupermercadoComMesmoCnpj() {
         Cnpj cnpj = new Cnpj("11222333000181");
         Instant agora = Instant.now();
