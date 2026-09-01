@@ -8,6 +8,8 @@ public interface SupermercadoRepository {
 
     Optional<Supermercado> buscarPorId(Long id);
 
+    Optional<Supermercado> buscarPorIdComLock(Long id);
+
     boolean existePorCnpj(Cnpj cnpj);
 
     Supermercado salvar(Supermercado supermercado);

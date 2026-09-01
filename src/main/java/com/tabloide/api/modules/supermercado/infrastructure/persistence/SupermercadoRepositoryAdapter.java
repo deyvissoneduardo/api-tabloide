@@ -27,6 +27,11 @@ public class SupermercadoRepositoryAdapter implements SupermercadoRepository {
     }
 
     @Override
+    public Optional<Supermercado> buscarPorIdComLock(Long id) {
+        return jpaRepository.buscarPorIdComLock(id).map(SupermercadoRepositoryAdapter::paraDominio);
+    }
+
+    @Override
     public boolean existePorCnpj(Cnpj cnpj) {
         return jpaRepository.existsByCnpj(cnpj.valor());
     }
