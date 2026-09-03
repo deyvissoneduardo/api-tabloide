@@ -1,0 +1,243 @@
+# TODO List — Backlog priorizado
+
+Checklist para acompanhamento manual da implementação. A ordem abaixo replica estritamente as prioridades definidas nos backlogs de back-end e front-end.
+
+> Marque uma tarefa concluída substituindo `[ ]` por `[x]`. Não reordene os itens, pois dependências e desbloqueios foram considerados na priorização.
+
+## Back-end
+
+- [X] BE 001 — [US-056 — Autenticar seus usuários](./docs/historias/back/001-US-056-back-autenticar-usuarios.md) — 8 SP — Pronta
+- [X] BE 002 — [US-001 — Autenticar-se no sistema](./docs/historias/back/002-US-001-back-autenticar-se-no-sistema.md) — 8 SP — Pronta
+- [X] BE 003 — [US-041 — Restringir usuários autorizados devem acessar a administração geral da plataforma](./docs/historias/back/003-US-041-back-restringir-usuarios-autorizados-devem-acessar-administracao-geral-plat.md) — 3 SP — Pronta
+- [X] BE 004 — [US-048 — Proteger contas de supermercados contra acesso indevido](./docs/historias/back/004-US-048-back-proteger-contas-supermercados-contra-acesso-indevido.md) — 8 SP — Pronta
+- [X] BE 005 — [US-174 — Restringir usuários autorizados devem acessar a administração do supermercado](./docs/historias/back/005-US-174-back-restringir-usuarios-autorizados-devem-acessar-administracao-supermerca.md) — 3 SP — Pronta
+- [X] BE 006 — [US-002 — Cadastrar um supermercado manualmente](./docs/historias/back/006-US-002-back-cadastrar-supermercado-manualmente.md) — 5 SP — Pronta
+- [X] BE 007 — [US-003 — Editar os dados de um supermercado](./docs/historias/back/007-US-003-back-editar-dados-supermercado.md) — 3 SP — Pronta
+- [X] BE 008 — [US-004 — Ativar um supermercado](./docs/historias/back/008-US-004-back-ativar-supermercado.md) — 3 SP — Pronta
+- [X] BE 009 — [US-005 — Desativar um supermercado](./docs/historias/back/009-US-005-back-desativar-supermercado.md) — 3 SP — Pronta
+- [X] BE 010 — [US-006 — Bloquear o acesso de um supermercado à plataforma](./docs/historias/back/010-US-006-back-bloquear-acesso-supermercado-plataforma.md) — 5 SP — Pronta
+- [X] BE 011 — [US-007 — Reativar o acesso de um supermercado](./docs/historias/back/011-US-007-back-reativar-acesso-supermercado.md) — 5 SP — Pronta
+- [X] BE 012 — [US-008 — Associar um plano comercial a um supermercado](./docs/historias/back/012-US-008-back-associar-plano-comercial-supermercado.md) — 8 SP — Precisa refinamento
+- [X] BE 013 — [US-009 — Alterar o plano de um supermercado](./docs/historias/back/013-US-009-back-alterar-plano-supermercado.md) — 8 SP — Precisa refinamento
+- [X] BE 014 — [US-012 — Identificar qual usuário realizou determinada alteração administrativa](./docs/historias/back/014-US-012-back-identificar-qual-usuario-realizou-determinada-alteracao-administrativa.md) — 3 SP — Pronta
+- [X] BE 015 — [US-014 — Definir funcionalidades disponíveis por plano](./docs/historias/back/015-US-014-back-definir-funcionalidades-disponiveis-plano.md) — 8 SP — Precisa refinamento
+- [X] BE 016 — [US-015 — Definir limites de utilização por plano](./docs/historias/back/016-US-015-back-definir-limites-utilizacao-plano.md) — 8 SP — Precisa refinamento
+- [X] BE 017 — [US-016 — Disponibilizar funcionalidades para determinados supermercados](./docs/historias/back/017-US-016-back-disponibilizar-funcionalidades-determinados-supermercados.md) — 3 SP — Precisa refinamento
+- [X] BE 018 — [US-043 — Alterações de planos, contas e permissões devem registrar responsável e data](./docs/historias/back/018-US-043-back-alteracoes-planos-contas-permissoes-devem-registrar-responsavel-data.md) — 8 SP — Pronta
+- [X] BE 019 — [US-044 — O painel administrativo deve continuar utilizável com grande quantidade de supermercados cadastrados](./docs/historias/back/019-US-044-back-painel-administrativo-deve-continuar-utilizavel-com-grande-quantidade.md) — 8 SP — Pronta
+- [X] BE 020 — [US-045 — Dados privados de supermercados não devem ser expostos publicamente](./docs/historias/back/020-US-045-back-dados-privados-supermercados-nao-devem-ser-expostos-publicamente.md) — 5 SP — Pronta
+- [X] BE 021 — [US-049 — Informações de diferentes supermercados devem permanecer logicamente separadas](./docs/historias/back/021-US-049-back-informacoes-diferentes-supermercados-devem-permanecer-logicamente-sepa.md) — 8 SP — Pronta
+- [X] BE 022 — [US-050 — Permitir crescimento do número de supermercados sem alterar o modelo de administração](./docs/historias/back/022-US-050-back-permitir-crescimento-numero-supermercados-sem-alterar-modelo-administr.md) — 3 SP — Pronta
+- [X] BE 023 — [US-053 — Permitir suporte operacional sem comprometer a privacidade dos clientes dos supermercados](./docs/historias/back/023-US-053-back-permitir-suporte-operacional-sem-comprometer-privacidade-clientes-supe.md) — 8 SP — Pronta
+- [X] BE 024 — [US-058 — Alterar suas credenciais de acesso](./docs/historias/back/024-US-058-back-alterar-credenciais-acesso.md) — 3 SP — Pronta
+- [X] BE 025 — [US-059 — Cadastrar mais de um usuário administrativo](./docs/historias/back/025-US-059-back-cadastrar-mais-usuario-administrativo.md) — 5 SP — Pronta
+- [X] BE 026 — [US-060 — Definir permissões diferentes para seus usuários](./docs/historias/back/026-US-060-back-definir-permissoes-diferentes-usuarios.md) — 8 SP — Pronta
+- [X] BE 027 — [US-061 — Ativar ou desativar seus usuários](./docs/historias/back/027-US-061-back-ativar-ou-desativar-usuarios.md) — 3 SP — Pronta
+- [X] BE 028 — [US-168 — A página pública deve estar disponível durante o funcionamento do supermercado](./docs/historias/back/028-US-168-back-pagina-publica-deve-estar-disponivel-durante-funcionamento-supermercad.md) — 5 SP — Pronta
+- [X] BE 029 — [US-175 — Um supermercado não deve acessar os dados privados de outro](./docs/historias/back/029-US-175-back-supermercado-nao-deve-acessar-dados-privados-outro.md) — 3 SP — Pronta
+- [X] BE 030 — [US-176 — Usuários devem respeitar suas permissões](./docs/historias/back/030-US-176-back-usuarios-devem-respeitar-permissoes.md) — 8 SP — Pronta
+- [X] BE 031 — [US-208 — Criar planos comerciais](./docs/historias/back/031-US-208-back-criar-planos-comerciais.md) — 8 SP — Precisa refinamento
+- [X] BE 032 — [US-209 — Editar planos para associações futuras](./docs/historias/back/032-US-209-back-editar-planos-associacoes-futuras.md) — 8 SP — Precisa refinamento
+- [X] BE 033 — [US-210 — Excluir logicamente um plano](./docs/historias/back/033-US-210-back-excluir-logicamente-plano.md) — 8 SP — Precisa refinamento
+- [X] BE 034 — [US-211 — Renovar a assinatura de um supermercado](./docs/historias/back/034-US-211-back-renovar-assinatura-supermercado.md) — 8 SP — Precisa refinamento
+- [X] BE 035 — [US-212 — Processar o vencimento das assinaturas](./docs/historias/back/035-US-212-back-processar-vencimento-assinaturas.md) — 8 SP — Precisa refinamento
+- [X] BE 036 — [US-218 — Controlar a cota de imagens do supermercado](./docs/historias/back/036-US-218-back-controlar-cota-imagens-supermercado.md) — 8 SP — Pronta
+- [X] BE 037 — [US-068 — Cadastrar uma ou mais lojas](./docs/historias/back/037-US-068-back-cadastrar-ou-mais-lojas.md) — 5 SP — Precisa refinamento
+- [X] BE 038 — [US-057 — Alterar seus dados cadastrais](./docs/historias/back/038-US-057-back-alterar-dados-cadastrais.md) — 3 SP — Pronta
+- [X] BE 039 — [US-062 — Cadastrar seu nome comercial](./docs/historias/back/039-US-062-back-cadastrar-nome-comercial.md) — 5 SP — Pronta
+- [X] BE 040 — [US-063 — Cadastrar sua razão social quando necessária](./docs/historias/back/040-US-063-back-cadastrar-razao-social-quando-necessaria.md) — 5 SP — Pronta
+- [X] BE 041 — [US-064 — Cadastrar sua logomarca](./docs/historias/back/041-US-064-back-cadastrar-logomarca.md) — 5 SP — Pronta
+- [X] BE 042 — [US-065 — Cadastrar seus dados de contato](./docs/historias/back/042-US-065-back-cadastrar-dados-contato.md) — 5 SP — Pronta
+- [X] BE 043 — [US-066 — Cadastrar seu endereço](./docs/historias/back/043-US-066-back-cadastrar-endereco.md) — 5 SP — Pronta
+- [X] BE 044 — [US-069 — Identificar cada loja individualmente](./docs/historias/back/044-US-069-back-identificar-cada-loja-individualmente.md) — 3 SP — Precisa refinamento
+- [X] BE 045 — [US-070 — Cadastrar o endereço de cada loja](./docs/historias/back/045-US-070-back-cadastrar-endereco-cada-loja.md) — 5 SP — Precisa refinamento
+- [X] BE 046 — [US-071 — Ativar ou desativar uma loja](./docs/historias/back/046-US-071-back-ativar-ou-desativar-loja.md) — 3 SP — Precisa refinamento
+- [X] BE 047 — [US-072 — Administrar ofertas separadamente por loja](./docs/historias/back/047-US-072-back-administrar-ofertas-separadamente-loja.md) — 8 SP — Precisa refinamento
+- [X] BE 048 — [US-073 — Compartilhar uma mesma campanha entre várias lojas](./docs/historias/back/lei048-US-073-back-compartilhar-mesma-campanha-entre-varias-lojas.md) — 8 SP — Precisa refinamento
+- [X] BE 049 — [US-103 — Gerar QR Codes diferentes por loja](./docs/historias/back/049-US-103-back-gerar-qr-codes-diferentes-loja.md) — 8 SP — Precisa refinamento
+- [X] BE 050 — [US-117 — Administrar várias lojas em uma conta](./docs/historias/back/050-US-117-back-administrar-varias-lojas-em-conta.md) — 5 SP — Precisa refinamento
+- [X] BE 051 — [US-189 — Conseguir crescer em quantidade de lojas sem alterar o fluxo básico de operação](./docs/historias/back/051-US-189-back-conseguir-crescer-em-quantidade-lojas-sem-alterar-fluxo-basico-operaca.md) — 8 SP — Precisa refinamento
+- [X] BE 052 — [US-074 — Cadastrar categorias](./docs/historias/back/052-US-074-back-cadastrar-categorias.md) — 5 SP — Pronta
+- [X] BE 053 — [US-075 — Editar categorias](./docs/historias/back/053-US-075-back-editar-categorias.md) — 3 SP — Pronta
+- [X] BE 054 — [US-076 — Desativar categorias](./docs/historias/back/054-US-076-back-desativar-categorias.md) — 3 SP — Pronta
+- [X] BE 055 — [US-077 — Associar produtos a categorias](./docs/historias/back/055-US-077-back-associar-produtos-categorias.md) — 5 SP — Pronta
+- [X] BE 056 — [US-101 — Organizar ofertas por categoria](./docs/historias/back/056-US-101-back-organizar-ofertas-categoria.md) — 3 SP — Pronta
+- [X] BE 057 — [US-078 — Cadastrar produtos](./docs/historias/back/057-US-078-back-cadastrar-produtos.md) — 5 SP — Pronta
+- [ ] BE 058 — [US-098 — Associar uma oferta a uma ou mais lojas](./docs/historias/back/058-US-098-back-associar-oferta-ou-mais-lojas.md) — 5 SP — Precisa refinamento
+- [ ] BE 059 — [US-081 — Associar o produto a uma categoria](./docs/historias/back/059-US-081-back-associar-produto-categoria.md) — 5 SP — Pronta
+- [ ] BE 060 — [US-079 — Informar o nome do produto](./docs/historias/back/060-US-079-back-informar-nome-produto.md) — 3 SP — Pronta
+- [ ] BE 061 — [US-080 — Cadastrar uma imagem do produto](./docs/historias/back/061-US-080-back-cadastrar-imagem-produto.md) — 5 SP — Pronta
+- [ ] BE 062 — [US-085 — Editar produtos](./docs/historias/back/062-US-085-back-editar-produtos.md) — 3 SP — Pronta
+- [ ] BE 063 — [US-086 — Desativar produtos](./docs/historias/back/063-US-086-back-desativar-produtos.md) — 3 SP — Pronta
+- [ ] BE 064 — [US-087 — Reutilizar produtos em futuras campanhas](./docs/historias/back/064-US-087-back-reutilizar-produtos-em-futuras-campanhas.md) — 8 SP — Pronta
+- [ ] BE 065 — [US-089 — Vincular um produto a uma oferta](./docs/historias/back/065-US-089-back-vincular-produto-oferta.md) — 3 SP — Pronta
+- [ ] BE 066 — [US-186 — Produtos cadastrados devem poder ser reutilizados](./docs/historias/back/066-US-186-back-produtos-cadastrados-devem-poder-ser-reutilizados.md) — 3 SP — Pronta
+- [ ] BE 067 — [US-088 — Cadastrar uma oferta](./docs/historias/back/067-US-088-back-cadastrar-oferta.md) — 5 SP — Pronta
+- [ ] BE 068 — [US-220 — Criar e administrar campanhas](./docs/historias/back/068-US-220-back-criar-administrar-campanhas.md) — 13 SP — Pronta
+- [ ] BE 069 — [US-017 — Administrar conteúdos gerais da plataforma quando necessário](./docs/historias/back/069-US-017-back-administrar-conteudos-gerais-plataforma-quando-necessario.md) — 5 SP — Pronta
+- [ ] BE 070 — [US-091 — Informar o preço promocional](./docs/historias/back/070-US-091-back-informar-preco-promocional.md) — 3 SP — Pronta
+- [ ] BE 071 — [US-092 — Informar a data inicial da oferta](./docs/historias/back/071-US-092-back-informar-data-inicial-oferta.md) — 3 SP — Pronta
+- [ ] BE 072 — [US-093 — Informar a data final da oferta](./docs/historias/back/072-US-093-back-informar-data-final-oferta.md) — 3 SP — Pronta
+- [ ] BE 073 — [US-094 — Editar uma oferta](./docs/historias/back/073-US-094-back-editar-oferta.md) — 3 SP — Pronta
+- [ ] BE 074 — [US-095 — Cancelar uma oferta](./docs/historias/back/074-US-095-back-cancelar-oferta.md) — 5 SP — Pronta
+- [ ] BE 075 — [US-096 — Ativar ou desativar uma oferta](./docs/historias/back/075-US-096-back-ativar-ou-desativar-oferta.md) — 3 SP — Pronta
+- [ ] BE 076 — [US-097 — Informar condições ou observações da oferta](./docs/historias/back/076-US-097-back-informar-condicoes-ou-observacoes-oferta.md) — 3 SP — Pronta
+- [ ] BE 077 — [US-099 — Copiar uma oferta existente](./docs/historias/back/077-US-099-back-copiar-oferta-existente.md) — 5 SP — Pronta
+- [ ] BE 078 — [US-100 — Ofertas vencidas devem deixar de ser apresentadas como vigentes](./docs/historias/back/078-US-100-back-ofertas-vencidas-devem-deixar-ser-apresentadas-como-vigentes.md) — 3 SP — Pronta
+- [ ] BE 079 — [US-102 — O QR Code deve continuar válido após a troca de campanhas](./docs/historias/back/079-US-102-back-qr-code-deve-continuar-valido-apos-troca-campanhas.md) — 8 SP — Pronta
+- [ ] BE 080 — [US-108 — O compartilhamento deve levar diretamente ao conteúdo correspondente](./docs/historias/back/080-US-108-back-compartilhamento-deve-levar-diretamente-ao-conteudo-correspondente.md) — 3 SP — Pronta
+- [ ] BE 081 — [US-109 — Disponibilizar um tabloide já existente](./docs/historias/back/081-US-109-back-disponibilizar-tabloide-ja-existente.md) — 5 SP — Pronta
+- [ ] BE 082 — [US-110 — Informar a validade do tabloide](./docs/historias/back/082-US-110-back-informar-validade-tabloide.md) — 5 SP — Pronta
+- [ ] BE 083 — [US-111 — Tabloides expirados não devem aparecer como atuais](./docs/historias/back/083-US-111-back-tabloides-expirados-nao-devem-aparecer-como-atuais.md) — 5 SP — Pronta
+- [ ] BE 084 — [US-112 — Cadastrar mensagens promocionais](./docs/historias/back/084-US-112-back-cadastrar-mensagens-promocionais.md) — 5 SP — Pronta
+- [ ] BE 085 — [US-113 — Publicar avisos](./docs/historias/back/085-US-113-back-publicar-avisos.md) — 5 SP — Pronta
+- [ ] BE 086 — [US-114 — Cadastrar banners](./docs/historias/back/086-US-114-back-cadastrar-banners.md) — 5 SP — Pronta
+- [ ] BE 087 — [US-115 — Definir a validade dos conteúdos](./docs/historias/back/087-US-115-back-definir-validade-conteudos.md) — 3 SP — Pronta
+- [ ] BE 088 — [US-116 — Ordenar conteúdos promocionais](./docs/historias/back/088-US-116-back-ordenar-conteudos-promocionais.md) — 3 SP — Pronta
+- [ ] BE 089 — [US-169 — Ofertas publicadas devem permanecer disponíveis durante sua validade](./docs/historias/back/089-US-169-back-ofertas-publicadas-devem-permanecer-disponiveis-durante-validade.md) — 5 SP — Pronta
+- [ ] BE 090 — [US-170 — O QR Code físico deve continuar válido após mudanças de campanhas](./docs/historias/back/090-US-170-back-qr-code-fisico-deve-continuar-valido-apos-mudancas-campanhas.md) — 8 SP — Pronta
+- [ ] BE 091 — [US-171 — Restringir ofertas vigentes devem ser apresentadas como atuais](./docs/historias/back/091-US-171-back-restringir-ofertas-vigentes-devem-ser-apresentadas-como-atuais.md) — 3 SP — Pronta
+- [ ] BE 092 — [US-179 — Consultar ofertas sem fornecer dados pessoais](./docs/historias/back/092-US-179-back-consultar-ofertas-sem-fornecer-dados-pessoais.md) — 3 SP — Pronta
+- [ ] BE 093 — [US-185 — Conseguir administrar suas ofertas sem depender constantemente do dono da plataforma](./docs/historias/back/093-US-185-back-conseguir-administrar-ofertas-sem-depender-constantemente-dono-platafo.md) — 5 SP — Pronta
+- [ ] BE 094 — [US-187 — Campanhas anteriores devem poder ser reaproveitadas](./docs/historias/back/094-US-187-back-campanhas-anteriores-devem-poder-ser-reaproveitadas.md) — 8 SP — Pronta
+- [ ] BE 095 — [US-188 — Alterações de campanhas não devem exigir troca do QR Code](./docs/historias/back/095-US-188-back-alteracoes-campanhas-nao-devem-exigir-troca-qr-code.md) — 8 SP — Pronta
+- [ ] BE 096 — [US-106 — Contabilizar acessos originados por QR Code](./docs/historias/back/096-US-106-back-contabilizar-acessos-originados-qr-code.md) — 8 SP — Pronta
+- [ ] BE 097 — [US-010 — Identificar supermercados com maior utilização da plataforma](./docs/historias/back/097-US-010-back-identificar-supermercados-com-maior-utilizacao-plataforma.md) — 3 SP — Pronta
+- [ ] BE 098 — [US-011 — Identificar supermercados inativos ou com baixa utilização](./docs/historias/back/098-US-011-back-identificar-supermercados-inativos-ou-com-baixa-utilizacao.md) — 3 SP — Pronta
+- [ ] BE 099 — [US-104 — Identificar cada QR Code](./docs/historias/back/099-US-104-back-identificar-cada-qr-code.md) — 8 SP — Pronta
+- [ ] BE 100 — [US-105 — Ativar ou desativar QR Codes](./docs/historias/back/100-US-105-back-ativar-ou-desativar-qr-codes.md) — 8 SP — Pronta
+- [ ] BE 101 — [US-107 — Identificar qual QR Code originou os acessos](./docs/historias/back/101-US-107-back-identificar-qual-qr-code-originou-acessos.md) — 8 SP — Pronta
+- [ ] BE 102 — [US-052 — O acesso administrativo deve respeitar as regras de privacidade aplicáveis](./docs/historias/back/102-US-052-back-acesso-administrativo-deve-respeitar-regras-privacidade-aplicaveis.md) — 8 SP — Pronta
+- [ ] BE 103 — [US-173 — As métricas devem representar os eventos registrados corretamente](./docs/historias/back/103-US-173-back-metricas-devem-representar-eventos-registrados-corretamente.md) — 5 SP — Pronta
+- [ ] BE 104 — [US-184 — Dados de analytics devem ser preferencialmente agregados quando identificação pessoal não for necessária](./docs/historias/back/104-US-184-back-dados-analytics-devem-ser-preferencialmente-agregados-quando-identific.md) — 5 SP — Pronta
+- [ ] BE 105 — [US-222 — Exportar relatórios em CSV](./docs/historias/back/105-US-222-back-exportar-relatorios-em-csv.md) — 8 SP — Pronta
+- [ ] BE 106 — [US-042 — As ações administrativas relevantes devem possuir rastreabilidade](./docs/historias/back/106-US-042-back-acoes-administrativas-relevantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
+- [ ] BE 107 — [US-051 — Registros de auditoria devem ser preservados pelo período definido pela operação](./docs/historias/back/107-US-051-back-registros-auditoria-devem-ser-preservados-pelo-periodo-definido-pela-o.md) — 8 SP — Pronta
+- [ ] BE 108 — [US-178 — Alterações importantes devem possuir rastreabilidade](./docs/historias/back/108-US-178-back-alteracoes-importantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
+- [ ] BE 109 — [US-182 — Consentimentos devem ser registrados quando necessários](./docs/historias/back/109-US-182-back-consentimentos-devem-ser-registrados-quando-necessarios.md) — 5 SP — Pronta
+- [ ] BE 110 — [US-183 — Revogar consentimentos](./docs/historias/back/110-US-183-back-revogar-consentimentos.md) — 5 SP — Pronta
+- [ ] BE 111 — [US-013 — Acompanhar problemas ou ocorrências registradas na plataforma](./docs/historias/back/111-US-013-back-acompanhar-problemas-ou-ocorrencias-registradas-na-plataforma.md) — 8 SP — Pronta
+- [ ] BE 112 — [US-046 — Possuir visão consolidada da operação](./docs/historias/back/112-US-046-back-possuir-visao-consolidada-operacao.md) — 8 SP — Pronta
+- [ ] BE 113 — [US-047 — Operações críticas devem reduzir o risco de execução acidental](./docs/historias/back/113-US-047-back-operacoes-criticas-devem-reduzir-risco-execucao-acidental.md) — 3 SP — Pronta
+- [ ] BE 114 — [US-067 — Editar seus dados](./docs/historias/back/114-US-067-back-editar-dados.md) — 3 SP — Pronta
+- [ ] BE 115 — [US-082 — Informar a marca](./docs/historias/back/115-US-082-back-informar-marca.md) — 3 SP — Pronta
+- [ ] BE 116 — [US-083 — Informar uma descrição](./docs/historias/back/116-US-083-back-informar-descricao.md) — 3 SP — Pronta
+- [ ] BE 117 — [US-084 — Informar peso, unidade ou volume](./docs/historias/back/117-US-084-back-informar-peso-unidade-ou-volume.md) — 2 SP — Pronta
+- [ ] BE 118 — [US-090 — Informar o preço normal](./docs/historias/back/118-US-090-back-informar-preco-normal.md) — 3 SP — Pronta
+- [ ] BE 119 — [US-172 — Alterações publicadas devem refletir corretamente para o consumidor](./docs/historias/back/119-US-172-back-alteracoes-publicadas-devem-refletir-corretamente-consumidor.md) — 5 SP — Pronta
+- [ ] BE 120 — [US-177 — A página pública não deve expor informações administrativas](./docs/historias/back/120-US-177-back-pagina-publica-nao-deve-expor-informacoes-administrativas.md) — 5 SP — Pronta
+- [ ] BE 121 — [US-180 — Dados pessoais devem ser coletados somente quando necessários](./docs/historias/back/121-US-180-back-dados-pessoais-devem-ser-coletados-somente-quando-necessarios.md) — 5 SP — Pronta
+- [ ] BE 122 — [US-181 — A finalidade da coleta deve ser informada](./docs/historias/back/122-US-181-back-finalidade-coleta-deve-ser-informada.md) — 5 SP — Pronta
+- [ ] BE 123 — [US-214 — Permitir recuperação de senha por link de uso único](./docs/historias/back/123-US-214-back-permitir-recuperacao-senha-link-uso-unico.md) — 8 SP — Pronta
+- [ ] BE 124 — [US-215 — Criar o primeiro DONO com senha provisória](./docs/historias/back/124-US-215-back-criar-primeiro-dono-com-senha-provisoria.md) — 5 SP — Pronta
+- [ ] BE 125 — [US-216 — Pesquisar e reutilizar sua biblioteca de imagens](./docs/historias/back/125-US-216-back-pesquisar-reutilizar-biblioteca-imagens.md) — 8 SP — Pronta
+
+## Front-end
+
+- [ ] FE 001 — [US-018 — Acessar uma área administrativa própria](./docs/historias/front/001-US-018-front-acessar-area-administrativa-propria.md) — 3 SP — Pronta
+- [ ] FE 002 — [US-118 — Acessar sua área administrativa](./docs/historias/front/002-US-118-front-acessar-area-administrativa.md) — 3 SP — Pronta
+- [ ] FE 003 — [US-021 — Visualizar todos os supermercados cadastrados](./docs/historias/front/003-US-021-front-visualizar-todos-supermercados-cadastrados.md) — 3 SP — Pronta
+- [ ] FE 004 — [US-022 — Consultar os dados de um supermercado](./docs/historias/front/004-US-022-front-consultar-dados-supermercado.md) — 3 SP — Pronta
+- [ ] FE 005 — [US-023 — Visualizar as lojas vinculadas a cada supermercado](./docs/historias/front/005-US-023-front-visualizar-lojas-vinculadas-cada-supermercado.md) — 3 SP — Precisa refinamento
+- [ ] FE 006 — [US-024 — Visualizar os usuários administrativos vinculados a cada supermercado](./docs/historias/front/006-US-024-front-visualizar-usuarios-administrativos-vinculados-cada-supermercado.md) — 3 SP — Pronta
+- [ ] FE 007 — [US-026 — Consultar os limites do plano de cada supermercado](./docs/historias/front/007-US-026-front-consultar-limites-plano-cada-supermercado.md) — 3 SP — Precisa refinamento
+- [ ] FE 008 — [US-027 — Consultar o estado da assinatura de cada supermercado](./docs/historias/front/008-US-027-front-consultar-estado-assinatura-cada-supermercado.md) — 3 SP — Precisa refinamento
+- [ ] FE 009 — [US-028 — Visualizar a quantidade total de supermercados cadastrados](./docs/historias/front/009-US-028-front-visualizar-quantidade-total-supermercados-cadastrados.md) — 3 SP — Pronta
+- [ ] FE 010 — [US-029 — Visualizar a quantidade de supermercados ativos](./docs/historias/front/010-US-029-front-visualizar-quantidade-supermercados-ativos.md) — 3 SP — Pronta
+- [ ] FE 011 — [US-030 — Visualizar a quantidade de supermercados inativos](./docs/historias/front/011-US-030-front-visualizar-quantidade-supermercados-inativos.md) — 3 SP — Pronta
+- [ ] FE 012 — [US-039 — Consultar informações necessárias para suporte ao supermercado](./docs/historias/front/012-US-039-front-consultar-informacoes-necessarias-suporte-ao-supermercado.md) — 3 SP — Pronta
+- [ ] FE 013 — [US-054 — Conseguir localizar um supermercado de forma simples](./docs/historias/front/013-US-054-front-conseguir-localizar-supermercado-forma-simples.md) — 3 SP — Pronta
+- [ ] FE 014 — [US-121 — Consultar quem realizou alterações importantes no seu supermercado](./docs/historias/front/014-US-121-front-consultar-quem-realizou-alteracoes-importantes-no-supermercado.md) — 3 SP — Pronta
+- [ ] FE 015 — [US-130 — Identificar claramente o supermercado](./docs/historias/front/015-US-130-front-identificar-claramente-supermercado.md) — 3 SP — Pronta
+- [ ] FE 016 — [US-163 — Compartilhar a página do supermercado](./docs/historias/front/016-US-163-front-compartilhar-pagina-supermercado.md) — 5 SP — Pronta
+- [ ] FE 017 — [US-197 — A administração do supermercado deve utilizar linguagem compreensível para usuários do varejo](./docs/historias/front/017-US-197-front-administracao-supermercado-deve-utilizar-linguagem-compreensivel-usuar.md) — 3 SP — Pronta
+- [ ] FE 018 — [US-213 — Receber avisos de vencimento da assinatura](./docs/historias/front/018-US-213-front-receber-avisos-vencimento-assinatura.md) — 3 SP — Precisa refinamento
+- [ ] FE 019 — [US-224 — Acessar a interface de gestão de planos](./docs/historias/front/019-US-224-front-acessar-interface-gestao-planos.md) — 3 SP — Precisa refinamento
+- [ ] FE 020 — [US-031 — Visualizar a quantidade total de lojas cadastradas](./docs/historias/front/020-US-031-front-visualizar-quantidade-total-lojas-cadastradas.md) — 3 SP — Precisa refinamento
+- [ ] FE 021 — [US-122 — Visualizar suas lojas](./docs/historias/front/021-US-122-front-visualizar-lojas.md) — 3 SP — Precisa refinamento
+- [ ] FE 022 — [US-123 — Visualizar métricas por loja](./docs/historias/front/022-US-123-front-visualizar-metricas-loja.md) — 5 SP — Precisa refinamento
+- [ ] FE 023 — [US-148 — Visualizar métricas por loja](./docs/historias/front/023-US-148-front-visualizar-metricas-loja.md) — 5 SP — Precisa refinamento
+- [ ] FE 024 — [US-151 — Comparar lojas](./docs/historias/front/024-US-151-front-comparar-lojas.md) — 3 SP — Precisa refinamento
+- [ ] FE 025 — [US-165 — Visualizar todas as lojas](./docs/historias/front/025-US-165-front-visualizar-todas-lojas.md) — 3 SP — Precisa refinamento
+- [ ] FE 026 — [US-167 — Visualizar métricas individuais de cada loja](./docs/historias/front/026-US-167-front-visualizar-metricas-individuais-cada-loja.md) — 5 SP — Precisa refinamento
+- [ ] FE 027 — [US-125 — Filtrar produtos por categoria](./docs/historias/front/027-US-125-front-filtrar-produtos-categoria.md) — 3 SP — Pronta
+- [ ] FE 028 — [US-132 — Filtrar ofertas por categoria](./docs/historias/front/028-US-132-front-filtrar-ofertas-categoria.md) — 3 SP — Pronta
+- [ ] FE 029 — [US-144 — Visualizar categorias mais acessadas](./docs/historias/front/029-US-144-front-visualizar-categorias-mais-acessadas.md) — 3 SP — Pronta
+- [ ] FE 030 — [US-157 — Apresentar categorias mais visualizadas](./docs/historias/front/030-US-157-front-apresentar-categorias-mais-visualizadas.md) — 3 SP — Pronta
+- [ ] FE 031 — [US-196 — A navegação entre categorias deve ser simples](./docs/historias/front/031-US-196-front-navegacao-entre-categorias-deve-ser-simples.md) — 3 SP — Pronta
+- [ ] FE 032 — [US-124 — Pesquisar produtos](./docs/historias/front/032-US-124-front-pesquisar-produtos.md) — 3 SP — Pronta
+- [ ] FE 033 — [US-133 — Pesquisar produtos ou ofertas](./docs/historias/front/033-US-133-front-pesquisar-produtos-ou-ofertas.md) — 3 SP — Pronta
+- [ ] FE 034 — [US-136 — Apresentar imagem do produto quando disponível](./docs/historias/front/034-US-136-front-apresentar-imagem-produto-quando-disponivel.md) — 2 SP — Pronta
+- [ ] FE 035 — [US-145 — Visualizar produtos mais acessados](./docs/historias/front/035-US-145-front-visualizar-produtos-mais-acessados.md) — 3 SP — Pronta
+- [ ] FE 036 — [US-149 — Visualizar métricas por produto](./docs/historias/front/036-US-149-front-visualizar-metricas-produto.md) — 5 SP — Pronta
+- [ ] FE 037 — [US-032 — Visualizar a quantidade total de campanhas criadas](./docs/historias/front/037-US-032-front-visualizar-quantidade-total-campanhas-criadas.md) — 3 SP — Pronta
+- [ ] FE 038 — [US-033 — Visualizar a quantidade total de ofertas cadastradas](./docs/historias/front/038-US-033-front-visualizar-quantidade-total-ofertas-cadastradas.md) — 3 SP — Pronta
+- [ ] FE 039 — [US-127 — Possuir uma página pública de ofertas](./docs/historias/front/039-US-127-front-possuir-pagina-publica-ofertas.md) — 5 SP — Precisa refinamento
+- [ ] FE 040 — [US-128 — Conseguir acessar as ofertas sem login](./docs/historias/front/040-US-128-front-conseguir-acessar-ofertas-sem-login.md) — 3 SP — Pronta
+- [ ] FE 041 — [US-129 — Conseguir acessar as ofertas sem cadastro](./docs/historias/front/041-US-129-front-conseguir-acessar-ofertas-sem-cadastro.md) — 3 SP — Pronta
+- [ ] FE 042 — [US-131 — Apresentar as ofertas vigentes](./docs/historias/front/042-US-131-front-apresentar-ofertas-vigentes.md) — 3 SP — Pronta
+- [ ] FE 043 — [US-135 — Apresentar validade da promoção](./docs/historias/front/043-US-135-front-apresentar-validade-promocao.md) — 2 SP — Pronta
+- [ ] FE 044 — [US-137 — Apresentar condições da oferta](./docs/historias/front/044-US-137-front-apresentar-condicoes-oferta.md) — 2 SP — Pronta
+- [ ] FE 045 — [US-138 — Visualizar detalhes da oferta](./docs/historias/front/045-US-138-front-visualizar-detalhes-oferta.md) — 3 SP — Pronta
+- [ ] FE 046 — [US-139 — Informar quando não houver ofertas vigentes](./docs/historias/front/046-US-139-front-informar-quando-nao-houver-ofertas-vigentes.md) — 3 SP — Pronta
+- [ ] FE 047 — [US-150 — Comparar campanhas](./docs/historias/front/047-US-150-front-comparar-campanhas.md) — 8 SP — Pronta
+- [ ] FE 048 — [US-152 — Visualizar ranking de ofertas](./docs/historias/front/048-US-152-front-visualizar-ranking-ofertas.md) — 5 SP — Pronta
+- [ ] FE 049 — [US-156 — Apresentar ofertas mais visualizadas](./docs/historias/front/049-US-156-front-apresentar-ofertas-mais-visualizadas.md) — 3 SP — Pronta
+- [ ] FE 050 — [US-161 — Compartilhar uma oferta](./docs/historias/front/050-US-161-front-compartilhar-oferta.md) — 5 SP — Pronta
+- [ ] FE 051 — [US-162 — Compartilhar uma campanha](./docs/historias/front/051-US-162-front-compartilhar-campanha.md) — 5 SP — Pronta
+- [ ] FE 052 — [US-164 — Visualizar o tabloide vigente](./docs/historias/front/052-US-164-front-visualizar-tabloide-vigente.md) — 5 SP — Pronta
+- [ ] FE 053 — [US-190 — Chegar às ofertas com o mínimo possível de etapas](./docs/historias/front/053-US-190-front-chegar-ofertas-com-minimo-possivel-etapas.md) — 3 SP — Pronta
+- [ ] FE 054 — [US-192 — O consumidor não deve precisar criar conta para visualizar ofertas](./docs/historias/front/054-US-192-front-consumidor-nao-deve-precisar-criar-conta-visualizar-ofertas.md) — 5 SP — Pronta
+- [ ] FE 055 — [US-194 — Os preços promocionais devem possuir destaque visual](./docs/historias/front/055-US-194-front-precos-promocionais-devem-possuir-destaque-visual.md) — 3 SP — Pronta
+- [ ] FE 056 — [US-195 — A validade das promoções deve ser facilmente identificável](./docs/historias/front/056-US-195-front-validade-promocoes-deve-ser-facilmente-identificavel.md) — 3 SP — Pronta
+- [ ] FE 057 — [US-198 — O cadastro de ofertas deve ser simples](./docs/historias/front/057-US-198-front-cadastro-ofertas-deve-ser-simples.md) — 3 SP — Pronta
+- [ ] FE 058 — [US-200 — A página de ofertas deve aparecer rapidamente após a leitura do QR Code](./docs/historias/front/058-US-200-front-pagina-ofertas-deve-aparecer-rapidamente-apos-leitura-qr-code.md) — 3 SP — Pronta
+- [ ] FE 059 — [US-201 — A navegação entre ofertas deve possuir resposta rápida](./docs/historias/front/059-US-201-front-navegacao-entre-ofertas-deve-possuir-resposta-rapida.md) — 3 SP — Pronta
+- [ ] FE 060 — [US-203 — Permanecer utilizável mesmo com grande volume de ofertas](./docs/historias/front/060-US-203-front-permanecer-utilizavel-mesmo-com-grande-volume-ofertas.md) — 8 SP — Pronta
+- [ ] FE 061 — [US-204 — O conteúdo deve possuir contraste adequado](./docs/historias/front/061-US-204-front-conteudo-deve-possuir-contraste-adequado.md) — 3 SP — Pronta
+- [ ] FE 062 — [US-221 — Acessar a interface de gestão de campanhas](./docs/historias/front/062-US-221-front-acessar-interface-gestao-campanhas.md) — 3 SP — Pronta
+- [ ] FE 063 — [US-226 — Acessar a interface de conteúdos gerais](./docs/historias/front/063-US-226-front-acessar-interface-conteudos-gerais.md) — 5 SP — Pronta
+- [ ] FE 064 — [US-140 — Obter um QR Code para sua página pública](./docs/historias/front/064-US-140-front-obter-qr-code-pagina-publica.md) — 5 SP — Pronta
+- [ ] FE 065 — [US-035 — Visualizar a quantidade total de leituras de QR Code](./docs/historias/front/065-US-035-front-visualizar-quantidade-total-leituras-qr-code.md) — 3 SP — Pronta
+- [ ] FE 066 — [US-141 — Utilizar o QR Code em materiais físicos e digitais](./docs/historias/front/066-US-141-front-utilizar-qr-code-em-materiais-fisicos-digitais.md) — 3 SP — Pronta
+- [ ] FE 067 — [US-142 — Visualizar a quantidade de scans de QR Code](./docs/historias/front/067-US-142-front-visualizar-quantidade-scans-qr-code.md) — 3 SP — Pronta
+- [ ] FE 068 — [US-146 — Visualizar QR Codes mais utilizados](./docs/historias/front/068-US-146-front-visualizar-qr-codes-mais-utilizados.md) — 3 SP — Pronta
+- [ ] FE 069 — [US-158 — Apresentar QR Codes mais utilizados](./docs/historias/front/069-US-158-front-apresentar-qr-codes-mais-utilizados.md) — 3 SP — Pronta
+- [ ] FE 070 — [US-020 — Recuperar seu acesso](./docs/historias/front/070-US-020-front-recuperar-acesso.md) — 3 SP — Pronta
+- [ ] FE 071 — [US-034 — Visualizar a quantidade total de acessos às páginas públicas](./docs/historias/front/071-US-034-front-visualizar-quantidade-total-acessos-paginas-publicas.md) — 3 SP — Pronta
+- [ ] FE 072 — [US-036 — Visualizar métricas gerais da plataforma](./docs/historias/front/072-US-036-front-visualizar-metricas-gerais-plataforma.md) — 5 SP — Pronta
+- [ ] FE 073 — [US-037 — Filtrar métricas por período](./docs/historias/front/073-US-037-front-filtrar-metricas-periodo.md) — 5 SP — Pronta
+- [ ] FE 074 — [US-040 — Consultar relatórios gerais de utilização](./docs/historias/front/074-US-040-front-consultar-relatorios-gerais-utilizacao.md) — 8 SP — Pronta
+- [ ] FE 075 — [US-055 — As métricas gerais devem ser compreensíveis sem necessidade de conhecimento técnico](./docs/historias/front/075-US-055-front-metricas-gerais-devem-ser-compreensiveis-sem-necessidade-conhecimento.md) — 5 SP — Pronta
+- [ ] FE 076 — [US-120 — Recuperar seu acesso](./docs/historias/front/076-US-120-front-recuperar-acesso.md) — 3 SP — Pronta
+- [ ] FE 077 — [US-143 — Visualizar acessos por data e horário](./docs/historias/front/077-US-143-front-visualizar-acessos-data-horario.md) — 3 SP — Pronta
+- [ ] FE 078 — [US-154 — Apresentar acessos](./docs/historias/front/078-US-154-front-apresentar-acessos.md) — 3 SP — Pronta
+- [ ] FE 079 — [US-155 — Apresentar scans](./docs/historias/front/079-US-155-front-apresentar-scans.md) — 3 SP — Pronta
+- [ ] FE 080 — [US-166 — Visualizar métricas consolidadas](./docs/historias/front/080-US-166-front-visualizar-metricas-consolidadas.md) — 5 SP — Pronta
+- [ ] FE 081 — [US-193 — O acesso deve ser prioritariamente adequado ao uso pelo celular](./docs/historias/front/081-US-193-front-acesso-deve-ser-prioritariamente-adequado-ao-uso-pelo-celular.md) — 3 SP — Pronta
+- [ ] FE 082 — [US-223 — Solicitar a exportação de relatórios](./docs/historias/front/082-US-223-front-solicitar-exportacao-relatorios.md) — 3 SP — Pronta
+- [ ] FE 083 — [US-019 — Encerrar sua sessão](./docs/historias/front/083-US-019-front-encerrar-sessao.md) — 3 SP — Pronta
+- [ ] FE 084 — [US-025 — Consultar o status de uma conta](./docs/historias/front/084-US-025-front-consultar-status-conta.md) — 3 SP — Pronta
+- [ ] FE 085 — [US-038 — Consultar registros de alterações relevantes](./docs/historias/front/085-US-038-front-consultar-registros-alteracoes-relevantes.md) — 3 SP — Pronta
+- [ ] FE 086 — [US-119 — Encerrar sua sessão](./docs/historias/front/086-US-119-front-encerrar-sessao.md) — 3 SP — Pronta
+- [ ] FE 087 — [US-126 — Apresentar o percentual de desconto quando aplicável](./docs/historias/front/087-US-126-front-apresentar-percentual-desconto-quando-aplicavel.md) — 3 SP — Pronta
+- [ ] FE 088 — [US-134 — Apresentar preços](./docs/historias/front/088-US-134-front-apresentar-precos.md) — 2 SP — Pronta
+- [ ] FE 089 — [US-147 — Selecionar um período de análise](./docs/historias/front/089-US-147-front-selecionar-periodo-analise.md) — 3 SP — Pronta
+- [ ] FE 090 — [US-153 — Possuir um painel resumido](./docs/historias/front/090-US-153-front-possuir-painel-resumido.md) — 3 SP — Pronta
+- [ ] FE 091 — [US-159 — Permitir escolher período](./docs/historias/front/091-US-159-front-permitir-escolher-periodo.md) — 3 SP — Pronta
+- [ ] FE 092 — [US-160 — Permitir comparar períodos](./docs/historias/front/092-US-160-front-permitir-comparar-periodos.md) — 3 SP — Pronta
+- [ ] FE 093 — [US-191 — O consumidor não deve precisar de treinamento](./docs/historias/front/093-US-191-front-consumidor-nao-deve-precisar-treinamento.md) — 3 SP — Pronta
+- [ ] FE 094 — [US-199 — Mensagens de erro devem ser claras](./docs/historias/front/094-US-199-front-mensagens-erro-devem-ser-claras.md) — 3 SP — Pronta
+- [ ] FE 095 — [US-202 — Imagens não devem impedir a visualização das informações essenciais](./docs/historias/front/095-US-202-front-imagens-nao-devem-impedir-visualizacao-informacoes-essenciais.md) — 3 SP — Pronta
+- [ ] FE 096 — [US-205 — Informações importantes não devem depender somente de cores](./docs/historias/front/096-US-205-front-informacoes-importantes-nao-devem-depender-somente-cores.md) — 3 SP — Pronta
+- [ ] FE 097 — [US-206 — Textos devem ser legíveis em dispositivos móveis](./docs/historias/front/097-US-206-front-textos-devem-ser-legiveis-em-dispositivos-moveis.md) — 3 SP — Pronta
+- [ ] FE 098 — [US-207 — Os principais fluxos devem considerar acessibilidade digital](./docs/historias/front/098-US-207-front-principais-fluxos-devem-considerar-acessibilidade-digital.md) — 13 SP — Pronta
+- [ ] FE 099 — [US-217 — Acessar a interface da biblioteca de imagens](./docs/historias/front/099-US-217-front-acessar-interface-biblioteca-imagens.md) — 3 SP — Pronta
+- [ ] FE 100 — [US-219 — Receber alerta ao atingir noventa por cento da cota](./docs/historias/front/100-US-219-front-receber-alerta-ao-atingir-noventa-cento-cota.md) — 3 SP — Pronta
+- [ ] FE 101 — [US-225 — Acessar a interface de ocorrências](./docs/historias/front/101-US-225-front-acessar-interface-ocorrencias.md) — 3 SP — Pronta
+
+## Progresso
+
+- Back-end concluído: ___ / 125
+- Front-end concluído: ___ / 101
+- Total concluído: ___ / 226

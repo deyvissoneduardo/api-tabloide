@@ -1,0 +1,431 @@
+# Mapa Mental — Tabloide Digital / Ofertas Inteligentes para Supermercados
+
+- **Tabloide Digital / Ofertas Inteligentes para Supermercados**
+  - **1. Ideia original**
+    - QR Code na entrada do mercado
+    - Cliente escaneia com o celular
+    - Abre o tabloide/ofertas atuais
+    - Sem instalar aplicativo
+    - Sem cadastro obrigatório
+    - Acesso rápido e simples
+
+  - **2. Problema que resolve**
+    - **Tabloide impresso**
+      - Custo de impressão
+      - Fica desatualizado
+      - Não gera métricas
+    - **Comunicação de ofertas**
+      - Cliente pode não saber das promoções
+      - Ofertas espalhadas pela loja
+      - Falta de canal digital simples
+    - **Falta de dados**
+      - Mercado não sabe quais ofertas interessaram
+      - Não sabe quais categorias são mais acessadas
+      - Não sabe quais campanhas tiveram melhor resultado
+
+  - **3. Mercado**
+    - **Varejo alimentar brasileiro**
+      - Mercado extremamente grande
+      - Centenas de milhares de estabelecimentos
+      - Milhões de consumidores diariamente
+      - Alto volume de campanhas e promoções
+    - **Tendências**
+      - Digitalização
+      - Fidelização
+      - Analytics
+      - Retail Media
+      - QR Code
+      - WhatsApp
+    - **Público inicial recomendado**
+      - Mercados independentes
+      - Supermercados regionais
+      - Pequenas redes
+      - Aproximadamente 1 a 20 lojas
+
+  - **4. Concorrência**
+    - **Concorrentes diretos**
+      - Mais Barato Aqui
+        - Cadastro de ofertas
+        - QR Code
+        - Ofertas pelo celular
+        - Métricas
+    - **Concorrentes indiretos**
+      - Tabloide Digital App
+        - Tabloide online
+        - Personalização
+        - Push
+        - White label
+        - SaaS mensal
+      - Encarte Fácil
+        - Criação de encartes
+        - Automação / IA
+      - Portais agregadores
+        - Centralizam encartes de várias redes
+    - **Conclusão**
+      - Ideia não é inédita
+      - Existe validação de mercado
+      - Diferenciação será obrigatória
+
+  - **5. Posicionamento**
+    - **Não ser apenas**
+      - QR Code que abre um PDF
+    - **Ser**
+      - Plataforma de ofertas inteligentes
+    - **Posicionamento futuro**
+      - Sistema operacional das ofertas do supermercado
+
+  - **6. Experiência do cliente**
+    - **Entrada do mercado**
+      - Placa
+        - Ofertas de hoje
+        - Veja as promoções
+        - QR Code
+    - Escaneia QR
+    - Página abre imediatamente
+    - **Categorias**
+      - Açougue
+      - Bebidas
+      - Hortifruti
+      - Limpeza
+      - Laticínios
+      - Outras
+    - **Produto**
+      - Foto
+      - Nome
+      - Preço anterior
+      - Preço atual
+      - Percentual de desconto
+      - Validade
+      - Adicionar à lista
+
+  - **7. Desafio principal**
+    - Cliente já está dentro da loja
+    - **Motivo para escanear**
+      - Descontos exclusivos
+      - Ofertas do dia
+      - Produtos mais baratos
+      - Cupons
+      - Promoções ocultas
+      - Benefício econômico claro
+
+  - **8. QR Code**
+    - **QR dinâmico**
+      - Mesmo QR para sempre
+      - Campanhas podem mudar
+      - Sem necessidade de reimpressão
+    - **QR geral**
+      - Entrada do supermercado
+    - **QR por setor**
+      - Açougue
+      - Bebidas
+      - Padaria
+      - Hortifruti
+      - Limpeza
+
+  - **9. Analytics**
+    - Número de scans
+    - Clientes que abriram ofertas
+    - Visualizações de produtos
+    - Produtos mais acessados
+    - Categorias mais acessadas
+    - Horários de maior acesso
+    - QR com maior utilização
+    - Campanhas com maior interesse
+    - Produtos adicionados à lista
+
+  - **10. Dashboard do supermercado**
+    - Acessos hoje
+    - Acessos semanais
+    - Acessos mensais
+    - Ofertas mais vistas
+    - Categorias mais vistas
+    - Ranking de produtos
+    - Performance das campanhas
+    - Performance dos QR Codes
+
+  - **11. Painel administrativo**
+    - Login
+    - **Mercado**
+      - Nome
+      - Logo
+      - Endereço
+      - Configurações
+    - **Campanhas**
+      - Criar
+      - Editar
+      - Publicar
+      - Agendar
+      - Encerrar
+    - **Produtos**
+      - Nome
+      - Imagem
+      - Categoria
+      - Preço normal
+      - Preço promocional
+      - Validade
+    - **QR Codes**
+      - Criar
+      - Identificar local
+      - Acompanhar métricas
+
+  - **12. MVP**
+    - **O que deve ter**
+      - Login do mercado
+      - Cadastro do mercado
+      - Cadastro de ofertas
+      - Categorias
+      - Campanhas
+      - Página pública mobile
+      - QR Code dinâmico
+      - Analytics básico
+    - **O que não deve ter inicialmente**
+      - Aplicativo
+      - IA
+      - ERP
+      - Integrações complexas
+      - Pagamentos
+      - Fidelidade avançada
+      - Cadastro obrigatório do consumidor
+
+  - **13. MVP de validação**
+    - Antes de desenvolver o SaaS completo
+    - Escolher 3 a 5 mercados
+    - Mercado fornece tabloide atual
+      - PDF
+      - Imagem
+    - Criar página mobile simples
+    - Colocar QR na entrada
+    - Rodar por aproximadamente 30 dias
+    - **Medir**
+      - Quantos clientes entraram
+      - Quantos escanearam
+      - Taxa de conversão
+
+  - **14. Hipótese principal**
+    - Clientes vão escanear o QR?
+
+  - **15. Métrica do piloto**
+    - Exemplo: 1.000 clientes/dia
+    - 10 scans
+      - 1%
+    - 100 scans
+      - 10%
+    - 200 scans
+      - 20%
+
+  - **16. Modelo de negócio**
+    - SaaS B2B
+    - Cobrança por loja
+    - Receita recorrente mensal
+    - Expansão por quantidade de lojas
+
+  - **17. Preço**
+    - **Possibilidades futuras**
+      - Básico
+        - R$ 59 a R$ 79
+      - Pro
+        - Aproximadamente R$ 149
+      - Redes
+        - R$ 299+
+    - **MVP recomendado**
+      - Aproximadamente R$ 99/mês por loja
+
+  - **18. Simulação de receita**
+    - **100 lojas**
+      - R$ 149 por loja
+      - R$ 14.900 MRR
+      - R$ 178.800 ARR
+    - **1.000 lojas**
+      - R$ 149.000 MRR
+      - R$ 1.788.000 ARR
+    - **10.000 lojas**
+      - R$ 1.490.000 MRR
+      - R$ 17.880.000 ARR
+
+  - **19. WhatsApp**
+    - Cliente escaneia QR
+    - Consulta ofertas
+    - CTA
+      - Receber ofertas pelo WhatsApp
+    - Evolução
+      - Cliente físico
+      - Audiência digital
+      - Relacionamento recorrente
+
+  - **20. Retail Media**
+    - Possível evolução
+    - Fabricantes patrocinam ofertas
+    - Exemplos
+      - Coca-Cola
+      - Ambev
+      - Nestlé
+      - Unilever
+    - **Receita**
+      - Impressões
+      - Cliques
+      - Visualizações
+      - Região
+      - Loja
+    - **Modelo futuro**
+      - Supermercado paga SaaS
+      - Indústria paga publicidade
+
+  - **21. Dados como ativo**
+    - Interesse por produto
+    - Interesse por categoria
+    - Localização
+    - Sazonalidade
+    - Horário
+    - Campanhas
+    - Comportamento agregado
+
+  - **22. Privacidade / LGPD**
+    - Evitar coletar dados desnecessários
+    - Não exigir CPF no acesso
+    - Não exigir cadastro
+    - Consentimento para WhatsApp
+    - Política de privacidade
+    - Dados preferencialmente agregados
+
+  - **23. Diferencial competitivo**
+    - **Não**
+      - QR + PDF
+    - **Sim**
+      - QR dinâmico
+      - Analytics
+      - Categorias
+      - Ofertas individuais
+      - Lista de compras
+      - WhatsApp
+      - Multi-loja
+      - Retail Media
+      - Dados de comportamento
+
+  - **24. Riscos**
+    - Baixa taxa de scans
+    - Mercado não enxergar valor
+    - Produto fácil de copiar
+    - Concorrência existente
+    - Apps próprios das grandes redes
+    - WhatsApp substituir parte da solução
+    - Dificuldade de manter ofertas atualizadas
+
+  - **25. Forças**
+    - MVP barato
+    - Implementação rápida
+    - Sem aplicativo
+    - Baixa fricção
+    - SaaS recorrente
+    - Mercado muito grande
+    - Possibilidade de expansão
+
+  - **26. SWOT**
+    - **Forças**
+      - Simplicidade
+      - Baixo custo
+      - QR permanente
+      - SaaS
+    - **Fraquezas**
+      - Dependência do scan
+      - Tecnologia fácil de copiar
+    - **Oportunidades**
+      - Analytics
+      - WhatsApp
+      - Fidelização
+      - Retail Media
+      - Pequenas redes
+    - **Ameaças**
+      - Concorrentes
+      - Apps próprios
+      - WhatsApp
+      - Tabloide tradicional
+
+  - **27. Roadmap conceitual**
+    - **V0 — Validação**
+      - QR
+      - Página
+      - Tabloide
+      - Contagem de scans
+    - **V1 — SaaS**
+      - Usuários
+      - Mercados
+      - Produtos
+      - Campanhas
+      - Categorias
+      - Analytics
+    - **V2 — Engajamento**
+      - Lista de compras
+      - Favoritos
+      - WhatsApp
+      - Cupons
+    - **V3 — Redes**
+      - Multi-loja
+      - Campanhas regionais
+      - Gestão centralizada
+      - Permissões
+    - **V4 — Plataforma**
+      - Integração ERP
+      - Integração PDV
+      - IA
+      - Automação de campanhas
+      - Retail Media
+      - Inteligência de mercado
+
+  - **28. Visão omnichannel**
+    - Uma única campanha
+      - QR Code
+      - WhatsApp
+      - Instagram
+      - Site
+      - TV da loja
+      - Totem
+      - Aplicativo
+    - Analytics centralizado
+
+  - **29. Visão de produto**
+    - **Hoje**
+      - QR → ofertas
+    - **Amanhã**
+      - Plataforma de campanhas
+    - **Futuro**
+      - Sistema operacional de ofertas do varejo
+
+  - **30. Próximos passos**
+    - Encontrar 3 a 5 mercados
+    - Conversar com donos/gerentes
+    - Entender como criam ofertas atualmente
+    - Criar landing page mobile simples
+    - Gerar QR Code
+    - Colocar na entrada
+    - Medir acessos
+    - Medir taxa de scan
+    - Entrevistar clientes
+    - Entrevistar supermercado
+    - Validar disposição a pagar
+    - Ajustar proposta de valor
+    - Somente depois construir o SaaS completo
+
+---
+
+## Fluxo estratégico resumido
+
+- Tráfego físico
+  - QR Code
+    - Ofertas
+      - Engajamento
+        - Dados
+          - Relacionamento
+            - WhatsApp / CRM
+              - Fidelização
+                - Retail Media
+                  - Nova receita
+
+## Evolução estratégica do produto
+
+- Tabloide digital
+  - Ofertas digitais
+    - Analytics
+      - Plataforma de campanhas
+        - Canal de relacionamento
+          - Retail Media
+            - Plataforma de varejo
