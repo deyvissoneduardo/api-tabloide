@@ -57,6 +57,9 @@ public class AlterarPlanoSupermercado {
             throw new PlanoExcluidoException();
         }
 
+        // Decisão de produto: downgrade nunca é bloqueado por limite de lojas (grandfathering).
+        // Lojas ativas em excesso permanecem ativas; o limite só é aplicado ao cadastrar uma
+        // nova loja (ver CadastrarLoja.validarLimiteDoPlano).
         Instant agora = Instant.now();
         String antes = atual.resumoParaAuditoria();
 

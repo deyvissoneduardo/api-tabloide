@@ -63,8 +63,12 @@ class AlterarPlanoSupermercadoTest {
     }
 
     private static Plano plano(Long id, String nome) {
+        return plano(id, nome, null);
+    }
+
+    private static Plano plano(Long id, String nome, Integer limiteLojas) {
         Instant agora = Instant.now();
-        return new Plano(id, nome, Plano.normalizarNome(nome), 30, BigDecimal.valueOf(99.90), 100, null, 0L, agora, agora, null);
+        return new Plano(id, nome, Plano.normalizarNome(nome), 30, BigDecimal.valueOf(99.90), 100, limiteLojas, 0L, agora, agora, null);
     }
 
     @Test
@@ -101,6 +105,21 @@ class AlterarPlanoSupermercadoTest {
 
         assertThatThrownBy(() -> alterarPlanoSupermercado.executar(1L, 6L, 1L, Perfil.SUPER_ADMIN))
                 .isInstanceOf(PlanoNaoEncontradoException.class);
+    }
+
+    @Test
+    void deveTrocarPlanoMesmoQuandoNovoPlanoTemLimiteDeLojasMenorQueQuantidadeAtual() {
+        Assinatura vigente = Assinatura.associar(1L, plano(5L, "Básico"), Instant.now());
+        Plano planoComLimiteBaixo = plano(6L, "Starter", 1);
+        when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.of(supermercado(EstadoSupermercado.ATIVO)));
+        when(assinaturaRepository.buscarVigenteOuAgendadaPorSupermercado(1L)).thenReturn(Optional.of(vigente));
+        when(planoRepository.buscarPorId(6L)).thenReturn(Optional.of(planoComLimiteBaixo));
+        when(assinaturaRepository.salvar(any(Assinatura.class))).thenAnswer(invocacao -> invocacao.getArgument(0));
+
+        Assinatura resultado = alterarPlanoSupermercado.executar(1L, 6L, 1L, Perfil.SUPER_ADMIN);
+
+        assertThat(resultado.planoId()).isEqualTo(6L);
+        assertThat(resultado.estado()).isEqualTo(EstadoAssinatura.VIGENTE);
     }
 
     @Test
