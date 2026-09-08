@@ -63,7 +63,7 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 055 — [US-077 — Associar produtos a categorias](./docs/historias/back/055-US-077-back-associar-produtos-categorias.md) — 5 SP — Pronta
 - [X] BE 056 — [US-101 — Organizar ofertas por categoria](./docs/historias/back/056-US-101-back-organizar-ofertas-categoria.md) — 3 SP — Pronta
 - [X] BE 057 — [US-078 — Cadastrar produtos](./docs/historias/back/057-US-078-back-cadastrar-produtos.md) — 5 SP — Pronta
-- [ ] BE 058 — [US-098 — Associar uma oferta a uma ou mais lojas](./docs/historias/back/058-US-098-back-associar-oferta-ou-mais-lojas.md) — 5 SP — Precisa refinamento
+- [X] BE 058 — [US-098 — Associar uma oferta a uma ou mais lojas](./docs/historias/back/058-US-098-back-associar-oferta-ou-mais-lojas.md) — 5 SP — Precisa refinamento
 - [X] BE 059 — [US-081 — Associar o produto a uma categoria](./docs/historias/back/059-US-081-back-associar-produto-categoria.md) — 5 SP — Pronta
 - [ ] BE 060 — [US-079 — Informar o nome do produto](./docs/historias/back/060-US-079-back-informar-nome-produto.md) — 3 SP — Pronta
 - [ ] BE 061 — [US-080 — Cadastrar uma imagem do produto](./docs/historias/back/061-US-080-back-cadastrar-imagem-produto.md) — 5 SP — Pronta
