@@ -15,6 +15,9 @@ import com.tabloide.api.modules.categoria.domain.CategoriaRepository;
 import com.tabloide.api.modules.categoria.domain.EstadoCategoria;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaNaoEncontradaException;
 import com.tabloide.api.modules.categoria.domain.exceptions.VersaoDesatualizadaException;
+import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
+import com.tabloide.api.modules.supermercado.domain.Supermercado;
+import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import java.time.Instant;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,11 +37,17 @@ class EditarCategoriaTest {
     @Mock
     private AuditoriaRepository auditoriaRepository;
 
+    @Mock
+    private SupermercadoRepository supermercadoRepository;
+
     private EditarCategoria editarCategoria;
 
     @BeforeEach
     void configurar() {
-        editarCategoria = new EditarCategoria(categoriaRepository, auditoriaRepository);
+        editarCategoria = new EditarCategoria(categoriaRepository, auditoriaRepository, supermercadoRepository);
+        org.mockito.Mockito.lenient().when(supermercadoRepository.buscarPorId(SUPERMERCADO_ID)).thenReturn(Optional.of(
+                new Supermercado(SUPERMERCADO_ID, null, "Razão", "Fantasia", "e@e.com", "119999", null,
+                        null, null, null, EstadoSupermercado.ATIVO, 0L, Instant.now(), Instant.now())));
     }
 
     private static Categoria categoriaExistente() {

@@ -16,7 +16,7 @@ import com.tabloide.api.modules.categoria.domain.EstadoCategoria;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaNaoEncontradaException;
 import com.tabloide.api.modules.produto.domain.Produto;
 import com.tabloide.api.modules.produto.domain.ProdutoRepository;
-import com.tabloide.api.modules.produto.domain.exceptions.CategoriaDesativadaNaoAceitaAssociacaoException;
+import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaDesativadaNaoAceitaAssociacaoException;
 import com.tabloide.api.modules.supermercado.domain.Endereco;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;

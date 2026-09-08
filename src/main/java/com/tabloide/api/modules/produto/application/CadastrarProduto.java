@@ -8,7 +8,6 @@ import com.tabloide.api.modules.categoria.domain.CategoriaRepository;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaNaoEncontradaException;
 import com.tabloide.api.modules.produto.domain.Produto;
 import com.tabloide.api.modules.produto.domain.ProdutoRepository;
-import com.tabloide.api.modules.produto.domain.exceptions.CategoriaDesativadaNaoAceitaAssociacaoException;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
 import com.tabloide.api.modules.supermercado.domain.exceptions.SupermercadoBloqueadoOuDesativadoException;
@@ -47,9 +46,7 @@ public class CadastrarProduto {
 
         Supermercado supermercado = supermercadoRepository.buscarPorId(supermercadoId)
                 .orElseThrow(SupermercadoNaoEncontradoException::new);
-        if (!supermercado.estaAtivo()) {
-            throw new SupermercadoBloqueadoOuDesativadoException();
-        }
+        supermercado.validarPermissaoParaMutacao();
 
         validarCategorias(dados.categoriaIds(), supermercadoId);
 
@@ -72,9 +69,7 @@ public class CadastrarProduto {
         for (Long categoriaId : categoriaIds) {
             Categoria categoria = categoriaRepository.buscarPorIdESupermercado(categoriaId, supermercadoId)
                     .orElseThrow(CategoriaNaoEncontradaException::new);
-            if (!categoria.estaAtiva()) {
-                throw new CategoriaDesativadaNaoAceitaAssociacaoException();
-            }
+            categoria.validarNovaAssociacao();
         }
     }
 

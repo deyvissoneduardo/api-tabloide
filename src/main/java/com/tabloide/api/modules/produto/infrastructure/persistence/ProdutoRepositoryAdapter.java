@@ -3,6 +3,7 @@ package com.tabloide.api.modules.produto.infrastructure.persistence;
 import com.tabloide.api.modules.produto.domain.Produto;
 import com.tabloide.api.modules.produto.domain.ProdutoRepository;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 @Repository
 public class ProdutoRepositoryAdapter implements ProdutoRepository {
@@ -11,6 +12,11 @@ public class ProdutoRepositoryAdapter implements ProdutoRepository {
 
     public ProdutoRepositoryAdapter(ProdutoJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
+    }
+
+    @Override
+    public Optional<Produto> buscarPorIdESupermercado(Long id, Long supermercadoId) {
+        return jpaRepository.findByIdAndSupermercadoId(id, supermercadoId).map(ProdutoRepositoryAdapter::paraDominio);
     }
 
     @Override

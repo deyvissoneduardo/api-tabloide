@@ -138,6 +138,12 @@ public class Supermercado {
         return estado == EstadoSupermercado.ATIVO;
     }
 
+    public void validarPermissaoParaMutacao() {
+        if (!estaAtivo()) {
+            throw new SupermercadoBloqueadoOuDesativadoException();
+        }
+    }
+
     public boolean estaDesativado() {
         return estado == EstadoSupermercado.DESATIVADO;
     }

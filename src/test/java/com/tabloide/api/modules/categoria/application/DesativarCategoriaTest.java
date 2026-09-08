@@ -14,6 +14,10 @@ import com.tabloide.api.modules.categoria.domain.Categoria;
 import com.tabloide.api.modules.categoria.domain.CategoriaRepository;
 import com.tabloide.api.modules.categoria.domain.EstadoCategoria;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaNaoEncontradaException;
+import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
+import com.tabloide.api.modules.supermercado.domain.Supermercado;
+import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
+import com.tabloide.api.modules.supermercado.domain.exceptions.SupermercadoBloqueadoOuDesativadoException;
 import java.time.Instant;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,17 +37,35 @@ class DesativarCategoriaTest {
     @Mock
     private AuditoriaRepository auditoriaRepository;
 
+    @Mock
+    private SupermercadoRepository supermercadoRepository;
+
     private DesativarCategoria desativarCategoria;
 
     @BeforeEach
     void configurar() {
-        desativarCategoria = new DesativarCategoria(categoriaRepository, auditoriaRepository);
+        desativarCategoria = new DesativarCategoria(categoriaRepository, auditoriaRepository, supermercadoRepository);
+        org.mockito.Mockito.lenient().when(supermercadoRepository.buscarPorId(SUPERMERCADO_ID)).thenReturn(Optional.of(
+                new Supermercado(SUPERMERCADO_ID, null, "Razão", "Fantasia", "e@e.com", "119999", null,
+                        null, null, null, EstadoSupermercado.ATIVO, 0L, Instant.now(), Instant.now())));
     }
 
     @Test
     void deveRejeitarQuandoForaDoEscopoDoAtor() {
         assertThatThrownBy(() -> desativarCategoria.executar(SUPERMERCADO_ID, 1L, 1L, Perfil.DONO, 2L))
                 .isInstanceOf(CategoriaNaoEncontradaException.class);
+
+        verify(categoriaRepository, never()).salvar(any());
+    }
+
+    @Test
+    void deveRejeitarQuandoSupermercadoEstaBloqueado() {
+        Supermercado bloqueado = new Supermercado(SUPERMERCADO_ID, null, "Razão", "Fantasia", "e@e.com", "119999",
+                null, null, null, null, EstadoSupermercado.BLOQUEADO, 0L, Instant.now(), Instant.now());
+        when(supermercadoRepository.buscarPorId(SUPERMERCADO_ID)).thenReturn(Optional.of(bloqueado));
+
+        assertThatThrownBy(() -> desativarCategoria.executar(SUPERMERCADO_ID, 1L, 1L, Perfil.DONO, SUPERMERCADO_ID))
+                .isInstanceOf(SupermercadoBloqueadoOuDesativadoException.class);
 
         verify(categoriaRepository, never()).salvar(any());
     }

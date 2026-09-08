@@ -6,6 +6,9 @@ import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.categoria.domain.Categoria;
 import com.tabloide.api.modules.categoria.domain.CategoriaRepository;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaNaoEncontradaException;
+import com.tabloide.api.modules.supermercado.domain.Supermercado;
+import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
+import com.tabloide.api.modules.supermercado.domain.exceptions.SupermercadoNaoEncontradoException;
 import java.time.Instant;
 import java.util.Objects;
 import org.springframework.stereotype.Component;
@@ -16,10 +19,13 @@ public class DesativarCategoria {
 
     private final CategoriaRepository categoriaRepository;
     private final AuditoriaRepository auditoriaRepository;
+    private final SupermercadoRepository supermercadoRepository;
 
-    public DesativarCategoria(CategoriaRepository categoriaRepository, AuditoriaRepository auditoriaRepository) {
+    public DesativarCategoria(CategoriaRepository categoriaRepository, AuditoriaRepository auditoriaRepository,
+                              SupermercadoRepository supermercadoRepository) {
         this.categoriaRepository = categoriaRepository;
         this.auditoriaRepository = auditoriaRepository;
+        this.supermercadoRepository = supermercadoRepository;
     }
 
     @Transactional
@@ -27,6 +33,8 @@ public class DesativarCategoria {
         if (foraDoEscopoDoAtor(supermercadoId, supermercadoIdAtor)) {
             throw new CategoriaNaoEncontradaException();
         }
+
+        validarSupermercadoPermiteMutacao(supermercadoId);
 
         Categoria categoria = categoriaRepository.buscarPorIdESupermercado(id, supermercadoId)
                 .orElseThrow(CategoriaNaoEncontradaException::new);
@@ -50,5 +58,11 @@ public class DesativarCategoria {
 
     private boolean foraDoEscopoDoAtor(Long supermercadoId, Long supermercadoIdAtor) {
         return !Objects.equals(supermercadoId, supermercadoIdAtor);
+    }
+
+    private void validarSupermercadoPermiteMutacao(Long supermercadoId) {
+        Supermercado supermercado = supermercadoRepository.buscarPorId(supermercadoId)
+                .orElseThrow(SupermercadoNaoEncontradoException::new);
+        supermercado.validarPermissaoParaMutacao();
     }
 }

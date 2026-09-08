@@ -1,12 +1,19 @@
 package com.tabloide.api.modules.produto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.Instant;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ProdutoTest {
+
+    @Test
+    void naoDeveCadastrarSemCategorias() {
+        assertThatThrownBy(() -> Produto.cadastrar(1L, "Produto", Set.of(), null, null, null, null, null, Instant.now()))
+                .isInstanceOf(com.tabloide.api.modules.produto.domain.exceptions.CategoriasProdutoInvalidasException.class);
+    }
 
     private static Produto cadastrarProduto() {
         return Produto.cadastrar(1L, "  Refrigerante Cola 2L  ", Set.of(10L, 20L), "  Marca X  ", null, null, null, null, Instant.now());

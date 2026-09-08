@@ -1,6 +1,7 @@
 package com.tabloide.api.modules.produto.interfaces.http;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,6 +12,7 @@ import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginRequest;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
 import com.tabloide.api.modules.categoria.interfaces.http.dto.CadastrarCategoriaRequest;
 import com.tabloide.api.modules.produto.interfaces.http.dto.CadastrarProdutoRequest;
+import com.tabloide.api.modules.produto.interfaces.http.dto.AssociarCategoriasProdutoRequest;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaEntity;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaRepository;
@@ -37,7 +39,7 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
 
     @Test
     void deveCadastrarProdutoComoDono() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777004001");
+        Long supermercadoId = criarSupermercado("11444777004078");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-cadastra-produto@sgtm.local");
         long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
 
@@ -49,7 +51,7 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
 
     @Test
     void deveRejeitarCadastroComOperador() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777004082");
+        Long supermercadoId = criarSupermercado("11444777004159");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-cria-categoria-para-operador@sgtm.local");
         long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
         String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, supermercadoId, "operador-nao-cadastra-produto@sgtm.local");
@@ -60,7 +62,7 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
 
     @Test
     void deveRejeitarQuandoCategoriaNaoExiste() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777004163");
+        Long supermercadoId = criarSupermercado("11444777004230");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-categoria-inexistente@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of(999999L))))
@@ -69,7 +71,7 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
 
     @Test
     void deveRejeitarQuandoCategoriaEstaDesativada() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777004244");
+        Long supermercadoId = criarSupermercado("11444777004310");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-categoria-desativada@sgtm.local");
         long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
         mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/categorias/" + categoriaId + "/desativacao")
@@ -82,11 +84,31 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
 
     @Test
     void deveRejeitarCadastroSemCategoria() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777004325");
+        Long supermercadoId = criarSupermercado("11444777004400");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-produto-sem-categoria@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of())))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void deveSubstituirCategoriasDoProduto() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777004582");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-associa-categorias@sgtm.local");
+        long categoriaInicial = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long novaCategoria = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Ofertas");
+        String produtoCriado = mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of(categoriaInicial))))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        long produtoId = objectMapper.readTree(produtoCriado).get("id").asLong();
+        long versao = objectMapper.readTree(produtoCriado).get("versao").asLong();
+
+        mockMvc.perform(put("/api/supermercados/" + supermercadoId + "/produtos/" + produtoId + "/categorias")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new AssociarCategoriasProdutoRequest(versao, Set.of(novaCategoria)))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.categoriaIds[0]").value(novaCategoria));
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder cadastrar(

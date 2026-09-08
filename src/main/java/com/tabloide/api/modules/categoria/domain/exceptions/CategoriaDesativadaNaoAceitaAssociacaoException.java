@@ -1,4 +1,4 @@
-package com.tabloide.api.modules.produto.domain.exceptions;
+package com.tabloide.api.modules.categoria.domain.exceptions;
 
 public class CategoriaDesativadaNaoAceitaAssociacaoException extends RuntimeException {
 

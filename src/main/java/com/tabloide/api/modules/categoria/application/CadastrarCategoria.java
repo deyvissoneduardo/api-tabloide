@@ -39,9 +39,7 @@ public class CadastrarCategoria {
 
         Supermercado supermercado = supermercadoRepository.buscarPorId(supermercadoId)
                 .orElseThrow(SupermercadoNaoEncontradoException::new);
-        if (!supermercado.estaAtivo()) {
-            throw new SupermercadoBloqueadoOuDesativadoException();
-        }
+        supermercado.validarPermissaoParaMutacao();
 
         Instant agora = Instant.now();
         Categoria categoria = Categoria.cadastrar(supermercadoId, dados.nome(), dados.descricao(), agora);

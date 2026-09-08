@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.produto.domain;
 
+import com.tabloide.api.modules.produto.domain.exceptions.CategoriasProdutoInvalidasException;
 import java.time.Instant;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class Produto {
         this.id = id;
         this.supermercadoId = supermercadoId;
         this.nome = nome;
-        this.categoriaIds = categoriaIds;
+        this.categoriaIds = Set.copyOf(categoriaIds);
         this.marca = marca;
         this.descricao = descricao;
         this.peso = peso;
@@ -53,8 +54,9 @@ public class Produto {
             Long supermercadoId, String nome, Set<Long> categoriaIds, String marca,
             String descricao, String peso, String unidade, String volume, Instant agora
     ) {
+        validarCategoriasInformadas(categoriaIds);
         return new Produto(
-                null, supermercadoId, nome.trim(), Set.copyOf(categoriaIds), normalizarOpcional(marca),
+                null, supermercadoId, normalizarNome(nome), Set.copyOf(categoriaIds), normalizarOpcional(marca),
                 normalizarOpcional(descricao), normalizarOpcional(peso), normalizarOpcional(unidade),
                 normalizarOpcional(volume), EstadoProduto.ATIVO, null, agora, agora
         );
@@ -62,6 +64,33 @@ public class Produto {
 
     public boolean estaAtivo() {
         return estado == EstadoProduto.ATIVO;
+    }
+
+    public void substituirCategorias(Set<Long> novasCategoriaIds, Instant agora) {
+        validarCategoriasInformadas(novasCategoriaIds);
+        this.categoriaIds = Set.copyOf(novasCategoriaIds);
+        this.atualizadoEm = agora;
+    }
+
+    public boolean possuiVersao(Long versaoConhecida) {
+        return java.util.Objects.equals(versao, versaoConhecida);
+    }
+
+    private static String normalizarNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome do produto é obrigatório");
+        }
+        return nome.trim();
+    }
+
+    private static void validarCategoriasInformadas(Set<Long> categoriaIds) {
+        if (categoriasNaoForamInformadas(categoriaIds)) {
+            throw new CategoriasProdutoInvalidasException();
+        }
+    }
+
+    private static boolean categoriasNaoForamInformadas(Set<Long> categoriaIds) {
+        return categoriaIds == null || categoriaIds.isEmpty() || categoriaIds.stream().anyMatch(java.util.Objects::isNull);
     }
 
     private static String normalizarOpcional(String valor) {

@@ -1,6 +1,7 @@
 package com.tabloide.api.modules.categoria.domain;
 
 import com.tabloide.api.modules.categoria.domain.exceptions.TransicaoEstadoInvalidaException;
+import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaDesativadaNaoAceitaAssociacaoException;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -36,11 +37,11 @@ public class Categoria {
     }
 
     public static Categoria cadastrar(Long supermercadoId, String nome, String descricao, Instant agora) {
-        return new Categoria(null, supermercadoId, nome.trim(), normalizarOpcional(descricao), EstadoCategoria.ATIVA, null, agora, agora);
+        return new Categoria(null, supermercadoId, normalizarNome(nome), normalizarOpcional(descricao), EstadoCategoria.ATIVA, null, agora, agora);
     }
 
     public void editar(String nome, String descricao, Instant agora) {
-        this.nome = nome.trim();
+        this.nome = normalizarNome(nome);
         this.descricao = normalizarOpcional(descricao);
         this.atualizadoEm = agora;
     }
@@ -65,6 +66,12 @@ public class Categoria {
         return estado == EstadoCategoria.ATIVA;
     }
 
+    public void validarNovaAssociacao() {
+        if (!estaAtiva()) {
+            throw new CategoriaDesativadaNaoAceitaAssociacaoException();
+        }
+    }
+
     public boolean possuiVersao(Long versaoConhecida) {
         return Objects.equals(versao, versaoConhecida);
     }
@@ -82,6 +89,13 @@ public class Categoria {
             return null;
         }
         return valor.trim();
+    }
+
+    private static String normalizarNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome da categoria é obrigatório");
+        }
+        return nome.trim();
     }
 
     public String resumoParaAuditoria() {
