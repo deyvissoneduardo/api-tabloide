@@ -37,7 +37,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveCadastrarCategoriaComoDono() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003001");
+        Long supermercadoId = criarSupermercado("11444777003004");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-cadastra-categoria@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, "Bebidas", "Cervejas e refrigerantes"))
@@ -48,7 +48,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveRejeitarCadastroComOperador() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003082");
+        Long supermercadoId = criarSupermercado("11444777003187");
         String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, supermercadoId, "operador-nao-cadastra-categoria@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenOperador, "Bebidas", null))
@@ -57,7 +57,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void devePermitirNomesDuplicadosNoMesmoSupermercado() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003163");
+        Long supermercadoId = criarSupermercado("11444777003268");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-nome-duplicado-categoria@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, "Bebidas", null)).andExpect(status().isCreated());
@@ -66,7 +66,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveRejeitarCadastroQuandoSupermercadoDesativado() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003244");
+        Long supermercadoId = criarSupermercado("11444777003349");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-supermercado-desativado-categoria@sgtm.local");
         SupermercadoJpaEntity supermercado = supermercadoJpaRepository.findById(supermercadoId).orElseThrow();
         supermercado.setEstado(EstadoSupermercado.DESATIVADO);
@@ -78,7 +78,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveEditarCategoriaComVersaoCorreta() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003325");
+        Long supermercadoId = criarSupermercado("11444777003420");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-edita-categoria@sgtm.local");
         long categoriaId = cadastrarECapturarId(supermercadoId, tokenDono, "Bebidas");
 
@@ -92,7 +92,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveRejeitarEdicaoComVersaoDesatualizada() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003406");
+        Long supermercadoId = criarSupermercado("11444777003500");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-versao-desatualizada-categoria@sgtm.local");
         long categoriaId = cadastrarECapturarId(supermercadoId, tokenDono, "Bebidas");
 
@@ -105,7 +105,7 @@ class CategoriaControllerIT extends CategoriaIntegrationTestSupport {
 
     @Test
     void deveDesativarEAtivarCategoria() throws Exception {
-        Long supermercadoId = criarSupermercado("11444777003487");
+        Long supermercadoId = criarSupermercado("11444777003691");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-ativa-desativa-categoria@sgtm.local");
         long categoriaId = cadastrarECapturarId(supermercadoId, tokenDono, "Bebidas");
 
