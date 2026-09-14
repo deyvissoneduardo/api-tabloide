@@ -1,6 +1,7 @@
 package com.tabloide.api.modules.produto.domain;
 
 import com.tabloide.api.modules.produto.domain.exceptions.CategoriasProdutoInvalidasException;
+import com.tabloide.api.modules.produto.domain.exceptions.TransicaoEstadoProdutoInvalidaException;
 import java.time.Instant;
 import java.util.Set;
 
@@ -70,6 +71,40 @@ public class Produto {
         validarCategoriasInformadas(novasCategoriaIds);
         this.categoriaIds = Set.copyOf(novasCategoriaIds);
         this.atualizadoEm = agora;
+    }
+
+    public void editar(String nome, String marca, String descricao, String peso, String unidade, String volume, Instant agora) {
+        this.nome = normalizarNome(nome);
+        this.marca = normalizarOpcional(marca);
+        this.descricao = normalizarOpcional(descricao);
+        this.peso = normalizarOpcional(peso);
+        this.unidade = normalizarOpcional(unidade);
+        this.volume = normalizarOpcional(volume);
+        this.atualizadoEm = agora;
+    }
+
+    public void ativar(Instant agora) {
+        if (!podeAtivar()) {
+            throw new TransicaoEstadoProdutoInvalidaException();
+        }
+        this.estado = EstadoProduto.ATIVO;
+        this.atualizadoEm = agora;
+    }
+
+    public void desativar(Instant agora) {
+        if (!podeDesativar()) {
+            throw new TransicaoEstadoProdutoInvalidaException();
+        }
+        this.estado = EstadoProduto.DESATIVADO;
+        this.atualizadoEm = agora;
+    }
+
+    private boolean podeAtivar() {
+        return estado == EstadoProduto.DESATIVADO;
+    }
+
+    private boolean podeDesativar() {
+        return estado == EstadoProduto.ATIVO;
     }
 
     public boolean possuiVersao(Long versaoConhecida) {

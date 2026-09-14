@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.produto.interfaces.http;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,6 +14,7 @@ import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
 import com.tabloide.api.modules.categoria.interfaces.http.dto.CadastrarCategoriaRequest;
 import com.tabloide.api.modules.produto.interfaces.http.dto.CadastrarProdutoRequest;
 import com.tabloide.api.modules.produto.interfaces.http.dto.AssociarCategoriasProdutoRequest;
+import com.tabloide.api.modules.produto.interfaces.http.dto.EditarProdutoRequest;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaEntity;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaRepository;
@@ -109,6 +111,63 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
                                 new AssociarCategoriasProdutoRequest(versao, Set.of(novaCategoria)))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categoriaIds[0]").value(novaCategoria));
+    }
+
+    @Test
+    void deveEditarProdutoComVersaoCorreta() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777004663");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-edita-produto@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        String produtoCriado = mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of(categoriaId))))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        long produtoId = objectMapper.readTree(produtoCriado).get("id").asLong();
+        long versao = objectMapper.readTree(produtoCriado).get("versao").asLong();
+
+        mockMvc.perform(patch("/api/supermercados/" + supermercadoId + "/produtos/" + produtoId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new EditarProdutoRequest(versao, "Refrigerante Cola 2L Editado", "Marca Y", null, null, null, null))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Refrigerante Cola 2L Editado"))
+                .andExpect(jsonPath("$.marca").value("Marca Y"));
+    }
+
+    @Test
+    void deveRejeitarEdicaoDeProdutoComVersaoDesatualizada() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777004744");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-produto-versao-desatualizada@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        String produtoCriado = mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of(categoriaId))))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        long produtoId = objectMapper.readTree(produtoCriado).get("id").asLong();
+
+        mockMvc.perform(patch("/api/supermercados/" + supermercadoId + "/produtos/" + produtoId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new EditarProdutoRequest(99L, "Refrigerante Editado", null, null, null, null, null))))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveDesativarEAtivarProduto() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777004825");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-ativa-desativa-produto@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        String produtoCriado = mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of(categoriaId))))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        long produtoId = objectMapper.readTree(produtoCriado).get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/produtos/" + produtoId + "/desativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("DESATIVADO"));
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/produtos/" + produtoId + "/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder cadastrar(

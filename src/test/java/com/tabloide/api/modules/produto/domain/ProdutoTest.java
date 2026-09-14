@@ -3,6 +3,7 @@ package com.tabloide.api.modules.produto.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.tabloide.api.modules.produto.domain.exceptions.TransicaoEstadoProdutoInvalidaException;
 import java.time.Instant;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -48,5 +49,55 @@ class ProdutoTest {
         assertThat(produto.peso()).isNull();
         assertThat(produto.unidade()).isNull();
         assertThat(produto.volume()).isNull();
+    }
+
+    @Test
+    void deveEditarCamposEditaveis() {
+        Produto produto = cadastrarProduto();
+
+        produto.editar("Novo Nome", "Nova Marca", "Nova Descrição", "1kg", "un", "500ml", Instant.now());
+
+        assertThat(produto.nome()).isEqualTo("Novo Nome");
+        assertThat(produto.marca()).isEqualTo("Nova Marca");
+        assertThat(produto.descricao()).isEqualTo("Nova Descrição");
+        assertThat(produto.peso()).isEqualTo("1kg");
+        assertThat(produto.unidade()).isEqualTo("un");
+        assertThat(produto.volume()).isEqualTo("500ml");
+    }
+
+    @Test
+    void deveDesativarQuandoAtivo() {
+        Produto produto = cadastrarProduto();
+
+        produto.desativar(Instant.now());
+
+        assertThat(produto.estaAtivo()).isFalse();
+    }
+
+    @Test
+    void naoDeveDesativarQuandoJaDesativado() {
+        Produto produto = new Produto(1L, 1L, "Produto", Set.of(10L), null, null, null, null, null,
+                EstadoProduto.DESATIVADO, 0L, Instant.now(), Instant.now());
+
+        assertThatThrownBy(() -> produto.desativar(Instant.now()))
+                .isInstanceOf(TransicaoEstadoProdutoInvalidaException.class);
+    }
+
+    @Test
+    void deveAtivarQuandoDesativado() {
+        Produto produto = new Produto(1L, 1L, "Produto", Set.of(10L), null, null, null, null, null,
+                EstadoProduto.DESATIVADO, 0L, Instant.now(), Instant.now());
+
+        produto.ativar(Instant.now());
+
+        assertThat(produto.estaAtivo()).isTrue();
+    }
+
+    @Test
+    void naoDeveAtivarQuandoJaAtivo() {
+        Produto produto = cadastrarProduto();
+
+        assertThatThrownBy(() -> produto.ativar(Instant.now()))
+                .isInstanceOf(TransicaoEstadoProdutoInvalidaException.class);
     }
 }

@@ -65,11 +65,11 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 057 — [US-078 — Cadastrar produtos](./docs/historias/back/057-US-078-back-cadastrar-produtos.md) — 5 SP — Pronta
 - [X] BE 058 — [US-098 — Associar uma oferta a uma ou mais lojas](./docs/historias/back/058-US-098-back-associar-oferta-ou-mais-lojas.md) — 5 SP — Precisa refinamento
 - [X] BE 059 — [US-081 — Associar o produto a uma categoria](./docs/historias/back/059-US-081-back-associar-produto-categoria.md) — 5 SP — Pronta
-- [ ] BE 060 — [US-079 — Informar o nome do produto](./docs/historias/back/060-US-079-back-informar-nome-produto.md) — 3 SP — Pronta
-- [ ] BE 061 — [US-080 — Cadastrar uma imagem do produto](./docs/historias/back/061-US-080-back-cadastrar-imagem-produto.md) — 5 SP — Pronta
-- [ ] BE 062 — [US-085 — Editar produtos](./docs/historias/back/062-US-085-back-editar-produtos.md) — 3 SP — Pronta
-- [ ] BE 063 — [US-086 — Desativar produtos](./docs/historias/back/063-US-086-back-desativar-produtos.md) — 3 SP — Pronta
-- [ ] BE 064 — [US-087 — Reutilizar produtos em futuras campanhas](./docs/historias/back/064-US-087-back-reutilizar-produtos-em-futuras-campanhas.md) — 8 SP — Pronta
+- [X] BE 060 — [US-079 — Informar o nome do produto](./docs/historias/back/060-US-079-back-informar-nome-produto.md) — 3 SP — Pronta
+- [X] BE 061 — [US-080 — Cadastrar uma imagem do produto](./docs/historias/back/061-US-080-back-cadastrar-imagem-produto.md) — 5 SP — Pronta
+- [X] BE 062 — [US-085 — Editar produtos](./docs/historias/back/062-US-085-back-editar-produtos.md) — 3 SP — Pronta
+- [X] BE 063 — [US-086 — Desativar produtos](./docs/historias/back/063-US-086-back-desativar-produtos.md) — 3 SP — Pronta
+- [X] BE 064 — [US-087 — Reutilizar produtos em futuras campanhas](./docs/historias/back/064-US-087-back-reutilizar-produtos-em-futuras-campanhas.md) — 8 SP — Pronta
 - [ ] BE 065 — [US-089 — Vincular um produto a uma oferta](./docs/historias/back/065-US-089-back-vincular-produto-oferta.md) — 3 SP — Pronta
 - [ ] BE 066 — [US-186 — Produtos cadastrados devem poder ser reutilizados](./docs/historias/back/066-US-186-back-produtos-cadastrados-devem-poder-ser-reutilizados.md) — 3 SP — Pronta
 - [ ] BE 067 — [US-088 — Cadastrar uma oferta](./docs/historias/back/067-US-088-back-cadastrar-oferta.md) — 5 SP — Pronta

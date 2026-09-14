@@ -3,6 +3,7 @@ package com.tabloide.api.modules.produto.interfaces.http;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import com.tabloide.api.modules.categoria.domain.exceptions.CategoriaDesativadaNaoAceitaAssociacaoException;
 import com.tabloide.api.modules.produto.domain.exceptions.ProdutoNaoEncontradoException;
+import com.tabloide.api.modules.produto.domain.exceptions.TransicaoEstadoProdutoInvalidaException;
 import com.tabloide.api.modules.produto.domain.exceptions.VersaoProdutoDesatualizadaException;
 import com.tabloide.api.modules.produto.domain.exceptions.CategoriasProdutoInvalidasException;
 import java.util.stream.Collectors;
@@ -23,6 +24,11 @@ public class ErroProdutoHandler {
 
     @ExceptionHandler(VersaoProdutoDesatualizadaException.class)
     public ResponseEntity<ErroResponse> tratarVersaoDesatualizada(VersaoProdutoDesatualizadaException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(TransicaoEstadoProdutoInvalidaException.class)
+    public ResponseEntity<ErroResponse> tratarTransicaoInvalida(TransicaoEstadoProdutoInvalidaException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
     }
 
