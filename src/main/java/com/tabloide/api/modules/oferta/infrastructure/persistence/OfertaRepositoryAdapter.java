@@ -2,6 +2,7 @@ package com.tabloide.api.modules.oferta.infrastructure.persistence;
 
 import com.tabloide.api.modules.oferta.domain.Oferta;
 import com.tabloide.api.modules.oferta.domain.OfertaRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -11,6 +12,11 @@ public class OfertaRepositoryAdapter implements OfertaRepository {
 
     public OfertaRepositoryAdapter(OfertaJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
+    }
+
+    @Override
+    public Optional<Oferta> buscarPorIdESupermercado(Long id, Long supermercadoId) {
+        return jpaRepository.findByIdAndSupermercadoId(id, supermercadoId).map(OfertaRepositoryAdapter::paraDominio);
     }
 
     @Override

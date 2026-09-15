@@ -2,6 +2,7 @@ package com.tabloide.api.modules.oferta.interfaces.http;
 
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import com.tabloide.api.modules.oferta.domain.exceptions.LojasOfertaInvalidasException;
+import com.tabloide.api.modules.oferta.domain.exceptions.OfertaNaoEncontradaException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PeriodoOfertaInvalidoException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PrecoOfertaInvalidoException;
 import java.util.stream.Collectors;
@@ -18,6 +19,11 @@ public class ErroOfertaHandler {
     @ExceptionHandler(LojasOfertaInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarLojasInvalidas(LojasOfertaInvalidasException ex) {
         return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OfertaNaoEncontradaException.class)
+    public ResponseEntity<ErroResponse> tratarNaoEncontrada(OfertaNaoEncontradaException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PrecoOfertaInvalidoException.class)
