@@ -85,16 +85,16 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 077 — [US-099 — Copiar uma oferta existente](./docs/historias/back/077-US-099-back-copiar-oferta-existente.md) — 5 SP — Pronta
 - [X] BE 078 — [US-100 — Ofertas vencidas devem deixar de ser apresentadas como vigentes](./docs/historias/back/078-US-100-back-ofertas-vencidas-devem-deixar-ser-apresentadas-como-vigentes.md) — 3 SP — Pronta
 - [X] BE 079 — [US-102 — O QR Code deve continuar válido após a troca de campanhas](./docs/historias/back/079-US-102-back-qr-code-deve-continuar-valido-apos-troca-campanhas.md) — 8 SP — Pronta
-- [ ] BE 080 — [US-108 — O compartilhamento deve levar diretamente ao conteúdo correspondente](./docs/historias/back/080-US-108-back-compartilhamento-deve-levar-diretamente-ao-conteudo-correspondente.md) — 3 SP — Pronta
-- [ ] BE 081 — [US-109 — Disponibilizar um tabloide já existente](./docs/historias/back/081-US-109-back-disponibilizar-tabloide-ja-existente.md) — 5 SP — Pronta
-- [ ] BE 082 — [US-110 — Informar a validade do tabloide](./docs/historias/back/082-US-110-back-informar-validade-tabloide.md) — 5 SP — Pronta
-- [ ] BE 083 — [US-111 — Tabloides expirados não devem aparecer como atuais](./docs/historias/back/083-US-111-back-tabloides-expirados-nao-devem-aparecer-como-atuais.md) — 5 SP — Pronta
-- [ ] BE 084 — [US-112 — Cadastrar mensagens promocionais](./docs/historias/back/084-US-112-back-cadastrar-mensagens-promocionais.md) — 5 SP — Pronta
-- [ ] BE 085 — [US-113 — Publicar avisos](./docs/historias/back/085-US-113-back-publicar-avisos.md) — 5 SP — Pronta
-- [ ] BE 086 — [US-114 — Cadastrar banners](./docs/historias/back/086-US-114-back-cadastrar-banners.md) — 5 SP — Pronta
-- [ ] BE 087 — [US-115 — Definir a validade dos conteúdos](./docs/historias/back/087-US-115-back-definir-validade-conteudos.md) — 3 SP — Pronta
-- [ ] BE 088 — [US-116 — Ordenar conteúdos promocionais](./docs/historias/back/088-US-116-back-ordenar-conteudos-promocionais.md) — 3 SP — Pronta
-- [ ] BE 089 — [US-169 — Ofertas publicadas devem permanecer disponíveis durante sua validade](./docs/historias/back/089-US-169-back-ofertas-publicadas-devem-permanecer-disponiveis-durante-validade.md) — 5 SP — Pronta
+- [ ] BE 080 — [US-108 — O compartilhamento deve levar diretamente ao conteúdo correspondente](./docs/historias/back/080-US-108-back-compartilhamento-deve-levar-diretamente-ao-conteudo-correspondente.md) — 3 SP — Pronta (bloqueada: depende de página pública ainda não implementada)
+- [X] BE 081 — [US-109 — Disponibilizar um tabloide já existente](./docs/historias/back/081-US-109-back-disponibilizar-tabloide-ja-existente.md) — 5 SP — Pronta
+- [X] BE 082 — [US-110 — Informar a validade do tabloide](./docs/historias/back/082-US-110-back-informar-validade-tabloide.md) — 5 SP — Pronta
+- [X] BE 083 — [US-111 — Tabloides expirados não devem aparecer como atuais](./docs/historias/back/083-US-111-back-tabloides-expirados-nao-devem-aparecer-como-atuais.md) — 5 SP — Pronta
+- [X] BE 084 — [US-112 — Cadastrar mensagens promocionais](./docs/historias/back/084-US-112-back-cadastrar-mensagens-promocionais.md) — 5 SP — Pronta
+- [X] BE 085 — [US-113 — Publicar avisos](./docs/historias/back/085-US-113-back-publicar-avisos.md) — 5 SP — Pronta
+- [X] BE 086 — [US-114 — Cadastrar banners](./docs/historias/back/086-US-114-back-cadastrar-banners.md) — 5 SP — Pronta
+- [X] BE 087 — [US-115 — Definir a validade dos conteúdos](./docs/historias/back/087-US-115-back-definir-validade-conteudos.md) — 3 SP — Pronta
+- [X] BE 088 — [US-116 — Ordenar conteúdos promocionais](./docs/historias/back/088-US-116-back-ordenar-conteudos-promocionais.md) — 3 SP — Pronta
+- [ ] BE 089 — [US-169 — Ofertas publicadas devem permanecer disponíveis durante sua validade](./docs/historias/back/089-US-169-back-ofertas-publicadas-devem-permanecer-disponiveis-durante-validade.md) — 5 SP — Pronta (bloqueada: depende de página pública ainda não implementada)
 - [ ] BE 090 — [US-170 — O QR Code físico deve continuar válido após mudanças de campanhas](./docs/historias/back/090-US-170-back-qr-code-fisico-deve-continuar-valido-apos-mudancas-campanhas.md) — 8 SP — Pronta
 - [ ] BE 091 — [US-171 — Restringir ofertas vigentes devem ser apresentadas como atuais](./docs/historias/back/091-US-171-back-restringir-ofertas-vigentes-devem-ser-apresentadas-como-atuais.md) — 3 SP — Pronta
 - [ ] BE 092 — [US-179 — Consultar ofertas sem fornecer dados pessoais](./docs/historias/back/092-US-179-back-consultar-ofertas-sem-fornecer-dados-pessoais.md) — 3 SP — Pronta
