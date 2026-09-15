@@ -70,11 +70,11 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 062 — [US-085 — Editar produtos](./docs/historias/back/062-US-085-back-editar-produtos.md) — 3 SP — Pronta
 - [X] BE 063 — [US-086 — Desativar produtos](./docs/historias/back/063-US-086-back-desativar-produtos.md) — 3 SP — Pronta
 - [X] BE 064 — [US-087 — Reutilizar produtos em futuras campanhas](./docs/historias/back/064-US-087-back-reutilizar-produtos-em-futuras-campanhas.md) — 8 SP — Pronta
-- [ ] BE 065 — [US-089 — Vincular um produto a uma oferta](./docs/historias/back/065-US-089-back-vincular-produto-oferta.md) — 3 SP — Pronta
-- [ ] BE 066 — [US-186 — Produtos cadastrados devem poder ser reutilizados](./docs/historias/back/066-US-186-back-produtos-cadastrados-devem-poder-ser-reutilizados.md) — 3 SP — Pronta
-- [ ] BE 067 — [US-088 — Cadastrar uma oferta](./docs/historias/back/067-US-088-back-cadastrar-oferta.md) — 5 SP — Pronta
-- [ ] BE 068 — [US-220 — Criar e administrar campanhas](./docs/historias/back/068-US-220-back-criar-administrar-campanhas.md) — 13 SP — Pronta
-- [ ] BE 069 — [US-017 — Administrar conteúdos gerais da plataforma quando necessário](./docs/historias/back/069-US-017-back-administrar-conteudos-gerais-plataforma-quando-necessario.md) — 5 SP — Pronta
+- [X] BE 065 — [US-089 — Vincular um produto a uma oferta](./docs/historias/back/065-US-089-back-vincular-produto-oferta.md) — 3 SP — Pronta
+- [X] BE 066 — [US-186 — Produtos cadastrados devem poder ser reutilizados](./docs/historias/back/066-US-186-back-produtos-cadastrados-devem-poder-ser-reutilizados.md) — 3 SP — Pronta
+- [X] BE 067 — [US-088 — Cadastrar uma oferta](./docs/historias/back/067-US-088-back-cadastrar-oferta.md) — 5 SP — Pronta
+- [X] BE 068 — [US-220 — Criar e administrar campanhas](./docs/historias/back/068-US-220-back-criar-administrar-campanhas.md) — 13 SP — Pronta
+- [X] BE 069 — [US-017 — Administrar conteúdos gerais da plataforma quando necessário](./docs/historias/back/069-US-017-back-administrar-conteudos-gerais-plataforma-quando-necessario.md) — 5 SP — Pronta
 - [ ] BE 070 — [US-091 — Informar o preço promocional](./docs/historias/back/070-US-091-back-informar-preco-promocional.md) — 3 SP — Pronta
 - [ ] BE 071 — [US-092 — Informar a data inicial da oferta](./docs/historias/back/071-US-092-back-informar-data-inicial-oferta.md) — 3 SP — Pronta
 - [ ] BE 072 — [US-093 — Informar a data final da oferta](./docs/historias/back/072-US-093-back-informar-data-final-oferta.md) — 3 SP — Pronta
