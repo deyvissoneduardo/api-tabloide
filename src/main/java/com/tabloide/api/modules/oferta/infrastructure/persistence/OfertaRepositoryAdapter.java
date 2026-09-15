@@ -21,22 +21,42 @@ public class OfertaRepositoryAdapter implements OfertaRepository {
 
     @Override
     public Oferta salvar(Oferta oferta) {
-        OfertaJpaEntity entidade = new OfertaJpaEntity(
-                oferta.id(),
-                oferta.supermercadoId(),
-                oferta.produtoId(),
-                oferta.lojaIds(),
-                oferta.precoNormal(),
-                oferta.precoPromocional(),
-                oferta.inicio(),
-                oferta.fim(),
-                oferta.condicoes(),
-                oferta.estado(),
-                null,
-                oferta.criadoEm(),
-                oferta.atualizadoEm()
-        );
-        return paraDominio(jpaRepository.save(entidade));
+        OfertaJpaEntity entidade = oferta.id() == null
+                ? new OfertaJpaEntity(
+                        null,
+                        oferta.supermercadoId(),
+                        oferta.produtoId(),
+                        oferta.lojaIds(),
+                        oferta.precoNormal(),
+                        oferta.precoPromocional(),
+                        oferta.inicio(),
+                        oferta.fim(),
+                        oferta.condicoes(),
+                        oferta.estado(),
+                        null,
+                        oferta.criadoEm(),
+                        oferta.atualizadoEm()
+                )
+                : atualizar(jpaRepository.findById(oferta.id()).orElseThrow(() ->
+                        new IllegalStateException("Oferta " + oferta.id() + " não encontrada para atualização")), oferta);
+
+        // flush imediato: sem ele, o @Version em memória só é incrementado no commit da
+        // transação, depois que este método já retornou a Oferta com a versão antiga para
+        // o use case (e para a resposta HTTP) — mesmo motivo do PlanoRepositoryAdapter.
+        return paraDominio(jpaRepository.saveAndFlush(entidade));
+    }
+
+    private static OfertaJpaEntity atualizar(OfertaJpaEntity entidade, Oferta oferta) {
+        entidade.setProdutoId(oferta.produtoId());
+        entidade.setLojaIds(oferta.lojaIds());
+        entidade.setPrecoNormal(oferta.precoNormal());
+        entidade.setPrecoPromocional(oferta.precoPromocional());
+        entidade.setInicio(oferta.inicio());
+        entidade.setFim(oferta.fim());
+        entidade.setCondicoes(oferta.condicoes());
+        entidade.setEstado(oferta.estado());
+        entidade.setAtualizadoEm(oferta.atualizadoEm());
+        return entidade;
     }
 
     private static Oferta paraDominio(OfertaJpaEntity entidade) {

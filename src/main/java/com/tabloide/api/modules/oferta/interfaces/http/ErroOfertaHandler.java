@@ -5,6 +5,8 @@ import com.tabloide.api.modules.oferta.domain.exceptions.LojasOfertaInvalidasExc
 import com.tabloide.api.modules.oferta.domain.exceptions.OfertaNaoEncontradaException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PeriodoOfertaInvalidoException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PrecoOfertaInvalidoException;
+import com.tabloide.api.modules.oferta.domain.exceptions.TransicaoEstadoOfertaInvalidaException;
+import com.tabloide.api.modules.oferta.domain.exceptions.VersaoOfertaDesatualizadaException;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,16 @@ public class ErroOfertaHandler {
     @ExceptionHandler(PeriodoOfertaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPeriodoInvalido(PeriodoOfertaInvalidoException ex) {
         return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(TransicaoEstadoOfertaInvalidaException.class)
+    public ResponseEntity<ErroResponse> tratarTransicaoInvalida(TransicaoEstadoOfertaInvalidaException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(VersaoOfertaDesatualizadaException.class)
+    public ResponseEntity<ErroResponse> tratarVersaoDesatualizada(VersaoOfertaDesatualizadaException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)

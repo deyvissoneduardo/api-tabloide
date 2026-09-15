@@ -1,5 +1,6 @@
 package com.tabloide.api.modules.oferta.interfaces.http;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +13,7 @@ import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
 import com.tabloide.api.modules.categoria.interfaces.http.dto.CadastrarCategoriaRequest;
 import com.tabloide.api.modules.loja.interfaces.http.dto.CadastrarLojaRequest;
 import com.tabloide.api.modules.oferta.interfaces.http.dto.CadastrarOfertaRequest;
+import com.tabloide.api.modules.oferta.interfaces.http.dto.EditarOfertaRequest;
 import com.tabloide.api.modules.plano.domain.EstadoAssinatura;
 import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaEntity;
 import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaRepository;
@@ -120,6 +122,118 @@ class OfertaControllerIT extends OfertaIntegrationTestSupport {
                         agora.minus(1, ChronoUnit.DAYS), agora.plus(1, ChronoUnit.DAYS), "Válido enquanto durar o estoque", true)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.estado").value("VIGENTE"));
+    }
+
+    @Test
+    void deveEditarOfertaAtualizandoCampos() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777006011");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-oferta-editar@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja Um");
+        tools.jackson.databind.JsonNode ofertaCriada = cadastrarOfertaECapturarCorpo(supermercadoId, tokenDono, requestOferta(produtoId, Set.of(lojaId)));
+        Instant agora = Instant.now();
+
+        mockMvc.perform(editar(supermercadoId, tokenDono, ofertaCriada.get("id").asLong(), new EditarOfertaRequest(
+                        ofertaCriada.get("versao").asLong(), produtoId, Set.of(lojaId),
+                        new BigDecimal("20.00"), new BigDecimal("10.00"), agora, agora.plus(3, ChronoUnit.DAYS), "Condição editada")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.precoNormal").value(20.00))
+                .andExpect(jsonPath("$.condicoes").value("Condição editada"));
+    }
+
+    @Test
+    void deveRejeitarEdicaoComVersaoDesatualizada() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777006100");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-oferta-versao@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja Um");
+        tools.jackson.databind.JsonNode ofertaCriada = cadastrarOfertaECapturarCorpo(supermercadoId, tokenDono, requestOferta(produtoId, Set.of(lojaId)));
+        Instant agora = Instant.now();
+
+        mockMvc.perform(editar(supermercadoId, tokenDono, ofertaCriada.get("id").asLong(), new EditarOfertaRequest(
+                        999L, produtoId, Set.of(lojaId), new BigDecimal("20.00"), new BigDecimal("10.00"),
+                        agora, agora.plus(3, ChronoUnit.DAYS), null)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveCancelarOferta() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777006283");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-oferta-cancelar@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja Um");
+        tools.jackson.databind.JsonNode ofertaCriada = cadastrarOfertaECapturarCorpo(supermercadoId, tokenDono, requestOferta(produtoId, Set.of(lojaId)));
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaCriada.get("id").asLong() + "/cancelamento")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("CANCELADA"));
+    }
+
+    @Test
+    void deveDesativarEReativarOfertaRespeitandoVigencia() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777006364");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-oferta-ativar@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja Um");
+        Instant agora = Instant.now();
+        tools.jackson.databind.JsonNode ofertaCriada = cadastrarOfertaECapturarCorpo(supermercadoId, tokenDono, new CadastrarOfertaRequest(
+                produtoId, Set.of(lojaId), new BigDecimal("10.00"), new BigDecimal("7.50"),
+                agora.minus(1, ChronoUnit.DAYS), agora.plus(1, ChronoUnit.DAYS), null, true));
+        long ofertaId = ofertaCriada.get("id").asLong();
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaId + "/desativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("DESATIVADA"));
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaId + "/ativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("VIGENTE"));
+    }
+
+    @Test
+    void deveCopiarOfertaComoNovoRascunho() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777006445");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-oferta-copiar@sgtm.local");
+        long categoriaId = cadastrarCategoriaECapturarId(supermercadoId, tokenDono, "Bebidas");
+        long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja Um");
+        Instant agora = Instant.now();
+        tools.jackson.databind.JsonNode ofertaCriada = cadastrarOfertaECapturarCorpo(supermercadoId, tokenDono, new CadastrarOfertaRequest(
+                produtoId, Set.of(lojaId), new BigDecimal("10.00"), new BigDecimal("7.50"),
+                agora.minus(1, ChronoUnit.DAYS), agora.plus(1, ChronoUnit.DAYS), "Condição original", true));
+        long ofertaId = ofertaCriada.get("id").asLong();
+
+        String corpoCopia = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaId + "/copia")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.estado").value("RASCUNHO"))
+                .andExpect(jsonPath("$.condicoes").value("Condição original"))
+                .andReturn().getResponse().getContentAsString();
+
+        long copiaId = objectMapper.readTree(corpoCopia).get("id").asLong();
+        org.assertj.core.api.Assertions.assertThat(copiaId).isNotEqualTo(ofertaId);
+    }
+
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder editar(
+            Long supermercadoId, String token, Long ofertaId, EditarOfertaRequest request) throws Exception {
+        return patch("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request));
+    }
+
+    private tools.jackson.databind.JsonNode cadastrarOfertaECapturarCorpo(Long supermercadoId, String token, CadastrarOfertaRequest request) throws Exception {
+        String corpo = mockMvc.perform(cadastrar(supermercadoId, token, request))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(corpo);
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder cadastrar(

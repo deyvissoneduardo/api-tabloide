@@ -24,6 +24,7 @@ public record OfertaResponse(
 ) {
 
     public static OfertaResponse from(Oferta oferta) {
+        Instant agora = Instant.now();
         return new OfertaResponse(
                 oferta.id(),
                 oferta.supermercadoId(),
@@ -35,7 +36,7 @@ public record OfertaResponse(
                 oferta.inicio(),
                 oferta.fim(),
                 oferta.condicoes(),
-                oferta.estado(),
+                oferta.estadoEfetivo(agora),
                 oferta.versao(),
                 oferta.criadoEm(),
                 oferta.atualizadoEm()

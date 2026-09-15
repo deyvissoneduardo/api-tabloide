@@ -112,32 +112,64 @@ public class OfertaJpaEntity {
         return produtoId;
     }
 
+    public void setProdutoId(Long produtoId) {
+        this.produtoId = produtoId;
+    }
+
     public Set<Long> getLojaIds() {
         return lojaIds;
+    }
+
+    public void setLojaIds(Set<Long> lojaIds) {
+        this.lojaIds = new HashSet<>(lojaIds);
     }
 
     public BigDecimal getPrecoNormal() {
         return precoNormal;
     }
 
+    public void setPrecoNormal(BigDecimal precoNormal) {
+        this.precoNormal = precoNormal;
+    }
+
     public BigDecimal getPrecoPromocional() {
         return precoPromocional;
+    }
+
+    public void setPrecoPromocional(BigDecimal precoPromocional) {
+        this.precoPromocional = precoPromocional;
     }
 
     public Instant getInicio() {
         return inicio;
     }
 
+    public void setInicio(Instant inicio) {
+        this.inicio = inicio;
+    }
+
     public Instant getFim() {
         return fim;
+    }
+
+    public void setFim(Instant fim) {
+        this.fim = fim;
     }
 
     public String getCondicoes() {
         return condicoes;
     }
 
+    public void setCondicoes(String condicoes) {
+        this.condicoes = condicoes;
+    }
+
     public EstadoOferta getEstado() {
         return estado;
+    }
+
+    public void setEstado(EstadoOferta estado) {
+        this.estado = estado;
     }
 
     public Long getVersao() {
@@ -150,5 +182,9 @@ public class OfertaJpaEntity {
 
     public Instant getAtualizadoEm() {
         return atualizadoEm;
+    }
+
+    public void setAtualizadoEm(Instant atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 }

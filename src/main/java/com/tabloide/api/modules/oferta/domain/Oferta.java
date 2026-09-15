@@ -3,6 +3,7 @@ package com.tabloide.api.modules.oferta.domain;
 import com.tabloide.api.modules.oferta.domain.exceptions.LojasOfertaInvalidasException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PeriodoOfertaInvalidoException;
 import com.tabloide.api.modules.oferta.domain.exceptions.PrecoOfertaInvalidoException;
+import com.tabloide.api.modules.oferta.domain.exceptions.TransicaoEstadoOfertaInvalidaException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
@@ -13,7 +14,7 @@ public class Oferta {
 
     private final Long id;
     private final Long supermercadoId;
-    private final Long produtoId;
+    private Long produtoId;
     private Set<Long> lojaIds;
     private BigDecimal precoNormal;
     private BigDecimal precoPromocional;
@@ -67,6 +68,73 @@ public class Oferta {
                 null, supermercadoId, produtoId, Set.copyOf(lojaIds), precoNormal, precoPromocional, inicio, fim,
                 normalizarOpcional(condicoes), estado, null, agora, agora
         );
+    }
+
+    public void editar(
+            Long produtoId, Set<Long> lojaIds, BigDecimal precoNormal, BigDecimal precoPromocional,
+            Instant inicio, Instant fim, String condicoes, Instant agora
+    ) {
+        if (estaFinalizada()) {
+            throw new TransicaoEstadoOfertaInvalidaException();
+        }
+        validarLojasInformadas(lojaIds);
+        validarPrecos(precoNormal, precoPromocional);
+        validarPeriodo(inicio, fim);
+        this.produtoId = produtoId;
+        this.lojaIds = Set.copyOf(lojaIds);
+        this.precoNormal = precoNormal;
+        this.precoPromocional = precoPromocional;
+        this.inicio = inicio;
+        this.fim = fim;
+        this.condicoes = normalizarOpcional(condicoes);
+        this.atualizadoEm = agora;
+    }
+
+    public void cancelar(Instant agora) {
+        if (estaFinalizada()) {
+            throw new TransicaoEstadoOfertaInvalidaException();
+        }
+        this.estado = EstadoOferta.CANCELADA;
+        this.atualizadoEm = agora;
+    }
+
+    public void ativar(Instant agora) {
+        if (!estaDesativada()) {
+            throw new TransicaoEstadoOfertaInvalidaException();
+        }
+        this.estado = calcularEstadoPublicado(inicio, fim, agora);
+        this.atualizadoEm = agora;
+    }
+
+    public void desativar(Instant agora) {
+        if (!estaAtiva()) {
+            throw new TransicaoEstadoOfertaInvalidaException();
+        }
+        this.estado = EstadoOferta.DESATIVADA;
+        this.atualizadoEm = agora;
+    }
+
+    public boolean estaFinalizada() {
+        return estado == EstadoOferta.CANCELADA || estado == EstadoOferta.EXPIRADA;
+    }
+
+    public boolean estaAtiva() {
+        return estado == EstadoOferta.AGENDADA || estado == EstadoOferta.VIGENTE;
+    }
+
+    public boolean estaDesativada() {
+        return estado == EstadoOferta.DESATIVADA;
+    }
+
+    public boolean possuiVersao(Long versaoConhecida) {
+        return Objects.equals(versao, versaoConhecida);
+    }
+
+    public EstadoOferta estadoEfetivo(Instant agora) {
+        if (estaAtiva()) {
+            return calcularEstadoPublicado(inicio, fim, agora);
+        }
+        return estado;
     }
 
     public Integer percentualDesconto() {

@@ -75,16 +75,16 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 067 — [US-088 — Cadastrar uma oferta](./docs/historias/back/067-US-088-back-cadastrar-oferta.md) — 5 SP — Pronta
 - [X] BE 068 — [US-220 — Criar e administrar campanhas](./docs/historias/back/068-US-220-back-criar-administrar-campanhas.md) — 13 SP — Pronta
 - [X] BE 069 — [US-017 — Administrar conteúdos gerais da plataforma quando necessário](./docs/historias/back/069-US-017-back-administrar-conteudos-gerais-plataforma-quando-necessario.md) — 5 SP — Pronta
-- [ ] BE 070 — [US-091 — Informar o preço promocional](./docs/historias/back/070-US-091-back-informar-preco-promocional.md) — 3 SP — Pronta
-- [ ] BE 071 — [US-092 — Informar a data inicial da oferta](./docs/historias/back/071-US-092-back-informar-data-inicial-oferta.md) — 3 SP — Pronta
-- [ ] BE 072 — [US-093 — Informar a data final da oferta](./docs/historias/back/072-US-093-back-informar-data-final-oferta.md) — 3 SP — Pronta
-- [ ] BE 073 — [US-094 — Editar uma oferta](./docs/historias/back/073-US-094-back-editar-oferta.md) — 3 SP — Pronta
-- [ ] BE 074 — [US-095 — Cancelar uma oferta](./docs/historias/back/074-US-095-back-cancelar-oferta.md) — 5 SP — Pronta
-- [ ] BE 075 — [US-096 — Ativar ou desativar uma oferta](./docs/historias/back/075-US-096-back-ativar-ou-desativar-oferta.md) — 3 SP — Pronta
-- [ ] BE 076 — [US-097 — Informar condições ou observações da oferta](./docs/historias/back/076-US-097-back-informar-condicoes-ou-observacoes-oferta.md) — 3 SP — Pronta
-- [ ] BE 077 — [US-099 — Copiar uma oferta existente](./docs/historias/back/077-US-099-back-copiar-oferta-existente.md) — 5 SP — Pronta
-- [ ] BE 078 — [US-100 — Ofertas vencidas devem deixar de ser apresentadas como vigentes](./docs/historias/back/078-US-100-back-ofertas-vencidas-devem-deixar-ser-apresentadas-como-vigentes.md) — 3 SP — Pronta
-- [ ] BE 079 — [US-102 — O QR Code deve continuar válido após a troca de campanhas](./docs/historias/back/079-US-102-back-qr-code-deve-continuar-valido-apos-troca-campanhas.md) — 8 SP — Pronta
+- [X] BE 070 — [US-091 — Informar o preço promocional](./docs/historias/back/070-US-091-back-informar-preco-promocional.md) — 3 SP — Pronta
+- [X] BE 071 — [US-092 — Informar a data inicial da oferta](./docs/historias/back/071-US-092-back-informar-data-inicial-oferta.md) — 3 SP — Pronta
+- [X] BE 072 — [US-093 — Informar a data final da oferta](./docs/historias/back/072-US-093-back-informar-data-final-oferta.md) — 3 SP — Pronta
+- [X] BE 073 — [US-094 — Editar uma oferta](./docs/historias/back/073-US-094-back-editar-oferta.md) — 3 SP — Pronta
+- [X] BE 074 — [US-095 — Cancelar uma oferta](./docs/historias/back/074-US-095-back-cancelar-oferta.md) — 5 SP — Pronta
+- [X] BE 075 — [US-096 — Ativar ou desativar uma oferta](./docs/historias/back/075-US-096-back-ativar-ou-desativar-oferta.md) — 3 SP — Pronta
+- [X] BE 076 — [US-097 — Informar condições ou observações da oferta](./docs/historias/back/076-US-097-back-informar-condicoes-ou-observacoes-oferta.md) — 3 SP — Pronta
+- [X] BE 077 — [US-099 — Copiar uma oferta existente](./docs/historias/back/077-US-099-back-copiar-oferta-existente.md) — 5 SP — Pronta
+- [X] BE 078 — [US-100 — Ofertas vencidas devem deixar de ser apresentadas como vigentes](./docs/historias/back/078-US-100-back-ofertas-vencidas-devem-deixar-ser-apresentadas-como-vigentes.md) — 3 SP — Pronta
+- [X] BE 079 — [US-102 — O QR Code deve continuar válido após a troca de campanhas](./docs/historias/back/079-US-102-back-qr-code-deve-continuar-valido-apos-troca-campanhas.md) — 8 SP — Pronta
 - [ ] BE 080 — [US-108 — O compartilhamento deve levar diretamente ao conteúdo correspondente](./docs/historias/back/080-US-108-back-compartilhamento-deve-levar-diretamente-ao-conteudo-correspondente.md) — 3 SP — Pronta
 - [ ] BE 081 — [US-109 — Disponibilizar um tabloide já existente](./docs/historias/back/081-US-109-back-disponibilizar-tabloide-ja-existente.md) — 5 SP — Pronta
 - [ ] BE 082 — [US-110 — Informar a validade do tabloide](./docs/historias/back/082-US-110-back-informar-validade-tabloide.md) — 5 SP — Pronta
