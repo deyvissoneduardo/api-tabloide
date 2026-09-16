@@ -94,17 +94,17 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 086 — [US-114 — Cadastrar banners](./docs/historias/back/086-US-114-back-cadastrar-banners.md) — 5 SP — Pronta
 - [X] BE 087 — [US-115 — Definir a validade dos conteúdos](./docs/historias/back/087-US-115-back-definir-validade-conteudos.md) — 3 SP — Pronta
 - [X] BE 088 — [US-116 — Ordenar conteúdos promocionais](./docs/historias/back/088-US-116-back-ordenar-conteudos-promocionais.md) — 3 SP — Pronta
-- [ ] BE 089 — [US-169 — Ofertas publicadas devem permanecer disponíveis durante sua validade](./docs/historias/back/089-US-169-back-ofertas-publicadas-devem-permanecer-disponiveis-durante-validade.md) — 5 SP — Pronta (bloqueada: depende de página pública ainda não implementada)
-- [ ] BE 090 — [US-170 — O QR Code físico deve continuar válido após mudanças de campanhas](./docs/historias/back/090-US-170-back-qr-code-fisico-deve-continuar-valido-apos-mudancas-campanhas.md) — 8 SP — Pronta
-- [ ] BE 091 — [US-171 — Restringir ofertas vigentes devem ser apresentadas como atuais](./docs/historias/back/091-US-171-back-restringir-ofertas-vigentes-devem-ser-apresentadas-como-atuais.md) — 3 SP — Pronta
-- [ ] BE 092 — [US-179 — Consultar ofertas sem fornecer dados pessoais](./docs/historias/back/092-US-179-back-consultar-ofertas-sem-fornecer-dados-pessoais.md) — 3 SP — Pronta
-- [ ] BE 093 — [US-185 — Conseguir administrar suas ofertas sem depender constantemente do dono da plataforma](./docs/historias/back/093-US-185-back-conseguir-administrar-ofertas-sem-depender-constantemente-dono-platafo.md) — 5 SP — Pronta
-- [ ] BE 094 — [US-187 — Campanhas anteriores devem poder ser reaproveitadas](./docs/historias/back/094-US-187-back-campanhas-anteriores-devem-poder-ser-reaproveitadas.md) — 8 SP — Pronta
-- [ ] BE 095 — [US-188 — Alterações de campanhas não devem exigir troca do QR Code](./docs/historias/back/095-US-188-back-alteracoes-campanhas-nao-devem-exigir-troca-qr-code.md) — 8 SP — Pronta
-- [ ] BE 096 — [US-106 — Contabilizar acessos originados por QR Code](./docs/historias/back/096-US-106-back-contabilizar-acessos-originados-qr-code.md) — 8 SP — Pronta
-- [ ] BE 097 — [US-010 — Identificar supermercados com maior utilização da plataforma](./docs/historias/back/097-US-010-back-identificar-supermercados-com-maior-utilizacao-plataforma.md) — 3 SP — Pronta
-- [ ] BE 098 — [US-011 — Identificar supermercados inativos ou com baixa utilização](./docs/historias/back/098-US-011-back-identificar-supermercados-inativos-ou-com-baixa-utilizacao.md) — 3 SP — Pronta
-- [ ] BE 099 — [US-104 — Identificar cada QR Code](./docs/historias/back/099-US-104-back-identificar-cada-qr-code.md) — 8 SP — Pronta
+- [X] BE 089 — [US-169 — Ofertas publicadas devem permanecer disponíveis durante sua validade](./docs/historias/back/089-US-169-back-ofertas-publicadas-devem-permanecer-disponiveis-durante-validade.md) — 5 SP — Pronta (bloqueada: depende de página pública ainda não implementada)
+- [X] BE 090 — [US-170 — O QR Code físico deve continuar válido após mudanças de campanhas](./docs/historias/back/090-US-170-back-qr-code-fisico-deve-continuar-valido-apos-mudancas-campanhas.md) — 8 SP — Pronta
+- [X] BE 091 — [US-171 — Restringir ofertas vigentes devem ser apresentadas como atuais](./docs/historias/back/091-US-171-back-restringir-ofertas-vigentes-devem-ser-apresentadas-como-atuais.md) — 3 SP — Pronta
+- [X] BE 092 — [US-179 — Consultar ofertas sem fornecer dados pessoais](./docs/historias/back/092-US-179-back-consultar-ofertas-sem-fornecer-dados-pessoais.md) — 3 SP — Pronta
+- [X] BE 093 — [US-185 — Conseguir administrar suas ofertas sem depender constantemente do dono da plataforma](./docs/historias/back/093-US-185-back-conseguir-administrar-ofertas-sem-depender-constantemente-dono-platafo.md) — 5 SP — Pronta
+- [X] BE 094 — [US-187 — Campanhas anteriores devem poder ser reaproveitadas](./docs/historias/back/094-US-187-back-campanhas-anteriores-devem-poder-ser-reaproveitadas.md) — 8 SP — Pronta
+- [X] BE 095 — [US-188 — Alterações de campanhas não devem exigir troca do QR Code](./docs/historias/back/095-US-188-back-alteracoes-campanhas-nao-devem-exigir-troca-qr-code.md) — 8 SP — Pronta
+- [X] BE 096 — [US-106 — Contabilizar acessos originados por QR Code](./docs/historias/back/096-US-106-back-contabilizar-acessos-originados-qr-code.md) — 8 SP — Pronta
+- [X] BE 097 — [US-010 — Identificar supermercados com maior utilização da plataforma](./docs/historias/back/097-US-010-back-identificar-supermercados-com-maior-utilizacao-plataforma.md) — 3 SP — Pronta
+- [X] BE 098 — [US-011 — Identificar supermercados inativos ou com baixa utilização](./docs/historias/back/098-US-011-back-identificar-supermercados-inativos-ou-com-baixa-utilizacao.md) — 3 SP — Pronta
+- [X] BE 099 — [US-104 — Identificar cada QR Code](./docs/historias/back/099-US-104-back-identificar-cada-qr-code.md) — 8 SP — Pronta
 - [ ] BE 100 — [US-105 — Ativar ou desativar QR Codes](./docs/historias/back/100-US-105-back-ativar-ou-desativar-qr-codes.md) — 8 SP — Pronta
 - [ ] BE 101 — [US-107 — Identificar qual QR Code originou os acessos](./docs/historias/back/101-US-107-back-identificar-qual-qr-code-originou-acessos.md) — 8 SP — Pronta
 - [ ] BE 102 — [US-052 — O acesso administrativo deve respeitar as regras de privacidade aplicáveis](./docs/historias/back/102-US-052-back-acesso-administrativo-deve-respeitar-regras-privacidade-aplicaveis.md) — 8 SP — Pronta

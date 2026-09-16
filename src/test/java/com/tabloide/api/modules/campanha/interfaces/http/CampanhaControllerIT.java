@@ -155,6 +155,32 @@ class CampanhaControllerIT extends CampanhaIntegrationTestSupport {
     }
 
     @Test
+    void deveReaproveitarOfertaDeCampanhaAnteriorAtravesDeCopia() throws Exception {
+        // US-187: reaproveitar campanha anterior = copiar suas ofertas (RN-004) e vincular a uma nova
+        // campanha; não existe (nem é exigido pela decisão consolidada) um endpoint de "copiar campanha".
+        Long supermercadoId = criarSupermercadoComPlano("11444777006879");
+        String token = criarDonoEAutenticar(supermercadoId, "dono-reaproveita-campanha@sgtm.local");
+        long lojaId = cadastrarLojaECapturarId(supermercadoId, token, "Loja Um");
+        long ofertaOriginalId = cadastrarOfertaECapturarId(supermercadoId, token, lojaId);
+        Long campanhaAnterior = cadastrarCampanhaECapturarId(supermercadoId, token, requestCampanha(Set.of(lojaId), Set.of(ofertaOriginalId)));
+
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/campanhas/" + campanhaAnterior + "/cancelamento")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("CANCELADA"));
+
+        String corpoCopia = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas/" + ofertaOriginalId + "/copia")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long ofertaCopiadaId = objectMapper.readTree(corpoCopia).get("id").asLong();
+
+        mockMvc.perform(cadastrar(supermercadoId, token, requestCampanha(Set.of(lojaId), Set.of(ofertaCopiadaId))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.ofertaIds[0]").value(ofertaCopiadaId));
+    }
+
+    @Test
     void deveRejeitarCadastroSemLojas() throws Exception {
         Long supermercadoId = criarSupermercadoComPlano("11444777006798");
         String token = criarDonoEAutenticar(supermercadoId, "dono-campanha-sem-loja@sgtm.local");
