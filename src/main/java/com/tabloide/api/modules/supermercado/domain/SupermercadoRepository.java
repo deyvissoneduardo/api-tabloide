@@ -2,6 +2,7 @@ package com.tabloide.api.modules.supermercado.domain;
 
 import com.tabloide.api.modules.autenticacao.domain.Cnpj;
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
+import java.util.List;
 import java.util.Optional;
 
 public interface SupermercadoRepository {
@@ -15,4 +16,6 @@ public interface SupermercadoRepository {
     Supermercado salvar(Supermercado supermercado);
 
     Pagina<Supermercado> listar(int pagina, int tamanho);
+
+    List<Supermercado> listarTodos();
 }

@@ -6,6 +6,7 @@ import com.tabloide.api.modules.supermercado.domain.Endereco;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -77,6 +78,11 @@ public class SupermercadoRepositoryAdapter implements SupermercadoRepository {
                 resultado.getTotalElements(),
                 resultado.getTotalPages()
         );
+    }
+
+    @Override
+    public List<Supermercado> listarTodos() {
+        return jpaRepository.findAll().stream().map(SupermercadoRepositoryAdapter::paraDominio).toList();
     }
 
     private static SupermercadoJpaEntity atualizar(SupermercadoJpaEntity entidade, Supermercado supermercado) {
