@@ -9,6 +9,8 @@ public interface QrCodeJpaRepository extends JpaRepository<QrCodeJpaEntity, Long
 
     Optional<QrCodeJpaEntity> findByIdAndSupermercadoId(Long id, Long supermercadoId);
 
+    Optional<QrCodeJpaEntity> findByCodigoPublico(String codigoPublico);
+
     boolean existsByNomeNormalizadoAndSupermercadoId(String nomeNormalizado, Long supermercadoId);
 
     Page<QrCodeJpaEntity> findByLojaIdAndSupermercadoId(Long lojaId, Long supermercadoId, Pageable pageable);

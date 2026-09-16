@@ -2,6 +2,7 @@ package com.tabloide.api.modules.qrcodes.interfaces.http;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,20 +12,26 @@ import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJ
 import com.tabloide.api.modules.autenticacao.infrastructure.persistence.UsuarioJpaRepository;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginRequest;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.LoginResponse;
+import com.tabloide.api.modules.campanha.interfaces.http.dto.CadastrarCampanhaRequest;
+import com.tabloide.api.modules.categoria.interfaces.http.dto.CadastrarCategoriaRequest;
 import com.tabloide.api.modules.loja.domain.EstadoLoja;
 import com.tabloide.api.modules.loja.infrastructure.persistence.LojaJpaEntity;
 import com.tabloide.api.modules.loja.infrastructure.persistence.LojaJpaRepository;
+import com.tabloide.api.modules.oferta.interfaces.http.dto.CadastrarOfertaRequest;
 import com.tabloide.api.modules.plano.domain.EstadoAssinatura;
 import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaEntity;
 import com.tabloide.api.modules.plano.infrastructure.persistence.AssinaturaJpaRepository;
 import com.tabloide.api.modules.plano.infrastructure.persistence.PlanoJpaEntity;
 import com.tabloide.api.modules.plano.infrastructure.persistence.PlanoJpaRepository;
+import com.tabloide.api.modules.produto.interfaces.http.dto.CadastrarProdutoRequest;
 import com.tabloide.api.modules.qrcodes.interfaces.http.dto.CadastrarQrCodeRequest;
 import com.tabloide.api.modules.supermercado.domain.EstadoSupermercado;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaEntity;
 import com.tabloide.api.modules.supermercado.infrastructure.persistence.SupermercadoJpaRepository;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -176,6 +183,121 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "image/svg+xml"));
+    }
+
+    @Test
+    void deveManterCodigoPublicoEDestinoAposMudancaDeCampanha() throws Exception {
+        // US-170/US-188: QR Code aponta para a loja, nunca para a campanha — trocar/cancelar a
+        // campanha não pode alterar o código público nem o destino resolvido.
+        Long supermercadoId = criarSupermercadoComPlano("11444777009037");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-qrcode-campanha@sgtm.local");
+        Long lojaId = criarLojaAtiva(supermercadoId, "Loja Centro");
+        String corpoQrCode = mockMvc.perform(gerar(supermercadoId, lojaId, tokenDono, requestQrCode("QR Entrada")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        String codigoPublico = objectMapper.readTree(corpoQrCode).get("codigoPublico").asText();
+
+        String destinoAntes = mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        long ofertaId = cadastrarOfertaECapturarId(supermercadoId, tokenDono, lojaId);
+        Long campanhaId = cadastrarCampanhaECapturarId(supermercadoId, tokenDono, lojaId, ofertaId);
+        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/campanhas/" + campanhaId + "/cancelamento")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + objectMapper.readTree(corpoQrCode).get("id").asLong())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.codigoPublico").value(codigoPublico))
+                .andExpect(jsonPath("$.estado").value("ATIVO"));
+
+        mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.supermercadoId").value(supermercadoId))
+                .andExpect(jsonPath("$.lojaId").value(lojaId))
+                .andExpect(content().json(destinoAntes));
+    }
+
+    @Test
+    void deveResolverDestinoDoQrCodeAtivoSemAutenticacao() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777009118");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-qrcode-publico@sgtm.local");
+        Long lojaId = criarLojaAtiva(supermercadoId, "Loja Centro");
+        long qrCodeId = gerarECapturarId(supermercadoId, lojaId, tokenDono, "QR Entrada");
+        String codigoPublico = objectMapper.readTree(
+                        mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
+                                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                                .andReturn().getResponse().getContentAsString())
+                .get("codigoPublico").asText();
+
+        mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.supermercadoId").value(supermercadoId))
+                .andExpect(jsonPath("$.lojaId").value(lojaId));
+    }
+
+    @Test
+    void deveRetornar404ParaQrCodeDesativado() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777009207");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-qrcode-desativado-publico@sgtm.local");
+        Long lojaId = criarLojaAtiva(supermercadoId, "Loja Centro");
+        long qrCodeId = gerarECapturarId(supermercadoId, lojaId, tokenDono, "QR Entrada");
+        String codigoPublico = objectMapper.readTree(
+                        mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
+                                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                                .andReturn().getResponse().getContentAsString())
+                .get("codigoPublico").asText();
+
+        mockMvc.perform(post(rota(supermercadoId, lojaId) + "/" + qrCodeId + "/desativacao")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
+                .andExpect(status().isNotFound());
+    }
+
+    private long cadastrarOfertaECapturarId(Long supermercadoId, String token, Long lojaId) throws Exception {
+        long categoriaId = objectMapper.readTree(
+                        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/categorias")
+                                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(new CadastrarCategoriaRequest("Bebidas", null))))
+                                .andExpect(status().isCreated())
+                                .andReturn().getResponse().getContentAsString())
+                .get("id").asLong();
+        long produtoId = objectMapper.readTree(
+                        mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/produtos")
+                                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(new CadastrarProdutoRequest(
+                                                "Refrigerante Cola 2L", Set.of(categoriaId), null, null, null, null, null))))
+                                .andExpect(status().isCreated())
+                                .andReturn().getResponse().getContentAsString())
+                .get("id").asLong();
+        Instant agora = Instant.now();
+        String corpo = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/ofertas")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CadastrarOfertaRequest(
+                                produtoId, Set.of(lojaId), new BigDecimal("10.00"), new BigDecimal("7.50"),
+                                agora, agora.plus(1, ChronoUnit.DAYS), null, false))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(corpo).get("id").asLong();
+    }
+
+    private Long cadastrarCampanhaECapturarId(Long supermercadoId, String token, Long lojaId, long ofertaId) throws Exception {
+        Instant agora = Instant.now();
+        String corpo = mockMvc.perform(post("/api/supermercados/" + supermercadoId + "/campanhas")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CadastrarCampanhaRequest(
+                                "Campanha", "Descrição", Set.of(lojaId), Set.of(ofertaId), agora, agora.plus(1, ChronoUnit.DAYS), false))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(corpo).get("id").asLong();
     }
 
     private String rota(Long supermercadoId, Long lojaId) {

@@ -3,6 +3,7 @@ package com.tabloide.api.modules.qrcodes.interfaces.http;
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.ErroResponse;
 import com.tabloide.api.modules.qrcodes.domain.exceptions.LojaIndisponivelParaQrCodeException;
 import com.tabloide.api.modules.qrcodes.domain.exceptions.NomeDeQrCodeJaCadastradoException;
+import com.tabloide.api.modules.qrcodes.domain.exceptions.QrCodeIndisponivelException;
 import com.tabloide.api.modules.qrcodes.domain.exceptions.QrCodeNaoEncontradoException;
 import com.tabloide.api.modules.qrcodes.domain.exceptions.TransicaoEstadoQrCodeInvalidaException;
 import java.util.stream.Collectors;
@@ -18,6 +19,11 @@ public class ErroQrCodeHandler {
 
     @ExceptionHandler(QrCodeNaoEncontradoException.class)
     public ResponseEntity<ErroResponse> tratarNaoEncontrado(QrCodeNaoEncontradoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(QrCodeIndisponivelException.class)
+    public ResponseEntity<ErroResponse> tratarIndisponivel(QrCodeIndisponivelException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(ex.getMessage()));
     }
 

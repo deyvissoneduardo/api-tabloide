@@ -24,6 +24,11 @@ public class QrCodeRepositoryAdapter implements QrCodeRepository {
     }
 
     @Override
+    public Optional<QrCode> buscarPorCodigoPublico(String codigoPublico) {
+        return jpaRepository.findByCodigoPublico(codigoPublico).map(QrCodeRepositoryAdapter::paraDominio);
+    }
+
+    @Override
     public boolean existeNomeNormalizadoNoSupermercado(String nomeNormalizado, Long supermercadoId) {
         return jpaRepository.existsByNomeNormalizadoAndSupermercadoId(nomeNormalizado, supermercadoId);
     }

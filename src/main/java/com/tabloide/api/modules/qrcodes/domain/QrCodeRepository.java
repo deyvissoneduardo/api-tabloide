@@ -7,6 +7,8 @@ public interface QrCodeRepository {
 
     Optional<QrCode> buscarPorIdESupermercado(Long id, Long supermercadoId);
 
+    Optional<QrCode> buscarPorCodigoPublico(String codigoPublico);
+
     boolean existeNomeNormalizadoNoSupermercado(String nomeNormalizado, Long supermercadoId);
 
     QrCode salvar(QrCode qrCode);

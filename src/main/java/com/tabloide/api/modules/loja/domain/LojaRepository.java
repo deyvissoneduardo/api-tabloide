@@ -7,6 +7,8 @@ public interface LojaRepository {
 
     Optional<Loja> buscarPorIdESupermercado(Long id, Long supermercadoId);
 
+    Optional<Loja> buscarPorId(Long id);
+
     boolean existeNomeNormalizadoNoSupermercado(String nomeNormalizado, Long supermercadoId);
 
     long contarAtivasPorSupermercado(Long supermercadoId);

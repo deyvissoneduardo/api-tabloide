@@ -2,7 +2,9 @@ package com.tabloide.api.modules.categoria.infrastructure.persistence;
 
 import com.tabloide.api.modules.categoria.domain.Categoria;
 import com.tabloide.api.modules.categoria.domain.CategoriaRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,6 +19,13 @@ public class CategoriaRepositoryAdapter implements CategoriaRepository {
     @Override
     public Optional<Categoria> buscarPorIdESupermercado(Long id, Long supermercadoId) {
         return jpaRepository.findByIdAndSupermercadoId(id, supermercadoId).map(CategoriaRepositoryAdapter::paraDominio);
+    }
+
+    @Override
+    public List<Categoria> listarPorIdsESupermercado(Set<Long> ids, Long supermercadoId) {
+        return jpaRepository.findByIdInAndSupermercadoId(ids, supermercadoId).stream()
+                .map(CategoriaRepositoryAdapter::paraDominio)
+                .toList();
     }
 
     @Override

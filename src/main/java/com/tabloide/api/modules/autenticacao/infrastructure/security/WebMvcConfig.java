@@ -20,7 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String[] caminhosExcluidos = {
                 "/api/v1/health",
                 "/api/redefinicoes-senha",
-                "/api/redefinicoes-senha/**"
+                "/api/redefinicoes-senha/**",
+                "/api/publico/**"
         };
 
         registry.addInterceptor(interceptor)

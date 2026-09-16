@@ -26,6 +26,11 @@ public class LojaRepositoryAdapter implements LojaRepository {
     }
 
     @Override
+    public Optional<Loja> buscarPorId(Long id) {
+        return jpaRepository.findById(id).map(LojaRepositoryAdapter::paraDominio);
+    }
+
+    @Override
     public boolean existeNomeNormalizadoNoSupermercado(String nomeNormalizado, Long supermercadoId) {
         return jpaRepository.existsByNomeNormalizadoAndSupermercadoId(nomeNormalizado, supermercadoId);
     }
