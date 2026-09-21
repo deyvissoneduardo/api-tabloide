@@ -105,17 +105,17 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 097 — [US-010 — Identificar supermercados com maior utilização da plataforma](./docs/historias/back/097-US-010-back-identificar-supermercados-com-maior-utilizacao-plataforma.md) — 3 SP — Pronta
 - [X] BE 098 — [US-011 — Identificar supermercados inativos ou com baixa utilização](./docs/historias/back/098-US-011-back-identificar-supermercados-inativos-ou-com-baixa-utilizacao.md) — 3 SP — Pronta
 - [X] BE 099 — [US-104 — Identificar cada QR Code](./docs/historias/back/099-US-104-back-identificar-cada-qr-code.md) — 8 SP — Pronta
-- [ ] BE 100 — [US-105 — Ativar ou desativar QR Codes](./docs/historias/back/100-US-105-back-ativar-ou-desativar-qr-codes.md) — 8 SP — Pronta
-- [ ] BE 101 — [US-107 — Identificar qual QR Code originou os acessos](./docs/historias/back/101-US-107-back-identificar-qual-qr-code-originou-acessos.md) — 8 SP — Pronta
-- [ ] BE 102 — [US-052 — O acesso administrativo deve respeitar as regras de privacidade aplicáveis](./docs/historias/back/102-US-052-back-acesso-administrativo-deve-respeitar-regras-privacidade-aplicaveis.md) — 8 SP — Pronta
-- [ ] BE 103 — [US-173 — As métricas devem representar os eventos registrados corretamente](./docs/historias/back/103-US-173-back-metricas-devem-representar-eventos-registrados-corretamente.md) — 5 SP — Pronta
-- [ ] BE 104 — [US-184 — Dados de analytics devem ser preferencialmente agregados quando identificação pessoal não for necessária](./docs/historias/back/104-US-184-back-dados-analytics-devem-ser-preferencialmente-agregados-quando-identific.md) — 5 SP — Pronta
-- [ ] BE 105 — [US-222 — Exportar relatórios em CSV](./docs/historias/back/105-US-222-back-exportar-relatorios-em-csv.md) — 8 SP — Pronta
-- [ ] BE 106 — [US-042 — As ações administrativas relevantes devem possuir rastreabilidade](./docs/historias/back/106-US-042-back-acoes-administrativas-relevantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
-- [ ] BE 107 — [US-051 — Registros de auditoria devem ser preservados pelo período definido pela operação](./docs/historias/back/107-US-051-back-registros-auditoria-devem-ser-preservados-pelo-periodo-definido-pela-o.md) — 8 SP — Pronta
-- [ ] BE 108 — [US-178 — Alterações importantes devem possuir rastreabilidade](./docs/historias/back/108-US-178-back-alteracoes-importantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
-- [ ] BE 109 — [US-182 — Consentimentos devem ser registrados quando necessários](./docs/historias/back/109-US-182-back-consentimentos-devem-ser-registrados-quando-necessarios.md) — 5 SP — Pronta
-- [ ] BE 110 — [US-183 — Revogar consentimentos](./docs/historias/back/110-US-183-back-revogar-consentimentos.md) — 5 SP — Pronta
+- [X] BE 100 — [US-105 — Ativar ou desativar QR Codes](./docs/historias/back/100-US-105-back-ativar-ou-desativar-qr-codes.md) — 8 SP — Pronta
+- [X] BE 101 — [US-107 — Identificar qual QR Code originou os acessos](./docs/historias/back/101-US-107-back-identificar-qual-qr-code-originou-acessos.md) — 8 SP — Pronta
+- [X] BE 102 — [US-052 — O acesso administrativo deve respeitar as regras de privacidade aplicáveis](./docs/historias/back/102-US-052-back-acesso-administrativo-deve-respeitar-regras-privacidade-aplicaveis.md) — 8 SP — Pronta
+- [X] BE 103 — [US-173 — As métricas devem representar os eventos registrados corretamente](./docs/historias/back/103-US-173-back-metricas-devem-representar-eventos-registrados-corretamente.md) — 5 SP — Pronta
+- [X] BE 104 — [US-184 — Dados de analytics devem ser preferencialmente agregados quando identificação pessoal não for necessária](./docs/historias/back/104-US-184-back-dados-analytics-devem-ser-preferencialmente-agregados-quando-identific.md) — 5 SP — Pronta
+- [X] BE 105 — [US-222 — Exportar relatórios em CSV](./docs/historias/back/105-US-222-back-exportar-relatorios-em-csv.md) — 8 SP — Pronta
+- [X] BE 106 — [US-042 — As ações administrativas relevantes devem possuir rastreabilidade](./docs/historias/back/106-US-042-back-acoes-administrativas-relevantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
+- [X] BE 107 — [US-051 — Registros de auditoria devem ser preservados pelo período definido pela operação](./docs/historias/back/107-US-051-back-registros-auditoria-devem-ser-preservados-pelo-periodo-definido-pela-o.md) — 8 SP — Pronta
+- [X] BE 108 — [US-178 — Alterações importantes devem possuir rastreabilidade](./docs/historias/back/108-US-178-back-alteracoes-importantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
+- [X] BE 109 — [US-182 — Consentimentos devem ser registrados quando necessários](./docs/historias/back/109-US-182-back-consentimentos-devem-ser-registrados-quando-necessarios.md) — 5 SP — Pronta
+- [X] BE 110 — [US-183 — Revogar consentimentos](./docs/historias/back/110-US-183-back-revogar-consentimentos.md) — 5 SP — Pronta
 - [ ] BE 111 — [US-013 — Acompanhar problemas ou ocorrências registradas na plataforma](./docs/historias/back/111-US-013-back-acompanhar-problemas-ou-ocorrencias-registradas-na-plataforma.md) — 8 SP — Pronta
 - [ ] BE 112 — [US-046 — Possuir visão consolidada da operação](./docs/historias/back/112-US-046-back-possuir-visao-consolidada-operacao.md) — 8 SP — Pronta
 - [ ] BE 113 — [US-047 — Operações críticas devem reduzir o risco de execução acidental](./docs/historias/back/113-US-047-back-operacoes-criticas-devem-reduzir-risco-execucao-acidental.md) — 3 SP — Pronta
