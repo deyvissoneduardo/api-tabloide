@@ -1,7 +1,10 @@
 package com.tabloide.api.modules.analytics.interfaces.http;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,6 +97,35 @@ class MetricasControllerIT extends AnalyticsIntegrationTestSupport {
                         .param("fim", Instant.now().plusSeconds(60).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.itens[?(@.supermercadoId == " + supermercadoInativo + ")].classificacao").value("INATIVO"));
+    }
+
+    @Test
+    void deveExportarMaisUtilizadosEmCsv() throws Exception {
+        // US-222/RN-014: exportar relatórios em CSV.
+        Long supermercadoId = criarSupermercadoComPlano("11444777055063");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-metricas-csv@sgtm.local");
+        long loja = cadastrarLojaECapturarId(supermercadoId, tokenDono, "Loja A");
+        mockMvc.perform(get("/api/publico/lojas/" + loja)).andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/metricas/supermercados/mais-utilizados/csv")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
+                        .param("inicio", Instant.now().minusSeconds(3600).toString())
+                        .param("fim", Instant.now().plusSeconds(60).toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/csv;charset=UTF-8"))
+                .andExpect(content().string(startsWith(
+                        "supermercadoId,nomeFantasia,quantidadeEventosPeriodoAtual,quantidadeEventosPeriodoAnterior,variacaoPercentual\r\n")))
+                .andExpect(content().string(containsString(supermercadoId + ",Mercado Bom Preço,1,0,")));
+    }
+
+    @Test
+    void deveExigirPerfilSuperAdminParaExportarCsv() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777063163");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-metricas-csv-negado@sgtm.local");
+
+        mockMvc.perform(get("/api/metricas/supermercados/baixa-utilizacao/csv")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isForbidden());
     }
 
     private long cadastrarLojaECapturarId(Long supermercadoId, String token, String nome) throws Exception {
