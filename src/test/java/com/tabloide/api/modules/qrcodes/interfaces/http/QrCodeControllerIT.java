@@ -239,6 +239,34 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
     }
 
     @Test
+    void deveContarAcessosDeCadaQrCodeNoPeriodo() throws Exception {
+        // US-107: identificar qual QR Code originou os acessos.
+        Long supermercadoId = criarSupermercadoComPlano("11444777009289");
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-acessos-qrcode@sgtm.local");
+        Long lojaId = criarLojaAtiva(supermercadoId, "Loja Centro");
+        long qrCodeMaisAcessado = gerarECapturarId(supermercadoId, lojaId, tokenDono, "QR Mais Acessado");
+        long qrCodeMenosAcessado = gerarECapturarId(supermercadoId, lojaId, tokenDono, "QR Menos Acessado");
+        String codigoPublicoMaisAcessado = codigoPublicoDoQrCode(supermercadoId, lojaId, tokenDono, qrCodeMaisAcessado);
+        String codigoPublicoMenosAcessado = codigoPublicoDoQrCode(supermercadoId, lojaId, tokenDono, qrCodeMenosAcessado);
+
+        for (int i = 0; i < 2; i++) {
+            mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublicoMaisAcessado)).andExpect(status().isOk());
+        }
+        mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublicoMenosAcessado)).andExpect(status().isOk());
+
+        mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeMaisAcessado)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantidadeAcessosNoPeriodo").value(2));
+
+        mockMvc.perform(get(rota(supermercadoId, lojaId))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens[?(@.id == " + qrCodeMaisAcessado + ")].quantidadeAcessosNoPeriodo").value(2))
+                .andExpect(jsonPath("$.itens[?(@.id == " + qrCodeMenosAcessado + ")].quantidadeAcessosNoPeriodo").value(1));
+    }
+
+    @Test
     void deveRetornar404ParaQrCodeDesativado() throws Exception {
         Long supermercadoId = criarSupermercadoComPlano("11444777009207");
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-qrcode-desativado-publico@sgtm.local");
@@ -316,6 +344,13 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
         return objectMapper.readTree(corpo).get("id").asLong();
+    }
+
+    private String codigoPublicoDoQrCode(Long supermercadoId, Long lojaId, String token, long qrCodeId) throws Exception {
+        String corpo = mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(corpo).get("codigoPublico").asText();
     }
 
     private CadastrarQrCodeRequest requestQrCode(String nome) {

@@ -10,6 +10,7 @@ import com.tabloide.api.modules.autenticacao.infrastructure.security.RequerPerfi
 import com.tabloide.api.modules.autenticacao.interfaces.http.dto.PaginaResponse;
 import com.tabloide.api.modules.qrcodes.application.AtivarQrCode;
 import com.tabloide.api.modules.qrcodes.application.BuscarQrCodePorId;
+import com.tabloide.api.modules.qrcodes.application.ContarAcessosDeQrCodes;
 import com.tabloide.api.modules.qrcodes.application.DadosQrCode;
 import com.tabloide.api.modules.qrcodes.application.DesativarQrCode;
 import com.tabloide.api.modules.qrcodes.application.GerarImagemQrCode;
@@ -21,6 +22,11 @@ import com.tabloide.api.modules.qrcodes.interfaces.http.dto.QrCodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +44,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class QrCodeController {
 
     private static final MediaType IMAGE_SVG = MediaType.valueOf("image/svg+xml");
+    // RN-007 (Analytics): período padrão de consulta é de 30 dias quando não informado.
+    private static final int DIAS_PERIODO_PADRAO = 30;
 
     private final GerarQrCode gerarQrCode;
     private final ListarQrCodesPorLoja listarQrCodesPorLoja;
@@ -45,6 +53,7 @@ public class QrCodeController {
     private final AtivarQrCode ativarQrCode;
     private final DesativarQrCode desativarQrCode;
     private final GerarImagemQrCode gerarImagemQrCode;
+    private final ContarAcessosDeQrCodes contarAcessosDeQrCodes;
 
     public QrCodeController(
             GerarQrCode gerarQrCode,
@@ -52,7 +61,8 @@ public class QrCodeController {
             BuscarQrCodePorId buscarQrCodePorId,
             AtivarQrCode ativarQrCode,
             DesativarQrCode desativarQrCode,
-            GerarImagemQrCode gerarImagemQrCode
+            GerarImagemQrCode gerarImagemQrCode,
+            ContarAcessosDeQrCodes contarAcessosDeQrCodes
     ) {
         this.gerarQrCode = gerarQrCode;
         this.listarQrCodesPorLoja = listarQrCodesPorLoja;
@@ -60,31 +70,52 @@ public class QrCodeController {
         this.ativarQrCode = ativarQrCode;
         this.desativarQrCode = desativarQrCode;
         this.gerarImagemQrCode = gerarImagemQrCode;
+        this.contarAcessosDeQrCodes = contarAcessosDeQrCodes;
     }
 
     @GetMapping
     @RequerPerfil({Perfil.DONO, Perfil.SUPER_ADMIN})
     @AuditarConsulta(acao = "QRCODES_CONSULTADOS", entidade = "QrCode", paramSupermercadoId = "supermercadoId")
-    @Operation(summary = "Lista os QR Codes de uma loja, paginado")
+    @Operation(summary = "Lista os QR Codes de uma loja, paginado, com a quantidade de acessos de cada um no período")
     public ResponseEntity<PaginaResponse<QrCodeResponse>> listar(
             @PathVariable Long supermercadoId,
             @PathVariable Long lojaId,
             @RequestParam(defaultValue = "0") int pagina,
-            @RequestParam(defaultValue = "25") int tamanho
+            @RequestParam(defaultValue = "25") int tamanho,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant inicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant fim
     ) {
         ClaimsSessao ator = contextoObrigatorio();
         Pagina<QrCode> resultado = listarQrCodesPorLoja.executar(supermercadoId, lojaId, ator.perfil(), ator.supermercadoId(), pagina, tamanho);
-        return ResponseEntity.ok(PaginaResponse.from(resultado, QrCodeResponse::from));
+        Instant[] periodo = resolverPeriodo(inicio, fim);
+        Map<Long, Long> acessosPorQrCode = contarAcessosDeQrCodes.executar(
+                resultado.itens().stream().map(QrCode::id).toList(), periodo[0], periodo[1]);
+        return ResponseEntity.ok(PaginaResponse.from(
+                resultado, qrCode -> QrCodeResponse.from(qrCode, acessosPorQrCode.getOrDefault(qrCode.id(), 0L))));
     }
 
     @GetMapping("/{id}")
     @RequerPerfil({Perfil.DONO, Perfil.SUPER_ADMIN})
     @AuditarConsulta(acao = "QRCODE_CONSULTADO", entidade = "QrCode", paramEntidadeId = "id", paramSupermercadoId = "supermercadoId")
-    @Operation(summary = "Consulta os dados e o estado de um QR Code")
-    public ResponseEntity<QrCodeResponse> buscarPorId(@PathVariable Long supermercadoId, @PathVariable Long lojaId, @PathVariable Long id) {
+    @Operation(summary = "Consulta os dados, o estado e a quantidade de acessos no período de um QR Code")
+    public ResponseEntity<QrCodeResponse> buscarPorId(
+            @PathVariable Long supermercadoId,
+            @PathVariable Long lojaId,
+            @PathVariable Long id,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant inicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant fim
+    ) {
         ClaimsSessao ator = contextoObrigatorio();
         QrCode qrCode = buscarQrCodePorId.executar(supermercadoId, id, ator.perfil(), ator.supermercadoId());
-        return ResponseEntity.ok(QrCodeResponse.from(qrCode));
+        Instant[] periodo = resolverPeriodo(inicio, fim);
+        Map<Long, Long> acessos = contarAcessosDeQrCodes.executar(List.of(qrCode.id()), periodo[0], periodo[1]);
+        return ResponseEntity.ok(QrCodeResponse.from(qrCode, acessos.getOrDefault(qrCode.id(), 0L)));
+    }
+
+    private Instant[] resolverPeriodo(Instant inicio, Instant fim) {
+        Instant fimResolvido = fim != null ? fim : Instant.now();
+        Instant inicioResolvido = inicio != null ? inicio : fimResolvido.minus(DIAS_PERIODO_PADRAO, ChronoUnit.DAYS);
+        return new Instant[] {inicioResolvido, fimResolvido};
     }
 
     @PostMapping

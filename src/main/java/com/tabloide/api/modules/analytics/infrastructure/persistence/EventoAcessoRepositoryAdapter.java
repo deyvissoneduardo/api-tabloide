@@ -3,8 +3,13 @@ package com.tabloide.api.modules.analytics.infrastructure.persistence;
 import com.tabloide.api.modules.analytics.domain.ContagemPorSupermercado;
 import com.tabloide.api.modules.analytics.domain.EventoAcesso;
 import com.tabloide.api.modules.analytics.domain.EventoAcessoRepository;
+import com.tabloide.api.modules.analytics.domain.TipoEventoAcesso;
+import com.tabloide.api.modules.analytics.infrastructure.persistence.EventoAcessoJpaRepository.ContagemPorRecursoProjecao;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
@@ -37,6 +42,15 @@ public class EventoAcessoRepositoryAdapter implements EventoAcessoRepository {
         return jpaRepository.contarPorSupermercadoNoPeriodo(inicio, fim).stream()
                 .map(projecao -> new ContagemPorSupermercado(projecao.getSupermercadoId(), projecao.getQuantidade()))
                 .toList();
+    }
+
+    @Override
+    public Map<Long, Long> contarPorRecursoNoPeriodo(TipoEventoAcesso tipo, Collection<Long> recursoIds, Instant inicio, Instant fim) {
+        if (recursoIds.isEmpty()) {
+            return Map.of();
+        }
+        return jpaRepository.contarPorRecursoNoPeriodo(tipo, recursoIds, inicio, fim).stream()
+                .collect(Collectors.toMap(ContagemPorRecursoProjecao::getRecursoId, ContagemPorRecursoProjecao::getQuantidade));
     }
 
     private boolean jaRegistrado(String eventoTecnicoId) {
