@@ -66,8 +66,9 @@ public class UsuarioController {
     }
 
     @PostMapping
-    @RequerPerfil({Perfil.DONO})
-    @Operation(summary = "Cadastra um usuário administrativo (DONO ou OPERADOR) no supermercado")
+    @RequerPerfil({Perfil.DONO, Perfil.SUPER_ADMIN})
+    @Operation(summary = "Cadastra um usuário administrativo no supermercado "
+            + "(DONO cadastra DONO ou OPERADOR no próprio supermercado; Super Admin cadastra o primeiro DONO em qualquer supermercado)")
     public ResponseEntity<UsuarioResponse> cadastrar(
             @PathVariable Long supermercadoId,
             @Valid @RequestBody CadastrarUsuarioAdministrativoRequest request

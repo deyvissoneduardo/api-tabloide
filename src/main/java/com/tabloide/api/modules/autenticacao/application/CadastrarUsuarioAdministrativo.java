@@ -5,6 +5,7 @@ import com.tabloide.api.modules.auditoria.domain.RegistroAuditoria;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.Usuario;
 import com.tabloide.api.modules.autenticacao.domain.UsuarioRepository;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.EmailJaCadastradoException;
 import com.tabloide.api.modules.supermercado.domain.Supermercado;
 import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
@@ -44,8 +45,11 @@ public class CadastrarUsuarioAdministrativo {
             Perfil perfilAtor,
             Long supermercadoIdAtor
     ) {
-        if (foraDoEscopoDoAtor(supermercadoId, supermercadoIdAtor)) {
+        if (donoForaDoProprioSupermercado(perfilAtor, supermercadoId, supermercadoIdAtor)) {
             throw new SupermercadoNaoEncontradoException();
+        }
+        if (superAdminTentandoCadastrarPerfilDiferenteDeDono(perfilAtor, dados.perfil())) {
+            throw new AcessoNegadoException();
         }
         Usuario.validarPerfilCadastravel(dados.perfil());
 
@@ -78,7 +82,11 @@ public class CadastrarUsuarioAdministrativo {
         return salvo;
     }
 
-    private boolean foraDoEscopoDoAtor(Long supermercadoId, Long supermercadoIdAtor) {
-        return !Objects.equals(supermercadoId, supermercadoIdAtor);
+    private boolean donoForaDoProprioSupermercado(Perfil perfilAtor, Long supermercadoId, Long supermercadoIdAtor) {
+        return perfilAtor == Perfil.DONO && !Objects.equals(supermercadoId, supermercadoIdAtor);
+    }
+
+    private boolean superAdminTentandoCadastrarPerfilDiferenteDeDono(Perfil perfilAtor, Perfil perfilNovoUsuario) {
+        return perfilAtor == Perfil.SUPER_ADMIN && perfilNovoUsuario != Perfil.DONO;
     }
 }

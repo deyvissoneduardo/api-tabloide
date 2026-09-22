@@ -12,6 +12,7 @@ import com.tabloide.api.modules.autenticacao.domain.Cnpj;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.Usuario;
 import com.tabloide.api.modules.autenticacao.domain.UsuarioRepository;
+import com.tabloide.api.modules.autenticacao.domain.exceptions.AcessoNegadoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.EmailJaCadastradoException;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.PerfilInvalidoParaCadastroException;
 import com.tabloide.api.modules.supermercado.domain.Endereco;
@@ -187,5 +188,35 @@ class CadastrarUsuarioAdministrativoTest {
                 .isInstanceOf(SupermercadoNaoEncontradoException.class);
 
         verify(supermercadoRepository, never()).buscarPorId(any());
+    }
+
+    @Test
+    void superAdminDeveCadastrarPrimeiroDonoEmQualquerSupermercadoAtivo() {
+        CadastrarUsuarioAdministrativo cadastrarUsuarioAdministrativo = construir();
+        Supermercado supermercado = supermercadoAtivo();
+        DadosNovoUsuarioAdministrativo dados = new DadosNovoUsuarioAdministrativo("primeiro-dono@sgtm.local", "SenhaValida1", Perfil.DONO);
+
+        when(supermercadoRepository.buscarPorId(SUPERMERCADO_ID)).thenReturn(Optional.of(supermercado));
+        when(usuarioRepository.buscarPorEmail("primeiro-dono@sgtm.local")).thenReturn(Optional.empty());
+        when(passwordEncoder.encode("SenhaValida1")).thenReturn("hash");
+        when(usuarioRepository.salvar(any(Usuario.class))).thenAnswer(chamada -> chamada.getArgument(0));
+
+        // Super Admin não pertence a nenhum supermercado (supermercadoIdAtor null).
+        Usuario salvo = cadastrarUsuarioAdministrativo.executar(SUPERMERCADO_ID, dados, ATOR_ID, Perfil.SUPER_ADMIN, null);
+
+        assertThat(salvo.perfil()).isEqualTo(Perfil.DONO);
+        verify(auditoriaRepository).registrar(any());
+    }
+
+    @Test
+    void superAdminNaoDeveCadastrarOperadorSemConsultarSupermercadoOuEmail() {
+        CadastrarUsuarioAdministrativo cadastrarUsuarioAdministrativo = construir();
+        DadosNovoUsuarioAdministrativo dados = new DadosNovoUsuarioAdministrativo("operador@sgtm.local", "SenhaValida1", Perfil.OPERADOR);
+
+        assertThatThrownBy(() -> cadastrarUsuarioAdministrativo.executar(SUPERMERCADO_ID, dados, ATOR_ID, Perfil.SUPER_ADMIN, null))
+                .isInstanceOf(AcessoNegadoException.class);
+
+        verify(supermercadoRepository, never()).buscarPorId(any());
+        verify(usuarioRepository, never()).buscarPorEmail(any());
     }
 }

@@ -195,8 +195,19 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
     }
 
     @Test
-    void deveRejeitarCadastroComSuperAdmin() throws Exception {
+    void deveCadastrarPrimeiroDonoComoSuperAdmin() throws Exception {
         Long supermercadoId = criarSupermercado("11444777001303");
+
+        mockMvc.perform(cadastrar(supermercadoId, tokenSuperAdmin(),
+                        new CadastrarUsuarioAdministrativoRequest("primeiro-dono@sgtm.local", "SenhaProvisoria1", Perfil.DONO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email").value("primeiro-dono@sgtm.local"))
+                .andExpect(jsonPath("$.perfil").value("DONO"));
+    }
+
+    @Test
+    void deveRejeitarCadastroDeOperadorComoSuperAdmin() throws Exception {
+        Long supermercadoId = criarSupermercado("11444777008650");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenSuperAdmin(),
                         new CadastrarUsuarioAdministrativoRequest("outro@sgtm.local", "SenhaValida1", Perfil.OPERADOR)))
