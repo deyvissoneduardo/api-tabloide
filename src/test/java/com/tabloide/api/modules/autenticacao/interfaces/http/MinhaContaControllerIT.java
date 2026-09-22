@@ -68,7 +68,7 @@ class MinhaContaControllerIT extends AutenticacaoIntegrationTestSupport {
         String token = criarUsuarioEAutenticar(Perfil.DONO, "dono-sem-alteracao@sgtm.local");
 
         mockMvc.perform(alterar(token, new AlterarPropriosDadosRequest(SENHA_PADRAO, null, null)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

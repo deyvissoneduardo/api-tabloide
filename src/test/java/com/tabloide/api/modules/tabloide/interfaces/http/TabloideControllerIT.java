@@ -76,7 +76,7 @@ class TabloideControllerIT extends TabloideIntegrationTestSupport {
         mockMvc.perform(disponibilizar(supermercadoId, tokenDono, new DisponibilizarTabloideRequest(
                         "Ofertas da semana", TipoArquivoTabloide.PDF, "https://arquivos/tabloide.pdf", 1024L,
                         Set.of(), agora, agora.plus(1, ChronoUnit.DAYS))))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -89,7 +89,7 @@ class TabloideControllerIT extends TabloideIntegrationTestSupport {
         mockMvc.perform(disponibilizar(supermercadoId, tokenDono, new DisponibilizarTabloideRequest(
                         "Ofertas da semana", TipoArquivoTabloide.PDF, "https://arquivos/tabloide.pdf", 21L * 1024 * 1024,
                         Set.of(lojaId), agora, agora.plus(1, ChronoUnit.DAYS))))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

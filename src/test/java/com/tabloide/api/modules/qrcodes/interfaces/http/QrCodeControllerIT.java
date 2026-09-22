@@ -195,7 +195,7 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
         String corpoQrCode = mockMvc.perform(gerar(supermercadoId, lojaId, tokenDono, requestQrCode("QR Entrada")))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
-        String codigoPublico = objectMapper.readTree(corpoQrCode).get("codigoPublico").asText();
+        String codigoPublico = objectMapper.readTree(corpoQrCode).get("codigoPublico").asString();
 
         String destinoAntes = mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
                 .andExpect(status().isOk())
@@ -230,7 +230,7 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
                         mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
                                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
                                 .andReturn().getResponse().getContentAsString())
-                .get("codigoPublico").asText();
+                .get("codigoPublico").asString();
 
         mockMvc.perform(get("/api/publico/qrcodes/" + codigoPublico))
                 .andExpect(status().isOk())
@@ -276,7 +276,7 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
                         mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
                                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
                                 .andReturn().getResponse().getContentAsString())
-                .get("codigoPublico").asText();
+                .get("codigoPublico").asString();
 
         mockMvc.perform(post(rota(supermercadoId, lojaId) + "/" + qrCodeId + "/desativacao")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono))
@@ -350,7 +350,7 @@ class QrCodeControllerIT extends QrCodeIntegrationTestSupport {
         String corpo = mockMvc.perform(get(rota(supermercadoId, lojaId) + "/" + qrCodeId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andReturn().getResponse().getContentAsString();
-        return objectMapper.readTree(corpo).get("codigoPublico").asText();
+        return objectMapper.readTree(corpo).get("codigoPublico").asString();
     }
 
     private CadastrarQrCodeRequest requestQrCode(String nome) {

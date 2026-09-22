@@ -186,7 +186,7 @@ class CampanhaControllerIT extends CampanhaIntegrationTestSupport {
         String token = criarDonoEAutenticar(supermercadoId, "dono-campanha-sem-loja@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, token, requestCampanha(Set.of(), Set.of())))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     private MockHttpServletRequestBuilder cadastrar(Long supermercadoId, String token, CadastrarCampanhaRequest request) throws Exception {

@@ -90,7 +90,7 @@ class ProdutoControllerIT extends ProdutoIntegrationTestSupport {
         String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-produto-sem-categoria@sgtm.local");
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestProduto(Set.of())))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

@@ -73,7 +73,7 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalido)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -434,7 +434,7 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
         mockMvc.perform(get("/api/supermercados")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
                         .param("tamanho", "10"))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -442,7 +442,7 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
         mockMvc.perform(get("/api/supermercados")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
                         .param("pagina", "-1"))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

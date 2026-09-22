@@ -128,7 +128,7 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono,
                         new CadastrarUsuarioAdministrativoRequest("outro@sgtm.local", "SenhaValida1", Perfil.SUPER_ADMIN)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -138,7 +138,7 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono,
                         new CadastrarUsuarioAdministrativoRequest("outro@sgtm.local", "curta", Perfil.OPERADOR)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -148,7 +148,7 @@ class UsuarioControllerIT extends AutenticacaoIntegrationTestSupport {
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono,
                         new CadastrarUsuarioAdministrativoRequest("nao-e-email", "SenhaValida1", Perfil.OPERADOR)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

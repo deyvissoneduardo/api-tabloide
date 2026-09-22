@@ -73,7 +73,7 @@ class OcorrenciaControllerIT extends OcorrenciaIntegrationTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalido)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

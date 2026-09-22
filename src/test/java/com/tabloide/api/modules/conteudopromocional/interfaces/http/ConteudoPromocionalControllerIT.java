@@ -110,7 +110,7 @@ class ConteudoPromocionalControllerIT extends ConteudoPromocionalIntegrationTest
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, new CadastrarConteudoPromocionalRequest(
                         TipoConteudoPromocional.MENSAGEM, "Sem texto", null, null, null,
                         Set.of(lojaId), agora, agora.plus(1, ChronoUnit.DAYS))))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

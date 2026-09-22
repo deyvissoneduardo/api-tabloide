@@ -133,7 +133,7 @@ class SessaoControllerIT extends AutenticacaoIntegrationTestSupport {
     void deveRejeitarTamanhoDePaginaForaDaListaPermitida() throws Exception {
         mockMvc.perform(get("/api/sessoes?tamanho=10")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + autenticarEExtrairToken(EMAIL_SUPER_ADMIN, SENHA_SUPER_ADMIN)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

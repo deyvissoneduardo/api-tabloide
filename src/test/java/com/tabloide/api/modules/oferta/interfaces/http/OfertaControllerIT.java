@@ -90,7 +90,7 @@ class OfertaControllerIT extends OfertaIntegrationTestSupport {
         long produtoId = cadastrarProdutoECapturarId(supermercadoId, tokenDono, categoriaId);
 
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, requestOferta(produtoId, Set.of())))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
@@ -105,7 +105,7 @@ class OfertaControllerIT extends OfertaIntegrationTestSupport {
         mockMvc.perform(cadastrar(supermercadoId, tokenDono, new CadastrarOfertaRequest(
                         produtoId, Set.of(lojaId), new BigDecimal("10.00"), new BigDecimal("15.00"),
                         agora, agora.plus(1, ChronoUnit.DAYS), null, false)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test

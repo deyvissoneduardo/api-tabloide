@@ -157,7 +157,7 @@ class AuditoriaControllerIT extends AuditoriaIntegrationTestSupport {
         mockMvc.perform(get("/api/auditoria")
                         .param("tamanho", "10")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin()))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     private long idDoPrimeiroRegistro(String token) throws Exception {

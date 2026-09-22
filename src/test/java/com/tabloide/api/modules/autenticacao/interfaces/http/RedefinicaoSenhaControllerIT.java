@@ -129,6 +129,6 @@ class RedefinicaoSenhaControllerIT extends AutenticacaoIntegrationTestSupport {
         mockMvc.perform(put("/api/redefinicoes-senha/{token}", verificacao.token())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new RedefinirSenhaRequest("fraca"))))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 }

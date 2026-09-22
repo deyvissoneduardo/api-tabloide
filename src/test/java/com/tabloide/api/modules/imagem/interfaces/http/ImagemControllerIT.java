@@ -197,7 +197,7 @@ class ImagemControllerIT extends ImagemIntegrationTestSupport {
                 "", TipoVinculoImagem.BANNER, null, "s3://bucket/x.jpg", FormatoImagem.JPG, -10);
 
         mockMvc.perform(registrar(tokenDono, invalido))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableContent());
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder registrar(
