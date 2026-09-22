@@ -57,7 +57,7 @@ class EditarSupermercadoTest {
     void deveLancarNaoEncontradoQuandoIdNaoExiste() {
         when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN))
+        assertThatThrownBy(() -> editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN, null))
                 .isInstanceOf(SupermercadoNaoEncontradoException.class);
     }
 
@@ -65,7 +65,7 @@ class EditarSupermercadoTest {
     void deveLancarVersaoDesatualizadaQuandoVersaoNaoConfere() {
         when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.of(supermercadoExistente(EstadoSupermercado.ATIVO, 5L)));
 
-        assertThatThrownBy(() -> editarSupermercado.executar(1L, 4L, novosDados(), 1L, Perfil.SUPER_ADMIN))
+        assertThatThrownBy(() -> editarSupermercado.executar(1L, 4L, novosDados(), 1L, Perfil.SUPER_ADMIN, null))
                 .isInstanceOf(VersaoDesatualizadaException.class);
 
         verify(supermercadoRepository, never()).salvar(any());
@@ -75,7 +75,7 @@ class EditarSupermercadoTest {
     void deveRejeitarEdicaoQuandoBloqueado() {
         when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.of(supermercadoExistente(EstadoSupermercado.BLOQUEADO, 0L)));
 
-        assertThatThrownBy(() -> editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN))
+        assertThatThrownBy(() -> editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN, null))
                 .isInstanceOf(SupermercadoBloqueadoOuDesativadoException.class);
     }
 
@@ -84,9 +84,27 @@ class EditarSupermercadoTest {
         when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.of(supermercadoExistente(EstadoSupermercado.ATIVO, 0L)));
         when(supermercadoRepository.salvar(any(Supermercado.class))).thenAnswer(invocacao -> invocacao.getArgument(0));
 
-        Supermercado resultado = editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN);
+        Supermercado resultado = editarSupermercado.executar(1L, 0L, novosDados(), 1L, Perfil.SUPER_ADMIN, null);
 
         assertThat(resultado.razaoSocial()).isEqualTo("Nova Razão");
         verify(auditoriaRepository).registrar(any(RegistroAuditoria.class));
+    }
+
+    @Test
+    void donoDeveEditarOProprioSupermercado() {
+        when(supermercadoRepository.buscarPorId(1L)).thenReturn(Optional.of(supermercadoExistente(EstadoSupermercado.ATIVO, 0L)));
+        when(supermercadoRepository.salvar(any(Supermercado.class))).thenAnswer(invocacao -> invocacao.getArgument(0));
+
+        Supermercado resultado = editarSupermercado.executar(1L, 0L, novosDados(), 10L, Perfil.DONO, 1L);
+
+        assertThat(resultado.razaoSocial()).isEqualTo("Nova Razão");
+    }
+
+    @Test
+    void donoNaoDeveEditarSupermercadoDeOutroId() {
+        assertThatThrownBy(() -> editarSupermercado.executar(1L, 0L, novosDados(), 10L, Perfil.DONO, 2L))
+                .isInstanceOf(SupermercadoNaoEncontradoException.class);
+
+        verify(supermercadoRepository, never()).buscarPorId(any());
     }
 }

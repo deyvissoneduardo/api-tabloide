@@ -113,8 +113,8 @@ public class SupermercadoController {
     }
 
     @PatchMapping("/{id}")
-    @RequerPerfil({Perfil.SUPER_ADMIN})
-    @Operation(summary = "Edita os dados cadastrais de um supermercado")
+    @RequerPerfil({Perfil.SUPER_ADMIN, Perfil.DONO})
+    @Operation(summary = "Edita os dados cadastrais de um supermercado (Super Admin, qualquer um; DONO, apenas o próprio)")
     public ResponseEntity<SupermercadoResponse> editar(@PathVariable Long id, @Valid @RequestBody EditarSupermercadoRequest request) {
         ClaimsSessao ator = contextoObrigatorio();
         Supermercado supermercado = editarSupermercado.executar(
@@ -131,7 +131,8 @@ public class SupermercadoController {
                         request.observacoesInternas()
                 ),
                 ator.usuarioId(),
-                ator.perfil()
+                ator.perfil(),
+                ator.supermercadoId()
         );
         return ResponseEntity.ok(SupermercadoResponse.from(supermercado));
     }

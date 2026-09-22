@@ -8,6 +8,7 @@ import com.tabloide.api.modules.supermercado.domain.SupermercadoRepository;
 import com.tabloide.api.modules.supermercado.domain.exceptions.SupermercadoNaoEncontradoException;
 import com.tabloide.api.modules.supermercado.domain.exceptions.VersaoDesatualizadaException;
 import java.time.Instant;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,12 @@ public class EditarSupermercado {
     }
 
     @Transactional
-    public Supermercado executar(Long id, Long versaoConhecida, DadosSupermercado dados, Long atorId, Perfil perfilAtor) {
+    public Supermercado executar(
+            Long id, Long versaoConhecida, DadosSupermercado dados, Long atorId, Perfil perfilAtor, Long supermercadoIdAtor) {
+        if (foraDoEscopoDoAtor(id, perfilAtor, supermercadoIdAtor)) {
+            throw new SupermercadoNaoEncontradoException();
+        }
+
         Supermercado supermercado = supermercadoRepository.buscarPorId(id)
                 .orElseThrow(SupermercadoNaoEncontradoException::new);
 
@@ -53,5 +59,9 @@ public class EditarSupermercado {
         ));
 
         return salvo;
+    }
+
+    private boolean foraDoEscopoDoAtor(Long id, Perfil perfilAtor, Long supermercadoIdAtor) {
+        return perfilAtor != Perfil.SUPER_ADMIN && !Objects.equals(id, supermercadoIdAtor);
     }
 }

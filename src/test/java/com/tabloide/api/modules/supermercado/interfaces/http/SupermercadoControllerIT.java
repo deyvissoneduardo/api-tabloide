@@ -118,6 +118,91 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
     }
 
     @Test
+    void deveEditarSupermercadoComoDonoDoProprioSupermercado() throws Exception {
+        String tokenSuperAdmin = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777004230"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+        long versao = objectMapper.readTree(corpoCadastro).get("versao").asLong();
+        String tokenDono = criarUsuarioEAutenticar(Perfil.DONO, "dono-edicao@sgtm.local", id);
+
+        EditarSupermercadoRequest edicao = new EditarSupermercadoRequest(
+                versao, "Razão Editada Pelo Dono", "Fantasia Editada", "editado@mercado.com", "11777776666",
+                "01310-100", "Av. Paulista", "2000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(patch("/api/supermercados/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(edicao)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.razaoSocial").value("Razão Editada Pelo Dono"));
+    }
+
+    @Test
+    void deveRejeitarEdicaoDeOutroSupermercadoComoDono() throws Exception {
+        String tokenSuperAdmin = tokenSuperAdmin();
+        String corpoCadastroA = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777005392"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long idSupermercadoA = objectMapper.readTree(corpoCadastroA).get("id").asLong();
+
+        String corpoCadastroB = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777006445"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long idSupermercadoB = objectMapper.readTree(corpoCadastroB).get("id").asLong();
+        long versaoB = objectMapper.readTree(corpoCadastroB).get("versao").asLong();
+
+        String tokenDonoA = criarUsuarioEAutenticar(Perfil.DONO, "dono-escopo@sgtm.local", idSupermercadoA);
+
+        EditarSupermercadoRequest edicao = new EditarSupermercadoRequest(
+                versaoB, "Razão Editada", "Fantasia Editada", "editado@mercado.com", "11777776666",
+                "01310-100", "Av. Paulista", "2000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(patch("/api/supermercados/" + idSupermercadoB)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDonoA)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(edicao)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveRejeitarEdicaoComOperador() throws Exception {
+        String tokenSuperAdmin = tokenSuperAdmin();
+        String corpoCadastro = mockMvc.perform(post("/api/supermercados")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenSuperAdmin)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestCadastro("11444777007506"))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        long id = objectMapper.readTree(corpoCadastro).get("id").asLong();
+        long versao = objectMapper.readTree(corpoCadastro).get("versao").asLong();
+        String tokenOperador = criarUsuarioEAutenticar(Perfil.OPERADOR, "operador-edicao@sgtm.local", id);
+
+        EditarSupermercadoRequest edicao = new EditarSupermercadoRequest(
+                versao, "Razão Editada", "Fantasia Editada", "editado@mercado.com", "11777776666",
+                "01310-100", "Av. Paulista", "2000", "Bela Vista", "São Paulo", "SP", null, null, null
+        );
+
+        mockMvc.perform(patch("/api/supermercados/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenOperador)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(edicao)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void deveRejeitarEdicaoComVersaoDesatualizada() throws Exception {
         String token = tokenSuperAdmin();
         String corpoCadastro = mockMvc.perform(post("/api/supermercados")
@@ -394,10 +479,14 @@ class SupermercadoControllerIT extends SupermercadoIntegrationTestSupport {
     }
 
     private String criarUsuarioEAutenticar(Perfil perfil, String email) throws Exception {
+        return criarUsuarioEAutenticar(perfil, email, null);
+    }
+
+    private String criarUsuarioEAutenticar(Perfil perfil, String email, Long supermercadoId) throws Exception {
         String senha = "SenhaCorreta1";
         Instant agora = Instant.now();
         usuarioJpaRepository.save(new UsuarioJpaEntity(
-                null, email, passwordEncoder.encode(senha), perfil, null, null, true, 0, null, agora, agora
+                null, email, passwordEncoder.encode(senha), perfil, supermercadoId, null, true, 0, null, agora, agora
         ));
         return autenticarEExtrairToken(email, senha);
     }
