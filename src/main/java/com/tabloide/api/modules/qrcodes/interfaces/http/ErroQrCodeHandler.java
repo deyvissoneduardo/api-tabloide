@@ -52,6 +52,6 @@ public class ErroQrCodeHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

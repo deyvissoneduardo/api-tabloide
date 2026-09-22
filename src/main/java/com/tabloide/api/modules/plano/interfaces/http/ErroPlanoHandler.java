@@ -68,7 +68,7 @@ public class ErroPlanoHandler {
 
     @ExceptionHandler(TamanhoPaginaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarTamanhoPaginaInvalido(TamanhoPaginaInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -76,6 +76,6 @@ public class ErroPlanoHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

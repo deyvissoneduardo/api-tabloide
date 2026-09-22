@@ -31,7 +31,7 @@ public class ErroOcorrenciaHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErroResponse> tratarArgumentoInvalido(IllegalArgumentException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -39,6 +39,6 @@ public class ErroOcorrenciaHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

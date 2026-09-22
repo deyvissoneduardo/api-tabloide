@@ -26,12 +26,12 @@ public class ErroCampanhaHandler {
 
     @ExceptionHandler(LojasCampanhaInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarLojasInvalidas(LojasCampanhaInvalidasException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PeriodoCampanhaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPeriodoInvalido(PeriodoCampanhaInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(OfertaJaVinculadaAOutraCampanhaException.class)
@@ -56,7 +56,7 @@ public class ErroCampanhaHandler {
 
     @ExceptionHandler(TamanhoPaginaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarTamanhoPaginaInvalido(TamanhoPaginaInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,6 +64,6 @@ public class ErroCampanhaHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

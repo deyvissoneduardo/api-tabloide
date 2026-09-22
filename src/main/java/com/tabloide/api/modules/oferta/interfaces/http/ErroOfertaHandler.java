@@ -20,7 +20,7 @@ public class ErroOfertaHandler {
 
     @ExceptionHandler(LojasOfertaInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarLojasInvalidas(LojasOfertaInvalidasException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(OfertaNaoEncontradaException.class)
@@ -30,12 +30,12 @@ public class ErroOfertaHandler {
 
     @ExceptionHandler(PrecoOfertaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPrecoInvalido(PrecoOfertaInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PeriodoOfertaInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPeriodoInvalido(PeriodoOfertaInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(TransicaoEstadoOfertaInvalidaException.class)
@@ -58,6 +58,6 @@ public class ErroOfertaHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

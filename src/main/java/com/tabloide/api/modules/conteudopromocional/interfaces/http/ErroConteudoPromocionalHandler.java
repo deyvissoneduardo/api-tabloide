@@ -24,37 +24,37 @@ public class ErroConteudoPromocionalHandler {
 
     @ExceptionHandler(TituloConteudoPromocionalInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarTituloInvalido(TituloConteudoPromocionalInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(TextoConteudoPromocionalInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarTextoInvalido(TextoConteudoPromocionalInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(NivelAvisoInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarNivelInvalido(NivelAvisoInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(DestinoBannerInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarDestinoInvalido(DestinoBannerInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(LojasConteudoPromocionalInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarLojasInvalidas(LojasConteudoPromocionalInvalidasException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PeriodoConteudoPromocionalInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPeriodoInvalido(PeriodoConteudoPromocionalInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PosicoesConteudoPromocionalInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarPosicoesInvalidas(PosicoesConteudoPromocionalInvalidasException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(ConteudoPromocionalNaoEncontradoException.class)
@@ -82,6 +82,6 @@ public class ErroConteudoPromocionalHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }

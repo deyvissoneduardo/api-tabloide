@@ -16,22 +16,22 @@ public class ErroTabloideHandler {
 
     @ExceptionHandler(TituloTabloideInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarTituloInvalido(TituloTabloideInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(LojasTabloideInvalidasException.class)
     public ResponseEntity<ErroResponse> tratarLojasInvalidas(LojasTabloideInvalidasException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(PeriodoTabloideInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarPeriodoInvalido(PeriodoTabloideInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(ArquivoTabloideInvalidoException.class)
     public ResponseEntity<ErroResponse> tratarArquivoInvalido(ArquivoTabloideInvalidoException ex) {
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(ex.getMessage()));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -39,6 +39,6 @@ public class ErroTabloideHandler {
         String mensagem = ex.getBindingResult().getFieldErrors().stream()
                 .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return ResponseEntity.unprocessableEntity().body(new ErroResponse(mensagem));
+        return ResponseEntity.unprocessableContent().body(new ErroResponse(mensagem));
     }
 }
