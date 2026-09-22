@@ -12,12 +12,15 @@ import com.tabloide.api.modules.imagem.application.DadosImagem;
 import com.tabloide.api.modules.imagem.application.ExcluirImagem;
 import com.tabloide.api.modules.imagem.application.ListarImagens;
 import com.tabloide.api.modules.imagem.application.RegistrarImagem;
+import com.tabloide.api.modules.imagem.domain.FiltroImagem;
 import com.tabloide.api.modules.imagem.domain.Imagem;
 import com.tabloide.api.modules.imagem.interfaces.http.dto.ImagemResponse;
 import com.tabloide.api.modules.imagem.interfaces.http.dto.RegistrarImagemRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.time.Instant;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,15 +51,18 @@ public class ImagemController {
     @GetMapping
     @RequerPerfil({Perfil.DONO, Perfil.OPERADOR, Perfil.SUPER_ADMIN})
     @AuditarConsulta(acao = "IMAGENS_CONSULTADAS", entidade = "Imagem", paramSupermercadoId = "supermercadoId")
-    @Operation(summary = "Lista a biblioteca de imagens de um supermercado, pesquisável por nome")
+    @Operation(summary = "Lista a biblioteca de imagens de um supermercado, pesquisável por nome e data de upload")
     public ResponseEntity<PaginaResponse<ImagemResponse>> listar(
             @RequestParam Long supermercadoId,
             @RequestParam(required = false) String nomeBusca,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant dataInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant dataFim,
             @RequestParam(defaultValue = "0") int pagina,
             @RequestParam(defaultValue = "25") int tamanho
     ) {
         ClaimsSessao ator = contextoObrigatorio();
-        Pagina<Imagem> resultado = listarImagens.executar(supermercadoId, ator.perfil(), ator.supermercadoId(), nomeBusca, pagina, tamanho);
+        FiltroImagem filtro = new FiltroImagem(nomeBusca, dataInicio, dataFim);
+        Pagina<Imagem> resultado = listarImagens.executar(supermercadoId, ator.perfil(), ator.supermercadoId(), filtro, pagina, tamanho);
         return ResponseEntity.ok(PaginaResponse.from(resultado, ImagemResponse::from));
     }
 

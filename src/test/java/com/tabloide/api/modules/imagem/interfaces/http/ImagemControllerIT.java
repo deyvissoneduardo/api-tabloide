@@ -143,6 +143,40 @@ class ImagemControllerIT extends ImagemIntegrationTestSupport {
     }
 
     @Test
+    void deveFiltrarImagensPorNomeEIntervaloDeData() throws Exception {
+        Long supermercadoId = criarSupermercadoComPlano("11444777003772", null);
+        String tokenDono = criarDonoEAutenticar(supermercadoId, "dono-filtra-imagens@sgtm.local");
+        registrarECapturarId(tokenDono, "Banner Verão");
+        registrarECapturarId(tokenDono, "Logomarca Nova");
+
+        Instant antesDoUpload = Instant.now().minusSeconds(60);
+        Instant depoisDoUpload = Instant.now().plusSeconds(60);
+
+        mockMvc.perform(get("/api/imagens")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .param("supermercadoId", String.valueOf(supermercadoId))
+                        .param("nomeBusca", "banner"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens.length()").value(1))
+                .andExpect(jsonPath("$.itens[0].nomeBusca").value("Banner Verão"));
+
+        mockMvc.perform(get("/api/imagens")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .param("supermercadoId", String.valueOf(supermercadoId))
+                        .param("dataInicio", antesDoUpload.toString())
+                        .param("dataFim", depoisDoUpload.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens.length()").value(2));
+
+        mockMvc.perform(get("/api/imagens")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDono)
+                        .param("supermercadoId", String.valueOf(supermercadoId))
+                        .param("dataInicio", depoisDoUpload.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens.length()").value(0));
+    }
+
+    @Test
     void deveRejeitarListagemDeOutroSupermercadoComoDono() throws Exception {
         Long supermercadoA = criarSupermercadoComPlano("11444777003420", null);
         Long supermercadoB = criarSupermercadoComPlano("11444777003500", null);

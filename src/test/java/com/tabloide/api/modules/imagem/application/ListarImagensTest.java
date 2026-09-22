@@ -7,9 +7,11 @@ import static org.mockito.Mockito.when;
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
+import com.tabloide.api.modules.imagem.domain.FiltroImagem;
 import com.tabloide.api.modules.imagem.domain.Imagem;
 import com.tabloide.api.modules.imagem.domain.ImagemRepository;
 import com.tabloide.api.modules.imagem.domain.exceptions.ImagemNaoEncontradaException;
+import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,5 +54,16 @@ class ListarImagensTest {
     void deveRejeitarTamanhoDePaginaInvalido() {
         assertThatThrownBy(() -> listarImagens.executar(SUPERMERCADO_ID, Perfil.DONO, SUPERMERCADO_ID, null, 0, 10))
                 .isInstanceOf(TamanhoPaginaInvalidoException.class);
+    }
+
+    @Test
+    void deveRepassarFiltroDeNomeEDataAoRepositorio() {
+        FiltroImagem filtro = new FiltroImagem("banner", Instant.parse("2026-01-01T00:00:00Z"), Instant.parse("2026-01-31T23:59:59Z"));
+        Pagina<Imagem> paginaVazia = new Pagina<>(List.of(), 0, 25, 0, 0);
+        when(imagemRepository.listarPorSupermercado(SUPERMERCADO_ID, filtro, 0, 25)).thenReturn(paginaVazia);
+
+        Pagina<Imagem> resultado = listarImagens.executar(SUPERMERCADO_ID, Perfil.DONO, SUPERMERCADO_ID, filtro, 0, 25);
+
+        assertThat(resultado.itens()).isEmpty();
     }
 }

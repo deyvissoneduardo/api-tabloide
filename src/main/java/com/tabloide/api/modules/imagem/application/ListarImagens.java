@@ -3,6 +3,7 @@ package com.tabloide.api.modules.imagem.application;
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
 import com.tabloide.api.modules.autenticacao.domain.Perfil;
 import com.tabloide.api.modules.autenticacao.domain.exceptions.TamanhoPaginaInvalidoException;
+import com.tabloide.api.modules.imagem.domain.FiltroImagem;
 import com.tabloide.api.modules.imagem.domain.Imagem;
 import com.tabloide.api.modules.imagem.domain.ImagemRepository;
 import com.tabloide.api.modules.imagem.domain.exceptions.ImagemNaoEncontradaException;
@@ -21,15 +22,15 @@ public class ListarImagens {
         this.imagemRepository = imagemRepository;
     }
 
-    // RN-005: biblioteca isolada por supermercado; Super Admin consulta qualquer supermercado para suporte.
+    // RN-005: biblioteca isolada por supermercado, pesquisável por nome e data; Super Admin consulta qualquer supermercado para suporte.
     public Pagina<Imagem> executar(
-            Long supermercadoId, Perfil perfilAtor, Long supermercadoIdAtor, String nomeBusca, int pagina, int tamanho) {
+            Long supermercadoId, Perfil perfilAtor, Long supermercadoIdAtor, FiltroImagem filtro, int pagina, int tamanho) {
         if (perfilAtor != Perfil.SUPER_ADMIN && !Objects.equals(supermercadoId, supermercadoIdAtor)) {
             throw new ImagemNaoEncontradaException();
         }
         if (pagina < 0 || !TAMANHOS_PERMITIDOS.contains(tamanho)) {
             throw new TamanhoPaginaInvalidoException();
         }
-        return imagemRepository.listarPorSupermercado(supermercadoId, nomeBusca, pagina, tamanho);
+        return imagemRepository.listarPorSupermercado(supermercadoId, filtro, pagina, tamanho);
     }
 }

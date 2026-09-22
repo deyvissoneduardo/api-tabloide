@@ -1,12 +1,17 @@
 package com.tabloide.api.modules.imagem.infrastructure.persistence;
 
 import com.tabloide.api.modules.autenticacao.domain.Pagina;
+import com.tabloide.api.modules.imagem.domain.FiltroImagem;
 import com.tabloide.api.modules.imagem.domain.Imagem;
 import com.tabloide.api.modules.imagem.domain.ImagemRepository;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -50,11 +55,9 @@ public class ImagemRepositoryAdapter implements ImagemRepository {
     }
 
     @Override
-    public Pagina<Imagem> listarPorSupermercado(Long supermercadoId, String nomeBusca, int pagina, int tamanho) {
+    public Pagina<Imagem> listarPorSupermercado(Long supermercadoId, FiltroImagem filtro, int pagina, int tamanho) {
         PageRequest paginacao = PageRequest.of(pagina, tamanho, Sort.by(Sort.Direction.DESC, "uploadEm"));
-        Page<ImagemJpaEntity> resultado = (nomeBusca == null || nomeBusca.isBlank())
-                ? jpaRepository.findBySupermercadoId(supermercadoId, paginacao)
-                : jpaRepository.findBySupermercadoIdAndNomeBuscaContainingIgnoreCase(supermercadoId, nomeBusca, paginacao);
+        Page<ImagemJpaEntity> resultado = jpaRepository.findAll(especificacao(supermercadoId, filtro), paginacao);
         return new Pagina<>(
                 resultado.getContent().stream().map(ImagemRepositoryAdapter::paraDominio).toList(),
                 pagina,
@@ -62,6 +65,23 @@ public class ImagemRepositoryAdapter implements ImagemRepository {
                 resultado.getTotalElements(),
                 resultado.getTotalPages()
         );
+    }
+
+    private static Specification<ImagemJpaEntity> especificacao(Long supermercadoId, FiltroImagem filtro) {
+        return (root, query, cb) -> {
+            List<Predicate> predicados = new ArrayList<>();
+            predicados.add(cb.equal(root.get("supermercadoId"), supermercadoId));
+            if (filtro.nomeBusca() != null && !filtro.nomeBusca().isBlank()) {
+                predicados.add(cb.like(cb.lower(root.get("nomeBusca")), "%" + filtro.nomeBusca().toLowerCase() + "%"));
+            }
+            if (filtro.dataInicio() != null) {
+                predicados.add(cb.greaterThanOrEqualTo(root.get("uploadEm"), filtro.dataInicio()));
+            }
+            if (filtro.dataFim() != null) {
+                predicados.add(cb.lessThanOrEqualTo(root.get("uploadEm"), filtro.dataFim()));
+            }
+            return cb.and(predicados.toArray(new Predicate[0]));
+        };
     }
 
     private static ImagemJpaEntity atualizar(ImagemJpaEntity entidade, Imagem imagem) {

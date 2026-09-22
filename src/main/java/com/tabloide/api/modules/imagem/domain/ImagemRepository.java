@@ -11,5 +11,5 @@ public interface ImagemRepository {
 
     Imagem salvar(Imagem imagem);
 
-    Pagina<Imagem> listarPorSupermercado(Long supermercadoId, String nomeBusca, int pagina, int tamanho);
+    Pagina<Imagem> listarPorSupermercado(Long supermercadoId, FiltroImagem filtro, int pagina, int tamanho);
 }
