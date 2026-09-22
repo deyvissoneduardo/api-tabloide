@@ -116,21 +116,21 @@ Checklist para acompanhamento manual da implementação. A ordem abaixo replica 
 - [X] BE 108 — [US-178 — Alterações importantes devem possuir rastreabilidade](./docs/historias/back/108-US-178-back-alteracoes-importantes-devem-possuir-rastreabilidade.md) — 8 SP — Pronta
 - [X] BE 109 — [US-182 — Consentimentos devem ser registrados quando necessários](./docs/historias/back/109-US-182-back-consentimentos-devem-ser-registrados-quando-necessarios.md) — 5 SP — Pronta
 - [X] BE 110 — [US-183 — Revogar consentimentos](./docs/historias/back/110-US-183-back-revogar-consentimentos.md) — 5 SP — Pronta
-- [ ] BE 111 — [US-013 — Acompanhar problemas ou ocorrências registradas na plataforma](./docs/historias/back/111-US-013-back-acompanhar-problemas-ou-ocorrencias-registradas-na-plataforma.md) — 8 SP — Pronta
-- [ ] BE 112 — [US-046 — Possuir visão consolidada da operação](./docs/historias/back/112-US-046-back-possuir-visao-consolidada-operacao.md) — 8 SP — Pronta
-- [ ] BE 113 — [US-047 — Operações críticas devem reduzir o risco de execução acidental](./docs/historias/back/113-US-047-back-operacoes-criticas-devem-reduzir-risco-execucao-acidental.md) — 3 SP — Pronta
-- [ ] BE 114 — [US-067 — Editar seus dados](./docs/historias/back/114-US-067-back-editar-dados.md) — 3 SP — Pronta
-- [ ] BE 115 — [US-082 — Informar a marca](./docs/historias/back/115-US-082-back-informar-marca.md) — 3 SP — Pronta
-- [ ] BE 116 — [US-083 — Informar uma descrição](./docs/historias/back/116-US-083-back-informar-descricao.md) — 3 SP — Pronta
-- [ ] BE 117 — [US-084 — Informar peso, unidade ou volume](./docs/historias/back/117-US-084-back-informar-peso-unidade-ou-volume.md) — 2 SP — Pronta
-- [ ] BE 118 — [US-090 — Informar o preço normal](./docs/historias/back/118-US-090-back-informar-preco-normal.md) — 3 SP — Pronta
-- [ ] BE 119 — [US-172 — Alterações publicadas devem refletir corretamente para o consumidor](./docs/historias/back/119-US-172-back-alteracoes-publicadas-devem-refletir-corretamente-consumidor.md) — 5 SP — Pronta
-- [ ] BE 120 — [US-177 — A página pública não deve expor informações administrativas](./docs/historias/back/120-US-177-back-pagina-publica-nao-deve-expor-informacoes-administrativas.md) — 5 SP — Pronta
-- [ ] BE 121 — [US-180 — Dados pessoais devem ser coletados somente quando necessários](./docs/historias/back/121-US-180-back-dados-pessoais-devem-ser-coletados-somente-quando-necessarios.md) — 5 SP — Pronta
-- [ ] BE 122 — [US-181 — A finalidade da coleta deve ser informada](./docs/historias/back/122-US-181-back-finalidade-coleta-deve-ser-informada.md) — 5 SP — Pronta
-- [ ] BE 123 — [US-214 — Permitir recuperação de senha por link de uso único](./docs/historias/back/123-US-214-back-permitir-recuperacao-senha-link-uso-unico.md) — 8 SP — Pronta
-- [ ] BE 124 — [US-215 — Criar o primeiro DONO com senha provisória](./docs/historias/back/124-US-215-back-criar-primeiro-dono-com-senha-provisoria.md) — 5 SP — Pronta
-- [ ] BE 125 — [US-216 — Pesquisar e reutilizar sua biblioteca de imagens](./docs/historias/back/125-US-216-back-pesquisar-reutilizar-biblioteca-imagens.md) — 8 SP — Pronta
+- [X] BE 111 — [US-013 — Acompanhar problemas ou ocorrências registradas na plataforma](./docs/historias/back/111-US-013-back-acompanhar-problemas-ou-ocorrencias-registradas-na-plataforma.md) — 8 SP — Pronta
+- [X] BE 112 — [US-046 — Possuir visão consolidada da operação](./docs/historias/back/112-US-046-back-possuir-visao-consolidada-operacao.md) — 8 SP — Pronta
+- [X] BE 113 — [US-047 — Operações críticas devem reduzir o risco de execução acidental](./docs/historias/back/113-US-047-back-operacoes-criticas-devem-reduzir-risco-execucao-acidental.md) — 3 SP — Pronta
+- [X] BE 114 — [US-067 — Editar seus dados](./docs/historias/back/114-US-067-back-editar-dados.md) — 3 SP — Pronta
+- [X] BE 115 — [US-082 — Informar a marca](./docs/historias/back/115-US-082-back-informar-marca.md) — 3 SP — Pronta
+- [X] BE 116 — [US-083 — Informar uma descrição](./docs/historias/back/116-US-083-back-informar-descricao.md) — 3 SP — Pronta
+- [X] BE 117 — [US-084 — Informar peso, unidade ou volume](./docs/historias/back/117-US-084-back-informar-peso-unidade-ou-volume.md) — 2 SP — Pronta
+- [X] BE 118 — [US-090 — Informar o preço normal](./docs/historias/back/118-US-090-back-informar-preco-normal.md) — 3 SP — Pronta
+- [X] BE 119 — [US-172 — Alterações publicadas devem refletir corretamente para o consumidor](./docs/historias/back/119-US-172-back-alteracoes-publicadas-devem-refletir-corretamente-consumidor.md) — 5 SP — Pronta
+- [X] BE 120 — [US-177 — A página pública não deve expor informações administrativas](./docs/historias/back/120-US-177-back-pagina-publica-nao-deve-expor-informacoes-administrativas.md) — 5 SP — Pronta
+- [X] BE 121 — [US-180 — Dados pessoais devem ser coletados somente quando necessários](./docs/historias/back/121-US-180-back-dados-pessoais-devem-ser-coletados-somente-quando-necessarios.md) — 5 SP — Pronta
+- [X] BE 122 — [US-181 — A finalidade da coleta deve ser informada](./docs/historias/back/122-US-181-back-finalidade-coleta-deve-ser-informada.md) — 5 SP — Pronta
+- [X] BE 123 — [US-214 — Permitir recuperação de senha por link de uso único](./docs/historias/back/123-US-214-back-permitir-recuperacao-senha-link-uso-unico.md) — 8 SP — Pronta
+- [X] BE 124 — [US-215 — Criar o primeiro DONO com senha provisória](./docs/historias/back/124-US-215-back-criar-primeiro-dono-com-senha-provisoria.md) — 5 SP — Pronta
+- [X] BE 125 — [US-216 — Pesquisar e reutilizar sua biblioteca de imagens](./docs/historias/back/125-US-216-back-pesquisar-reutilizar-biblioteca-imagens.md) — 8 SP — Pronta
 
 ## Front-end
 
